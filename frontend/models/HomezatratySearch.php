@@ -59,7 +59,7 @@ class HomezatratySearch extends Homezatraty
             'query' => $query,
 			'sort'=>[
 			'defaultOrder'=>[
-				 'id'=>SORT_DESC
+				 'date'=>SORT_DESC
 			],
         ],
         ]);
