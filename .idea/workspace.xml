@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4292131d-4029-408e-a1ba-36a420321234" name="Default Changelist" comment="Delete info from gitignore to full push to git">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/models/HomezatratySearch.php" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/models/HomezatratySearch.php" afterDir="false" />
-    </list>
+    <list default="true" id="4292131d-4029-408e-a1ba-36a420321234" name="Default Changelist" comment="Delete info from gitignore to full push to git" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -163,7 +160,7 @@
       <option name="presentableId" value="Default" />
       <updated>1653469190237</updated>
       <workItem from="1653469193629" duration="20000" />
-      <workItem from="1653470316121" duration="1067000" />
+      <workItem from="1653470316121" duration="1344000" />
     </task>
     <task id="LOCAL-00001" summary="Delete info from gitignore to full push to git">
       <created>1653470472264</created>
