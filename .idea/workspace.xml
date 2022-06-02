@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4292131d-4029-408e-a1ba-36a420321234" name="Default Changelist" comment="Delete info from gitignore to full push to git" />
+    <list default="true" id="4292131d-4029-408e-a1ba-36a420321234" name="Default Changelist" comment="Delete info from gitignore to full push to git">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/config/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/config/main.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/controllers/InvoiceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/controllers/InvoiceController.php" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution />
   </component>
@@ -142,7 +146,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../TRAINEE-PHP-Level-3" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RunManager">
@@ -161,6 +165,8 @@
       <updated>1653469190237</updated>
       <workItem from="1653469193629" duration="20000" />
       <workItem from="1653470316121" duration="1344000" />
+      <workItem from="1653551603831" duration="167000" />
+      <workItem from="1654171318998" duration="1928000" />
     </task>
     <task id="LOCAL-00001" summary="Delete info from gitignore to full push to git">
       <created>1653470472264</created>
@@ -185,6 +191,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Delete info from gitignore to full push to git" />

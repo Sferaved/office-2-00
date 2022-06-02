@@ -187,8 +187,8 @@ class InvoiceController extends Controller
 		//echo $content;
 		
 			Yii::$app->mailer->compose()
-			->setFrom(['sferaved@gmail.com' => 'Офис on-line'])
-			->setReplyTo('sferaved@gmail.com')
+			->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
+	//		->setReplyTo('sferaved@gmail.com')
 			->setTo(['andrey18051@gmail.com','any26113@gmail.com'])
 			->setSubject('Новый счет на '.$client)
 			->setHtmlBody($content)
@@ -252,8 +252,8 @@ class InvoiceController extends Controller
 
 		
 			Yii::$app->mailer->compose()
-			->setFrom(['sferaved@gmail.com' => 'Офис on-line'])
-			->setReplyTo('sferaved@gmail.com')
+			->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
+	//		->setReplyTo('sferaved@gmail.com')
 			->setTo(['andrey18051@gmail.com','any26113@gmail.com'])
 			->setSubject('Изменения в счете на '.$client)
 			->setHtmlBody($content)
@@ -301,8 +301,8 @@ class InvoiceController extends Controller
 
 	
 			Yii::$app->mailer->compose()
-			->setFrom(['sferaved@gmail.com' => 'Офис on-line'])
-			->setReplyTo('sferaved@gmail.com')
+			->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
+		//	->setReplyTo('sferaved@gmail.com')
 			->setTo(['andrey18051@gmail.com',$arrEmail['email']])
 			->setSubject('Изменения в счете на '.$client)
 			->setHtmlBody($content)

@@ -65,11 +65,11 @@ return [
             'useFileTransport' => false,
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.gmail.com', // SMTP сервер почтовика
-                'username' => 'sferaved@gmail.com', // Логин (адрес электронной почты)
+                'host' => 'smtp.ukr.net', // SMTP сервер почтовика
+                'username' => 'sferaved@ukr.net', // Логин (адрес электронной почты)
                 'password' => '18And051971', // Пароль
-                'port' => '587', // Порт
-                'encryption' => 'tls', // Шифрование
+                'port' => '465', // Порт
+                'encryption' => 'ssl', // Шифрование
 		    ],
         ],
     ],
