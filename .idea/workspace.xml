@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4292131d-4029-408e-a1ba-36a420321234" name="Default Changelist" comment="Delete info from gitignore to full push to git">
+    <list default="true" id="4292131d-4029-408e-a1ba-36a420321234" name="Default Changelist" comment="Change gmail on ukr.net">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/config/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/config/main.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/controllers/InvoiceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/controllers/InvoiceController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/controllers/SiteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/controllers/SiteController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/web/files/act_697.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/web/files/ranunok_697.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/web/files/ranunok_697_signature.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/web/function.php" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/web/function.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,15 +142,19 @@
     </include_path>
   </component>
   <component name="ProjectId" id="29eMe1f6F55MUNYnmxi3MgjmwQJ" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../TRAINEE-PHP-Level-3" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RunManager">
@@ -166,7 +174,10 @@
       <workItem from="1653469193629" duration="20000" />
       <workItem from="1653470316121" duration="1344000" />
       <workItem from="1653551603831" duration="167000" />
-      <workItem from="1654171318998" duration="1928000" />
+      <workItem from="1654171318998" duration="2699000" />
+      <workItem from="1654248258185" duration="477000" />
+      <workItem from="1654249292102" duration="11000" />
+      <workItem from="1655366852297" duration="2078000" />
     </task>
     <task id="LOCAL-00001" summary="Delete info from gitignore to full push to git">
       <created>1653470472264</created>
@@ -175,7 +186,14 @@
       <option name="project" value="LOCAL" />
       <updated>1653470472264</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Change gmail on ukr.net">
+      <created>1654173371551</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1654173371551</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -194,7 +212,9 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Delete info from gitignore to full push to git" />
-    <option name="LAST_COMMIT_MESSAGE" value="Delete info from gitignore to full push to git" />
+    <MESSAGE value="Change gmail on ukr.net" />
+    <option name="LAST_COMMIT_MESSAGE" value="Change gmail on ukr.net" />
   </component>
 </project>

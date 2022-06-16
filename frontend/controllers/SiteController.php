@@ -154,8 +154,7 @@ class SiteController extends Controller
 
 		
 			Yii::$app->mailer->compose()
-			->setFrom(['sferaved@gmail.com' => 'Офис on-line'])
-			->setReplyTo('sferaved@gmail.com')
+			->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
 			->setTo(['andrey18051@gmail.com','any26113@gmail.com',$user_info['email']])
 			->setSubject($user_name.' НЕ ЗАКОНЧИЛА РАБОТУ.')
 			->setHtmlBody($content)
@@ -191,8 +190,7 @@ class SiteController extends Controller
 
 		
 			Yii::$app->mailer->compose()
-			->setFrom(['sferaved@gmail.com' => 'Офис on-line'])
-			->setReplyTo('sferaved@gmail.com')
+			->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
 			->setTo(['andrey18051@gmail.com','any26113@gmail.com',$user_info['email']])
 			->setSubject($user_name.' закончила работу.')
 			->setHtmlBody($content)

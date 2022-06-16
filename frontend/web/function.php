@@ -2420,8 +2420,7 @@ if ($i_e !=0) {
 
 			
 				 Yii::$app->mailer->compose()
-				->setFrom(['sferaved@gmail.com' => 'Офис on-line'])
-				->setReplyTo('sferaved@gmail.com')
+				->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
 				->setTo(['any26113@gmail.com'])
 				->setSubject('Новый счет на '.$client)
 				->setHtmlBody($content)
@@ -2616,8 +2615,7 @@ if ($i_i !=0) {
 
 			
 				 Yii::$app->mailer->compose()
-				->setFrom(['sferaved@gmail.com' => 'Офис on-line'])
-				->setReplyTo('sferaved@gmail.com')
+				->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
 				->setTo(['any26113@gmail.com'])
 				->setSubject('Новый счет на '.$client)
 				->setHtmlBody($content)
