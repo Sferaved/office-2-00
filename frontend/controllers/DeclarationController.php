@@ -344,8 +344,7 @@ class DeclarationController extends Controller
 
 			if ($model->forma_oplat == 'Карта' && Yii::$app->user->can('user')) {
 				 Yii::$app->mailer->compose()
-				->setFrom(['sferaved@gmail.com' => 'Офис on-line'])
-				->setReplyTo('sferaved@gmail.com')
+				->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
 				->setTo(['andrey18051@gmail.com'])
 				->setSubject('Новый счет на '.$client)
 				->setHtmlBody($content)
@@ -353,8 +352,7 @@ class DeclarationController extends Controller
 			 };
 			if ($model->forma_oplat != 'Карта' && Yii::$app->user->can('admin')) {
 				 Yii::$app->mailer->compose()
-				->setFrom(['sferaved@gmail.com' => 'Офис on-line'])
-				->setReplyTo('sferaved@gmail.com')
+                ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
 				->setTo(['any26113@gmail.com'])
 				->setSubject('Новый счет на '.$client)
 				->setHtmlBody($content)
@@ -363,8 +361,7 @@ class DeclarationController extends Controller
 			 
 			if ($model->forma_oplat != 'Карта' && Yii::$app->user->can('user')) {
 				 Yii::$app->mailer->compose()
-				->setFrom(['sferaved@gmail.com' => 'Офис on-line'])
-				->setReplyTo('sferaved@gmail.com')
+                ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
 				->setTo(['andrey18051@gmail.com','any26113@gmail.com'])
 				->setSubject('Новый счет на '.$client)
 				->setHtmlBody($content)
@@ -606,8 +603,7 @@ class DeclarationController extends Controller
 
 		
 			Yii::$app->mailer->compose()
-			->setFrom(['sferaved@gmail.com' => 'Офис on-line'])
-			->setReplyTo('sferaved@gmail.com')
+            ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
 			->setTo(['andrey18051@gmail.com','any26113@gmail.com'])
 			->setSubject('Удаление счета на '.$client)
 			->setHtmlBody($content)

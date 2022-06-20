@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4292131d-4029-408e-a1ba-36a420321234" name="Default Changelist" comment="Change gmail on ukr.net">
+    <list default="true" id="4292131d-4029-408e-a1ba-36a420321234" name="Default Changelist" comment="Change ukr.net password and edit Aquaizol send message">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/config/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/config/main.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/controllers/SiteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/controllers/SiteController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/web/files/act_697.xls" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/web/files/ranunok_697.xls" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/web/files/ranunok_697_signature.xls" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/web/function.php" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/web/function.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/controllers/DeclarationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/controllers/DeclarationController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,7 +172,9 @@
       <workItem from="1654171318998" duration="2699000" />
       <workItem from="1654248258185" duration="477000" />
       <workItem from="1654249292102" duration="11000" />
-      <workItem from="1655366852297" duration="2078000" />
+      <workItem from="1655366852297" duration="3100000" />
+      <workItem from="1655381077768" duration="379000" />
+      <workItem from="1655721961102" duration="441000" />
     </task>
     <task id="LOCAL-00001" summary="Delete info from gitignore to full push to git">
       <created>1653470472264</created>
@@ -193,7 +190,14 @@
       <option name="project" value="LOCAL" />
       <updated>1654173371551</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Change ukr.net password and edit Aquaizol send message">
+      <created>1655371951129</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1655371951129</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -204,7 +208,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -215,6 +231,7 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Delete info from gitignore to full push to git" />
     <MESSAGE value="Change gmail on ukr.net" />
-    <option name="LAST_COMMIT_MESSAGE" value="Change gmail on ukr.net" />
+    <MESSAGE value="Change ukr.net password and edit Aquaizol send message" />
+    <option name="LAST_COMMIT_MESSAGE" value="Change ukr.net password and edit Aquaizol send message" />
   </component>
 </project>
