@@ -2280,7 +2280,7 @@ if ($i_e !=0) {
             $sheet->setCellValue("H22",   $H22); //Клиент
             $sheet->setCellValue("H25",  $H25); //Клиент
 			
-			$hight_e=$i_e*6+7; // высота строк
+			$hight_e=$i_e*6+8; // высота строк
 			
 				if ($hight_e <=32) {
 				$hight_e=32;
@@ -2478,7 +2478,7 @@ if ($i_i !=0) {
             $sheet->setCellValue("B17",   $B17); //Номер счета
             $sheet->setCellValue("H22",   $H22); //Клиент
             $sheet->setCellValue("H25",  $H25); //Клиент
-			$hight_i=$i_i*6+7; // высота строк
+			$hight_i=$i_i*6+8; // высота строк
 			
 		 	if ($hight_i <=32) {
 				$hight_i=32;

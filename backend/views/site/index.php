@@ -31,11 +31,11 @@ $this->title = 'Офис on-line';
 
         <div class="row">
             <div class="col-lg-3">
-                <h3>MDoffice</h3>
+                <h3>Офис on-line</h3>
 
-                <p> Новости ВЭД.</p>
+                <p>Рабочая панель</p>
 
-                <p><a class="btn btn-default" href="https://www.mdoffice.com.ua/ua/amain.html">перейти &raquo;</a></p>
+                <p><a class="btn btn-default" href="http://korzhov-office.ru">перейти &raquo;</a></p>
             </div>
             <div class="col-lg-3">
                 <h3>Курсы валют</h3>
