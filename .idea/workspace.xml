@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4292131d-4029-408e-a1ba-36a420321234" name="Default Changelist" comment="Change ukr.net password and edit Declarration  message">
+    <list default="true" id="4292131d-4029-408e-a1ba-36a420321234" name="Default Changelist" comment="Size cell of declaration numbers  increased (+8) Aqua and Flexx act and invoice.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/views/site/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/backend/views/site/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/web/function.php" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/web/function.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/web/templates/act_aquaizol.xls" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/web/templates/act_aquaizol.xls" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/web/templates/act_aquaizol_sign.xls" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/web/templates/act_aquaizol_sign.xls" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -178,7 +175,7 @@
       <workItem from="1655366852297" duration="3100000" />
       <workItem from="1655381077768" duration="379000" />
       <workItem from="1655721961102" duration="519000" />
-      <workItem from="1659338830068" duration="2747000" />
+      <workItem from="1659338830068" duration="4045000" />
     </task>
     <task id="LOCAL-00001" summary="Delete info from gitignore to full push to git">
       <created>1653470472264</created>
@@ -208,7 +205,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655722463929</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Size cell of declaration numbers  increased (+8) Aqua and Flexx act and invoice.">
+      <created>1659341803160</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1659341803160</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -244,6 +248,7 @@
     <MESSAGE value="Change gmail on ukr.net" />
     <MESSAGE value="Change ukr.net password and edit Aquaizol send message" />
     <MESSAGE value="Change ukr.net password and edit Declarration  message" />
-    <option name="LAST_COMMIT_MESSAGE" value="Change ukr.net password and edit Declarration  message" />
+    <MESSAGE value="Size cell of declaration numbers  increased (+8) Aqua and Flexx act and invoice." />
+    <option name="LAST_COMMIT_MESSAGE" value="Size cell of declaration numbers  increased (+8) Aqua and Flexx act and invoice." />
   </component>
 </project>

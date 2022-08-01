@@ -908,10 +908,15 @@ if ($i_e !=null) {
 };
 
 if ($i_i !=null) {
-					  $A="A"."3";
-                      $B="B"."3";
-                      $C="C"."3";
-                      $D="D"."3";
+    $col =3;
+    if ($i_e == null) {
+        $col =2;
+    };
+    $A="A".$col;
+    $B="B".$col;
+    $C="C".$col;
+    $D="D".$col;
+
 
     $sheet->setCellValue($A,   "Импорт" ); 
     $sheet->setCellValue($B,   $i_i); 
@@ -968,13 +973,10 @@ if ($i_i !=null) {
 };
 
 if ($i_All !=null){
-	$col =4;
-	if ($i_e ==null && $i_i !=null) {
-		$col =3;
-	};
-	if ($i_e !=null && $i_i ==null) {
-		$col =3;
-	};
+    $col =3;
+    if ($i_e !=null && $i_i !=null) {
+        $col =4;
+    };
 					  $A="A".$col;
                       $B="B".$col;
                       $C="C".$col;
