@@ -101,7 +101,7 @@ function decl_read ($filename) {
 
     $arrContragent = Contragent::find()->asArray()->all(); 
     
-	$tabl_pdf['custom']=550;
+	$tabl_pdf['custom']=800;
 	
 	
     foreach ($arrContragent as $tabl) {

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4292131d-4029-408e-a1ba-36a420321234" name="Default Changelist" comment="Size cell of declaration numbers  increased (+8) Aqua and Flexx act and invoice.">
+    <list default="true" id="4292131d-4029-408e-a1ba-36a420321234" name="Default Changelist" comment=" Aqua and Flexx report edit.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/controllers/DeclarationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/controllers/DeclarationController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/web/function.php" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/web/function.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -175,7 +176,8 @@
       <workItem from="1655366852297" duration="3100000" />
       <workItem from="1655381077768" duration="379000" />
       <workItem from="1655721961102" duration="519000" />
-      <workItem from="1659338830068" duration="4045000" />
+      <workItem from="1659338830068" duration="4814000" />
+      <workItem from="1659545808888" duration="1009000" />
     </task>
     <task id="LOCAL-00001" summary="Delete info from gitignore to full push to git">
       <created>1653470472264</created>
@@ -212,7 +214,14 @@
       <option name="project" value="LOCAL" />
       <updated>1659341803160</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary=" Aqua and Flexx report edit.">
+      <created>1659343453975</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1659343453975</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -249,6 +258,7 @@
     <MESSAGE value="Change ukr.net password and edit Aquaizol send message" />
     <MESSAGE value="Change ukr.net password and edit Declarration  message" />
     <MESSAGE value="Size cell of declaration numbers  increased (+8) Aqua and Flexx act and invoice." />
-    <option name="LAST_COMMIT_MESSAGE" value="Size cell of declaration numbers  increased (+8) Aqua and Flexx act and invoice." />
+    <MESSAGE value=" Aqua and Flexx report edit." />
+    <option name="LAST_COMMIT_MESSAGE" value=" Aqua and Flexx report edit." />
   </component>
 </project>
