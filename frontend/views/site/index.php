@@ -12,7 +12,7 @@ $this->title = 'Офис on-line';
         <h1>Офис on-line</h1>
 
         <p class="lead">Система учета работы и затрат (версия 2.0)</p>
-		<p class="lead">Период с 1 апреля по 31 декабря 2021</p>
+		<p class="lead">Период с 1 января по 31 декабря 2022</p>
   <?php if (Yii::$app->user->isGuest) {
      ?>
         <p><a class="btn btn-lg btn-success" href="/site/login">Начать работу</a></p>
@@ -95,7 +95,7 @@ $this->title = 'Офис on-line';
 
                 <p>Панель администратора.</p>
 
-                <p><a class="btn btn-default" href="http://korzhov-office.ru/admin">перейти &raquo;</a></p>
+                <p><a class="btn btn-default" href="http://of2022/admin">перейти &raquo;</a></p>
             </div>
 			<div class="col-lg-3">
                 <h3>Электронный документооборот</h3>

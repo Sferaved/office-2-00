@@ -2688,7 +2688,7 @@ if ($aq_fl_id==3)
     $table->addRow(200);
     $table->addCell(5000)->addText("Юридична адреса: 61176, Україна, м.Харків, вул.Краснодарська , буд. 177, корп. Б, кв.58",$table_styleFont_normal);
     $table->addCell(200)->addText("");
-    $table->addCell(5000)->addText("Юридична адреса: 62371, Харківська обл., Дергачівський р-н, с. Подвірки, вул.Сумський шлях ,47-Б",$table_styleFont_normal);
+    $table->addCell(5000)->addText("Юридична адреса: 62371, Харківська обл., с.Подвірки, вул.Сумський шлях ,47-Б",$table_styleFont_normal);
     $table->addRow(200);
     $table->addCell(5000)->addText("Код ДРФО:   2607014759",$table_styleFont_normal);
     $table->addCell(200)->addText("");
@@ -2757,7 +2757,7 @@ else
     $table->addRow(200);
     $table->addCell(5000)->addText("Юридична адреса: 61176, Україна, м.Харків, вул.Краснодарська , буд. 177, корп. Б, кв.58",$table_styleFont_normal);
     $table->addCell(200)->addText("");
-    $table->addCell(5000)->addText("Юридична адреса: 62371, Харківська обл., Дергачівський р-н, с. Подвірки, вул.Сумський шлях ,45-Д, офіс 307",$table_styleFont_normal);
+    $table->addCell(5000)->addText("Юридична адреса: 62371, Харківська обл., с.Подвірки, вул.Сумський шлях ,45-Д, офіс 307",$table_styleFont_normal);
     $table->addRow(200);
     $table->addCell(5000)->addText("Код ДРФО:   2607014759",$table_styleFont_normal);
     $table->addCell(200)->addText("");

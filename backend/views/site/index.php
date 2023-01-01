@@ -9,7 +9,7 @@ $this->title = 'Офис on-line';
     <div class="jumbotron">
         <h1>Офис on-line</h1> 
 		<p class="lead">Система учета работы и затрат (версия 2.0)</p>
-		<p class="lead">Период с 1 апреля по 31 декабря 2021</p>
+		<p class="lead">Период с 1 января по 31 декабря 2022</p>
 		 <h2>Панель администратора</h2>
 
        
@@ -35,7 +35,7 @@ $this->title = 'Офис on-line';
 
                 <p>Рабочая панель</p>
 
-                <p><a class="btn btn-default" href="http://korzhov-office.ru">перейти &raquo;</a></p>
+                <p><a class="btn btn-default" href="http://of2022">перейти &raquo;</a></p>
             </div>
             <div class="col-lg-3">
                 <h3>Курсы валют</h3>
