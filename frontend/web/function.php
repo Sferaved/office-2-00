@@ -622,7 +622,7 @@ function dogovor_long_doc ($id){
 	$fontStyle = array('name' => 'Times New Roman', 'size'=>10,'bold' => TRUE );
 	$section->addText('ДОДАТКОВА УГОДА ', $fontStyle, 'Paragraph');
 
-	$date = new DateTime($date_begin); 
+	$date = new DateTime('first day of this year');
 
 	$fontStyle = array('name' => 'Times New Roman', 'size'=>10);
 	$section->addText(
@@ -630,11 +630,11 @@ function dogovor_long_doc ($id){
 	   $fontStyle, 'Paragraph'
 	);
 
-
+    $dateStartLong = $date->format('d.m.Y').'р.';
 
     $fontStyle = array('name' => 'Times New Roman', 'size'=>10);
     $section->addText(
-    'м.Харків                                                                                                                 '.$date->format('d.m.Y').'р.', 
+    'м.Харків                                                                                                                 ' . $dateStartLong,
     $fontStyle, 'Paragraph'
     );
     
