@@ -51,26 +51,29 @@ foreach ($arrUsers as $value) (            //Получили отобранны
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?php /* $form->field($model, 'date')->widget(
-    DatePicker::class, 
-    [
-        'model' => $model,
-                'value' => $model->date,
-                'attribute' => 'date',
-                'language' => 'ru',
-                
-                'options' => ['placeholder' => 'Выбрать дату'],
-                'template' => '{addon}{input}',
-                'clientOptions' => [
-                    'autoclose' => true,
-                    'todayHighlight' => true,
-                    'format' => 'yyyy-mm-dd'
-    ]
-    ]); ?>
-
-   <?= $form->field($model, 'decl_id')->textInput()->dropDownList(
+    <?php /*    <?= $form->field($model, 'decl_id')->textInput()->dropDownList(
                 ArrayHelper::map($arrDecl, 'id','decl_number'),
-                ['prompt' => 'Сделайте выбор...']); */?> 
+                ['prompt' => 'Сделайте выбор...']); */?>
+
+    <?php     if (Yii::$app->user->can('admin')){ ?>
+
+
+        <?=	$form->field($model, 'date')->textInput(['maxlength' => true])->widget(
+        DatePicker::class,
+        [
+            'model' => $model,
+            'value' => $model->date,
+            'attribute' => 'date',
+            'language' => 'ru',
+
+            'options' => ['placeholder' => 'Выбрать дату'],
+            'template' => '{addon}{input}',
+            'clientOptions' => [
+                'autoclose' => true,
+                'todayHighlight' => true,
+                'format' => 'yyyy-mm-dd'
+            ]
+        ]); }?>
 
     <?= $form->field($model, 'cost')->textInput(['maxlength' => true]) ?>
 
@@ -79,7 +82,7 @@ foreach ($arrUsers as $value) (            //Получили отобранны
                 ['prompt' => 'Сделайте выбор...']); ?>
 
     <?php     if (Yii::$app->user->can('admin')){ ?>
- 
+
  
 	<?=	  $form->field($model, 'user_id')->textInput()->dropDownList(
                 ArrayHelper::map($arrUS, 'id','username'),
