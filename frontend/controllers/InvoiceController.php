@@ -410,14 +410,13 @@ class InvoiceController extends Controller
 
 	
 	}
-	
-	public function actionFile($id)// Скачивание списка неоплаченных счетов
+
+	public function actionFile($id)
     {
- 	 
-	    invoice_file($id);
-		
+        invoice_file($id);
+
 		$file = 'files/invoice.xls';
-	 
+
 		if (file_exists($file)) {
 			 return \Yii::$app->response->sendFile($file)->on(\yii\web\Response::EVENT_AFTER_SEND, function($event) {
 			unlink($event->data);

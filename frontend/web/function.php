@@ -423,6 +423,100 @@ function act_doc ($number_invoice,$date, $decl, $client, $cost ) {
    
    return ($new_act);     
 }
+
+function actDocSignature ($number_invoice,$date, $decl, $client, $cost ) {
+
+
+
+ //номер и дата договора
+    $arrClient = Client::findOne(['client'=>$client]);
+	$arrClientInfo = ClientInfo::find()->asArray()->where(['=','client_id',$arrClient['id']])->one();
+ //  debug ($arrClientInfo);
+
+	$dogovor= $arrClient["dogovor"];
+    $dogovor_date= $arrClient["date_begin"];
+	$dogovor_date =date('d.m.Y',strtotime($dogovor_date));
+
+	$date = date('d.m.Y',strtotime($date));
+
+// Создание акта
+
+	$inputFileName = './templates/act_aquaizol.xls';
+
+	$spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
+    $sheet = $spreadsheet->getActiveSheet();
+
+    $C11 = 'АКТ надання послуг № '.$number_invoice.' від '. $date.'р.';
+	$C13 ="    Ми, що нижче підписалися, представник Замовника ".$client.",  з одного боку, і представник Виконавця  ФО-П Коржов Андрій Анатолійович , з іншого боку, склали цей акт про те, що на підставі наведених документів:";
+
+    $T5 = $client;
+	if (isset ($arrClientInfo)) {
+	$T8 =	$arrClientInfo['director'];
+	$T35 =$T5 ."код за ЕДРПОУ ".$arrClient['cod_EGRPOU']." адрес: ".$arrClientInfo['adress']." телефон ".$arrClientInfo['telephon'];
+	}
+	else {
+	$T8 =' ';
+	$T35 =$T5 ."код за ЕДРПОУ ".$arrClient['cod_EGRPOU'];
+	}
+
+    $L14 = "№".$dogovor." від ".$dogovor_date."р.";
+
+
+
+
+	//Определение - номер декларации или все остальное
+	$flag_UA = 0;
+	$mystring =   $decl;
+	$findme   = 'U';
+	$pos = strpos($mystring,   $findme );
+
+	if ($pos !== false) {
+
+        $E19 = "Послуги митного брокера за МД №".$decl;
+        $flag_U=1;
+    }
+    else {
+        $E19 = "Послуги митного брокера.";
+        $flag_U=0;
+    }
+
+    $B34 = num2text_ua($cost); // Общая стоимость словами
+    $AK19 = number_format ($cost,2,',',' ');
+    $C23 = 'Всього найменувань 1,'.' на суму '.$B34.' грн';
+
+	$new_act = 'act_'.$number_invoice;
+
+            $new_invoice = 'act_'.$number_invoice;
+            $sheet->setCellValue("T5",   $T5); //Клиент
+			$sheet->setCellValue("T8",   $T8); //Клиент
+			$sheet->setCellValue("C13",   $C13); //Текст
+            $sheet->setCellValue("L14",   $L14); //Номер договора
+            $sheet->setCellValue("C11",   $C11); //Номер счета
+            $sheet->setCellValue("E19",   $E19); //Список деклараций
+            $sheet->setCellValue("Y19",  "1"); //Количество деклараций
+            $sheet->setCellValue("AF19", $AK19); //Цена за 1 декларацию
+            $sheet->setCellValue("AK19", $AK19); //Стоимость за все
+            $sheet->setCellValue("AK21", $AK19); //Стоимость за все (ИТОГО)
+            $sheet->setCellValue("C23", $C23); //Сумма прописью
+            $sheet->setCellValue("C34",  $date); //Дата подписи акта
+            $sheet->setCellValue("T34",  $date); //Дата подписи акта
+			$sheet->setCellValue("T35",  $T35); //Дата подписи акта
+
+
+
+            $drawing = new PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+            $drawing->setPath('img/signature.jpg');
+            $drawing->setWidth(255);
+            $drawing->setCoordinates('C36');
+            $drawing->setWorksheet($sheet);
+
+    $act = new PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
+    $act->save('files/'.$new_act.'.xls');
+
+
+
+   return ($new_act);
+}
  
 
 function dogovor_doc ($id){

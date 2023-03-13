@@ -52,9 +52,10 @@ $this->params['breadcrumbs'][] = $this->title;
 	
 <?php	
 // Формирование счета
-$invoice= invoice_doc ( $model->id,$model->date, $decl_number, $client, $model->cost);
-// Формирование акта
-$act= act_doc ( $model->id,$model->date, $decl_number, $client, $model->cost);
+    $invoice= invoice_doc ( $model->id,$model->date, $decl_number, $client, $model->cost);
+    // Формирование акта
+    $act = act_doc ($model->id, $model->date, $decl_number, $client, $model->cost);
+    $actSignature = actDocSignature($model->id, $model->date, $decl_number, $client, $model->cost);
 ?>
 
 <?= Html::a(Yii::t('app', 'Счет'), ['export','file'=>$invoice], ['class' => 'btn btn-success']) ?>
@@ -64,8 +65,9 @@ $invoice = $invoice.'_signature';
 ?>
 <?= Html::a(Yii::t('app', 'Счет c подписью'), ['export','file'=>$invoice], ['class' => 'btn btn-primary']) ?>
 
+<?= Html::a(Yii::t('app', 'Акт'), ['export','file'=>$act], ['class' => 'btn btn-success']) ?>
 
-<?= Html::a(Yii::t('app', 'Акт'), ['export','file'=>$act], ['class' => 'btn btn-success']) ?>				
+<?= Html::a(Yii::t('app', 'Акт с подписью'), ['export','file'=>$actSignature], ['class' => 'btn btn-primary']) ?>
 	 </p>
 
     <?= DetailView::widget([
