@@ -35,7 +35,7 @@ $this->title = 'Офис on-line';
 
                 <p>Рабочая панель</p>
 
-                <p><a class="btn btn-default" href="http://of2022">перейти &raquo;</a></p>
+                <p><a class="btn btn-default" href="https://sferaved-office-online.ru">перейти &raquo;</a></p>
             </div>
             <div class="col-lg-3">
                 <h3>Курсы валют</h3>
