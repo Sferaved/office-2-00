@@ -34,7 +34,6 @@ $this->title = 'Офис on-line';
                 <h3>Офис on-line</h3>
 
                 <p>Рабочая панель</p>
-
                 <p><a class="btn btn-default" href="https://sferaved-office-online.ru">перейти &raquo;</a></p>
             </div>
             <div class="col-lg-3">
