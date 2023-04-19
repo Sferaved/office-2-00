@@ -2,6 +2,7 @@
 
 // баланс затрат
 
+use frontend\controllers\DeclarationController;
 use frontend\models\Cabinet;
 use frontend\models\Cabinetstatya;
 use frontend\models\User;
@@ -716,19 +717,19 @@ function dogovor_long_doc ($id){
 	$fontStyle = array('name' => 'Times New Roman', 'size'=>10,'bold' => TRUE );
 	$section->addText('ДОДАТКОВА УГОДА ', $fontStyle, 'Paragraph');
 
-	$date = new DateTime('first day of this year');
+
 
 	$fontStyle = array('name' => 'Times New Roman', 'size'=>10);
 	$section->addText(
-	   'до ДОГОВОРУ ДОРУЧЕННЯ  №'.$dogovor_full.' від '.$date->format('d.m.Y').'р. (далі за текстом – «Договор») про надання послуг з декларування товарів і транспортних засобів',
+	   'до ДОГОВОРУ ДОРУЧЕННЯ  №'.$dogovor_full.' від '. $date_begin .'р. (далі за текстом – «Договор») про надання послуг з декларування товарів і транспортних засобів',
 	   $fontStyle, 'Paragraph'
 	);
 
-    $dateStartLong = $date->format('d.m.Y').'р.';
+
 
     $fontStyle = array('name' => 'Times New Roman', 'size'=>10);
     $section->addText(
-    'м.Харків                                                                                                                 ' . $dateStartLong,
+    'м.Харків                                                                                                                 ' . $date_finish ,
     $fontStyle, 'Paragraph'
     );
     
@@ -2241,17 +2242,38 @@ $writer = new Xlsx($spreadsheet);
 $writer->save('files/report.xls'); //Расчет за период
 }
 
+function messageToBot($message, $chat_id)
+{
+    $bot = '6235702872:AAFW6QzdfvAILGe0oA9_X7lgx-I9O2w_Vg4';
+
+    $array = array(
+        'chat_id' => $chat_id,
+        'text' => $message,
+        'parse_mode' => 'html'
+    );
+
+    $url = 'https://api.tlgr.org/bot' . $bot . '/sendMessage';
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($array, '', '&'));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, false);
+    curl_exec($ch);
+    curl_close($ch);
+}
 
 function aq_fl_documents($aq_fl_id,$date_from,$date_to) {
 // Расчет для формирования документов
 if ($aq_fl_id==3) {
 	$arrAqFl=Aquaizol::find()->where(['between', 'date', $date_from, $date_to])->all();
+    $client = "Акваизол";
 }
 
 if ($aq_fl_id==81) {
 	$arrAqFl=Flex::find()->where(['between', 'date', $date_from, $date_to])->all();
+    $client = "ФЛЕКСС";
 }
-
 
 foreach ($arrAqFl as $value)(
  $arrId[$value->id] = $value->decl_number_id
@@ -2353,10 +2375,14 @@ if ($i_e !=0) {
 	$model_i->oplata = 'Нет';
 	$model_i->forma_oplat = 'Безнал';
     $model_i->save();
-	
+
 	$date_from_T= date('d.m.Y',strtotime($date_from));
 	$date_to_T = date('d.m.Y',strtotime($date_to));
-	
+
+    $message = "Андрей выставил счет за $date_to_T №: $model_i->id Клиент: $client Сумма: $export грн";
+    messageToBot($message, 120352595);
+    messageToBot($message, 474748019);
+
     $B17 = 'Рахунок на оплату № '.$model_i->id.' від '. $date_to_T.'р.';
     $H22 = $client;
     $H25 = "№".$dogovor." від ".$dogovor_date."р.";
@@ -2552,10 +2578,15 @@ if ($i_i !=0) {
 	$model_i->oplata = 'Нет';
 	$model_i->forma_oplat = 'Безнал';
     $model_i->save();
-	
+
+
 	$date_from_T = date('d.m.Y',strtotime($date_from));
 	$date_to_T = date('d.m.Y',strtotime($date_to));
-	
+
+    $message = "Андрей выставил счет за $date_to_T №: $model_i->id Клиент: $client Сумма: $import грн";
+    messageToBot($message, 120352595);
+    messageToBot($message, 474748019);
+
     $B17 = 'Рахунок на оплату № '.$model_i->id.' від '. $date_to_T.'р.';
     $H22 = $client;
     $H25 = "№".$dogovor." від ".$dogovor_date."р.";

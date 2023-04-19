@@ -18,6 +18,7 @@ use yii2tech\spreadsheet\Spreadsheet;
 use yii\data\ActiveDataProvider;
 use frontend\models\AuthAssignment;
 
+
 /**
  * InvoiceController implements the CRUD actions for Invoice model.
  */
@@ -144,6 +145,8 @@ class InvoiceController extends Controller
      * Creates a new Invoice model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\httpclient\Exception
      */
     public function actionCreate()
     {
@@ -155,7 +158,7 @@ class InvoiceController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			Yii::$app->session->setFlash ('success', 'Данные приняты');
 			
-		  if (Yii::$app->user->can('user')) { // Отправка сообщения об выставленном счете
+		 // Отправка сообщения об выставленном счете
 		
 			$declArr= Declaration::find()->where(['=','id',$model->decl_id])->all();
 			foreach ($declArr as $value) ($decl= $value->decl_number);
@@ -192,18 +195,40 @@ class InvoiceController extends Controller
 			->setTo(['andrey18051@gmail.com','any26113@gmail.com'])
 			->setSubject('Новый счет на '.$client)
 			->setHtmlBody($content)
-		  ->send();	
-		}
-			
-			
-			
-			
+		  ->send();
+
+              $message = "$user_name выставил(а) счет за $date №: $model->id Клиент: $client Сумма: $model->cost грн";
+              self::messageToBot($message, 120352595);
+              self::messageToBot($message, 474748019);
+
+
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+    public function messageToBot($message, $chat_id)
+    {
+        $bot = '6235702872:AAFW6QzdfvAILGe0oA9_X7lgx-I9O2w_Vg4';
+
+        $array = array(
+            'chat_id' => $chat_id,
+            'text' => $message,
+            'parse_mode' => 'html'
+        );
+
+        $url = 'https://api.tlgr.org/bot' . $bot . '/sendMessage';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($array, '', '&'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_exec($ch);
+        curl_close($ch);
     }
 
     /**
@@ -220,7 +245,7 @@ class InvoiceController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			Yii::$app->session->setFlash ('success', 'Счет успешно исправлен');
 			
-			if (Yii::$app->user->can('user')) { // Отправка сообщения об исправленном счете
+			// Отправка сообщения об исправленном счете
 		
             $declArr= Declaration::find()->where(['=','id',$model->decl_id])->all();
 			foreach ($declArr as $value) 
@@ -257,10 +282,10 @@ class InvoiceController extends Controller
 			->setTo(['andrey18051@gmail.com','any26113@gmail.com'])
 			->setSubject('Изменения в счете на '.$client)
 			->setHtmlBody($content)
-		  ->send();	
-		  
-
-		}
+		  ->send();
+            $message = "$user_name исправил(а) счет за $date №: $model->id Клиент: $client Сумма: $model->cost грн";
+            self::messageToBot($message, 120352595);
+            self::messageToBot($message, 474748019);
 
 //
         $invArr= Invoice::find()->where(['=','id',$id])->one();
@@ -306,9 +331,10 @@ class InvoiceController extends Controller
 			->setTo(['andrey18051@gmail.com',$arrEmail['email']])
 			->setSubject('Изменения в счете на '.$client)
 			->setHtmlBody($content)
-		  ->send();	
-			
-           
+		  ->send();
+
+                $message = "Оплачен счет за $date №: $id Клиент: $client Сумма: $model->cost грн";
+                self::messageToBot($message, 120352595);
         }
 		}
 
@@ -334,7 +360,7 @@ class InvoiceController extends Controller
         $this->findModel($id)->delete();
 		Yii::$app->session->setFlash ('success', 'Счет успешно удален');
 		
-		if (Yii::$app->user->can('user')) { // Отправка сообщения об удаленном счете
+		 // Отправка сообщения об удаленном счете
 		
 			$declArr= Declaration::find()->where(['=','id',$model->decl_id])->all();
 			foreach ($declArr as $value) 
@@ -366,13 +392,14 @@ class InvoiceController extends Controller
 
 		
 			Yii::$app->mailer->compose()
-			->setFrom(['sferaved@gmail.com' => 'Офис on-line'])
-			->setReplyTo('sferaved@gmail.com')
+            ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
 			->setTo(['andrey18051@gmail.com','any26113@gmail.com'])
 			->setSubject('Удаление счета на '.$client)
 			->setHtmlBody($content)
-		  ->send();	
-		}
+		  ->send();
+        $message = "$user_name удалил(а) счет за $date №: $model->id Клиент: $client Сумма: $model->cost грн";
+        self::messageToBot($message, 120352595);
+        self::messageToBot($message, 474748019);
 
         return $this->redirect(['index']);
     }

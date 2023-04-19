@@ -22,7 +22,6 @@ use frontend\models\Aquaizol;
 use frontend\models\Flex;
 use frontend\models\AuthAssignment;
 
-
 /**
  * DeclarationController implements the CRUD actions for Declaration model.
  */
@@ -76,8 +75,7 @@ class DeclarationController extends Controller
 
 //Client
 
-		$arrCl = Client::find()->all(); 	
-		
+		$arrCl = Client::find()->all();
         foreach ($arrCl as $value) (// пара ключ-значение для отобранных записей
            $arrClient[$value->id] = $value->client
         );
@@ -285,11 +283,13 @@ class DeclarationController extends Controller
 			
         ]);
     }
-	
-	 /**
+
+    /**
      * Creates a new Invoice model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\httpclient\Exception
      */
     public function actionInvoice($id)
     {
@@ -314,7 +314,7 @@ class DeclarationController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			Yii::$app->session->setFlash ('success', 'Данные приняты');
             
-			if (Yii::$app->user->can('user') || Yii::$app->user->can('admin')) { // Отправка сообщения об выставленном счете
+			// Отправка сообщения об выставленном счете
 		
 			$declArr= Declaration::find()->where(['=','id',$model->decl_id])->all();
 			foreach ($declArr as $value) ($decl= $value->decl_number);
@@ -369,7 +369,10 @@ class DeclarationController extends Controller
 				->setHtmlBody($content)
 			  ->send();	
 			 }
-    	}
+                $message = "$user_name выставил(а) счет за $date №: $model->id Клиент: $client Сумма: $model->cost грн";
+                self::messageToBot($message, 120352595);
+                self::messageToBot($message, 474748019);
+
             return $this->redirect(['view', 'id' => $model_d->id]);
         }
 
@@ -378,6 +381,26 @@ class DeclarationController extends Controller
         ]);
     }
 
+    public function messageToBot($message, $chat_id)
+    {
+        $bot = '6235702872:AAFW6QzdfvAILGe0oA9_X7lgx-I9O2w_Vg4';
+
+        $array = array(
+            'chat_id' => $chat_id,
+            'text' => $message,
+            'parse_mode' => 'html'
+        );
+
+        $url = 'https://api.tlgr.org/bot' . $bot . '/sendMessage';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($array, '', '&'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_exec($ch);
+        curl_close($ch);
+    }
     public function actionZatraty($id)
     {
 			$model_d = $this->findModel($id);
@@ -611,8 +634,11 @@ class DeclarationController extends Controller
 			->setHtmlBody($content)
 		  ->send();	
 			$model = Invoice::find() ->where(['id'=>$val]) ->one() ->delete();
-			
-			
+
+            $message = "$user_name удалил(а) счет за $date №: $val Клиент: $client Сумма: $cost грн";
+
+            self::messageToBot($message, 120352595);
+            self::messageToBot($message, 474748019);
 			};
 		}
 		
