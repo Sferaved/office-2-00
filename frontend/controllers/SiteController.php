@@ -111,9 +111,9 @@ class SiteController extends Controller
      */
     public function actionLogout()
     {
-        
 
-		
+        $decl = 0;
+		$invoice = 0;
 		
 		$decl_inv = invoice_absent();
 		$user_name = Yii::$app->user->identity->username;  
@@ -160,11 +160,11 @@ class SiteController extends Controller
 			->setHtmlBody($content)
 		  ->send();	  
 			}
-		
-		
-		
-		
-			  return $this->render('index');  
+
+            $message ="Не выставлены счета на выполненную работу: $inv_abs_plus";
+            self::messageToBot($message, 120352595);
+
+            return $this->render('index');
 		}
 		else {  
 		
@@ -196,13 +196,40 @@ class SiteController extends Controller
 			->setHtmlBody($content)
 		  ->send();	
 			}
-		 Yii::$app->user->logout();
+
+            $message = "$user_name закончил(а) работу. Оформлено деклараций: $decl. Выставлено счетов: $invoice.";
+            self::messageToBot($message, 120352595);
+            self::messageToBot($message, 474748019);
+
+
+
+            Yii::$app->user->logout();
          return $this->goHome();
 		}  
 	  
 
     }
 
+    public function messageToBot($message, $chat_id)
+    {
+        $bot = '6235702872:AAFW6QzdfvAILGe0oA9_X7lgx-I9O2w_Vg4';
+
+        $array = array(
+            'chat_id' => $chat_id,
+            'text' => $message,
+            'parse_mode' => 'html'
+        );
+
+        $url = 'https://api.tlgr.org/bot' . $bot . '/sendMessage';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($array, '', '&'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_exec($ch);
+        curl_close($ch);
+    }
     /**
      * Displays contact page.
      *
