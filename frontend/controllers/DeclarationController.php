@@ -401,6 +401,30 @@ class DeclarationController extends Controller
         curl_exec($ch);
         curl_close($ch);
     }
+
+    public function buttonsToBot($chat_id, $message, $button)
+    {
+        $bot = '6235702872:AAFW6QzdfvAILGe0oA9_X7lgx-I9O2w_Vg4';
+
+        $array = array(
+            'chat_id' => $chat_id,
+            'text' => $message,
+            'parse_mode' => 'html',
+            'reply_markup' => $button
+        );
+
+        $url = 'https://api.tlgr.org/bot' . $bot . '/sendMessage';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($array, '', '&'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_exec($ch);
+        curl_close($ch);
+
+    }
+
     public function actionZatraty($id)
     {
 			$model_d = $this->findModel($id);

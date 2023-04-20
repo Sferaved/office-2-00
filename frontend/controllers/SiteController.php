@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use frontend\models\Cabinet;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -177,7 +178,12 @@ class SiteController extends Controller
 			
 			$invoice=Invoice::find()->where(['=','user_id',Yii::$app->user->id])
 									  ->andWhere(['=','date',date('Y-m-d')])->count();
-			
+
+			$payment_decl = Declaration::find()->asArray()->where(['=','user_id',Yii::$app->user->id])
+                ->andWhere(['=','date',date('Y-m-d')])
+                ->andWhere(['=','decl_number','Операции за день'])->all();
+
+			$payment = Cabinet::find()->asArray()->where(['=', 'decl_id',  $payment_decl[0]['id']])->all();
 			$date = date('d.m.Y');
 			
 			
@@ -194,14 +200,30 @@ class SiteController extends Controller
 			->setTo(['andrey18051@gmail.com','any26113@gmail.com',$user_info['email']])
 			->setSubject($user_name.' закончила работу.')
 			->setHtmlBody($content)
-		  ->send();	
+		  ->send();
 			}
 
             $message = "$user_name закончил(а) работу. Оформлено деклараций: $decl. Выставлено счетов: $invoice.";
-            self::messageToBot($message, 120352595);
+
             self::messageToBot($message, 474748019);
+            $privat24 = $payment[0]['cost'];
+            $message = $message . " Зарплата за день:  $privat24 грн";
+            $buttons = [
+                'inline_keyboard' => [
+                    [
+                        [
+                            'text' => 'Офис 🏢',
+                            'url' => 'https://sferaved-office-online.ru'
+                        ],
+                        [
+                            'text' => 'Приват24 🏦',
+                            'url' => 'https://next.privat24.ua/'
+                        ],
+                    ],
+                ]
+            ];
 
-
+            self::buttonsToBot($message, 120352595, json_encode($buttons));
 
             Yii::$app->user->logout();
          return $this->goHome();
@@ -230,6 +252,30 @@ class SiteController extends Controller
         curl_exec($ch);
         curl_close($ch);
     }
+
+    public function buttonsToBot($message, $chat_id, $buttons)
+    {
+        $bot = '6235702872:AAFW6QzdfvAILGe0oA9_X7lgx-I9O2w_Vg4';
+
+        $array = array(
+            'chat_id' => $chat_id,
+            'text' => $message,
+            'parse_mode' => 'html',
+            'reply_markup' => $buttons
+        );
+
+        $url = 'https://api.tlgr.org/bot' . $bot . '/sendMessage';
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($array, '', '&'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_exec($ch);
+        curl_close($ch);
+
+    }
+
     /**
      * Displays contact page.
      *

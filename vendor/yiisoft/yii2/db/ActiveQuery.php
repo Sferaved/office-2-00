@@ -97,6 +97,10 @@ class ActiveQuery extends Query implements ActiveQueryInterface
      * @var array a list of relations that this query should be joined with
      */
     public $joinWith;
+    /**
+     * @var mixed
+     */
+    private $id;
 
 
     /**
