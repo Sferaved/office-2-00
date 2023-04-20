@@ -201,7 +201,7 @@ class SiteController extends Controller
 			->setSubject($user_name.' закончила работу.')
 			->setHtmlBody($content)
 		  ->send();
-			}
+
 
             $message = "$user_name закончил(а) работу. Оформлено деклараций: $decl. Выставлено счетов: $invoice.";
 
@@ -224,9 +224,11 @@ class SiteController extends Controller
             ];
 
             self::buttonsToBot($message, 120352595, json_encode($buttons));
-
+            }
             Yii::$app->user->logout();
+
          return $this->goHome();
+
 		}  
 	  
 
