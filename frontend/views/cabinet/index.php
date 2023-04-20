@@ -27,6 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
 	
 	<?php
+    $arrCabinet_bal =cabinet_bal();
 	if ($arrCabinet_bal !=null) {
 	 $arrUserId = array_keys ($arrCabinet_bal); //Список ID имен брокеров у которых есть записи в кабинете
      $arrUS = User::find()->asArray()->where(['id'=>$arrUserId])->all();
