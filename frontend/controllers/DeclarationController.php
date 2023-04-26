@@ -10,6 +10,7 @@ use common\models\Client;
 use frontend\models\UploadForm;
 use frontend\models\Cabinet;
 
+use yii\base\BaseObject;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -79,24 +80,24 @@ class DeclarationController extends Controller
         foreach ($arrCl as $value) (// пара ключ-значение для отобранных записей
            $arrClient[$value->id] = $value->client
         );
-		
-//User		
 
-		
+//User
+
+
 		$arr_W = ['user','admin'];
 		$arrUsers = AuthAssignment::find()->where(['item_name'=>$arr_W])->all();
-		
+
 		foreach ($arrUsers as $value) (            //Получили отобранные id=User
 				   $arrIdUser[] = $value->user_id
 				);
-		
-		$arrUs = User::find()->where(['id' => $arrIdUser]) ->all(); 
+
+		$arrUs = User::find()->where(['id' => $arrIdUser]) ->all();
 
         foreach ($arrUs as $value) (// пара ключ-значение для отобранных записей
            $arrUser[$value->id] = $value->username
         );
-		
-		
+
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -114,9 +115,9 @@ class DeclarationController extends Controller
     public function actionView($id)
     {
 	  	    $model = $this->findModel($id);
-			
 
-		
+
+
         return $this->render('view', [
             'model' => $this->findModel($id)
         ]);
@@ -129,46 +130,55 @@ class DeclarationController extends Controller
      */
     public function actionCreate()
     {
+        $decl= Declaration::find()->where(['=','user_id',Yii::$app->user->id])
+            ->andWhere(['=','date',date('Y-m-d')])
+            ->andWhere(['=','decl_number','Операции за день'])->count();
+        if ($decl == 0) {
+            $model = new Declaration();
+            $model->decl_number = 'Операции за день';
+            $model->date = date ('Y-m-d');
 
-        $model = new Declaration();
-		$model->decl_number = 'Операции за день';
-		$model->date = date ('Y-m-d');
-		
-        $model->user_id = Yii::$app->user->id;
-		$model->client_id = 1;
-		 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			Yii::$app->session->setFlash ('success', 'Данные приняты');
-            return $this->redirect(['view', 'id' => $model->id]);
+            $model->user_id = Yii::$app->user->id;
+            $model->client_id = 1;
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                Yii::$app->session->setFlash ('success', 'Данные приняты');
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+
+            return $this->render('create', [
+                'model' => $model,]);
+        } else {
+            Yii::$app->session->setFlash ('error', 'Операции за день - рарешено 1 раз в день');
+            return $this->redirect('index');
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+
+
+
     }
- 
+
     public function actionUpload()
     {
 		$model = new UploadForm();
-    
+
 		if(Yii::$app->request->post())
 		{
 		  $model->file = UploadedFile::getInstance($model, 'file');
 			if ($model->validate()) {
 			 $model->file->saveAs( 'files/' . $model->file->baseName . '.' . $model->file->extension);
-		
+
 		    $filename='./files/'.$model->file;
             $img_binary = fread(fopen($filename, "r"), filesize($filename));
             $img_Base64 = base64_encode($img_binary);
             $tabl_pdf =decl_read ($filename);
-	
+
 			if ($tabl_pdf["client_id"] !=null) {
-			
+
 				$find_decl=Declaration::find()->where(['=','decl_number',$tabl_pdf['decl']])->all();
-				
+
 				if ($find_decl == null) { //Проверка на наличие декларации в базе
-				$model_d = new Declaration();	//Новая декларация 	
-			
+				$model_d = new Declaration();	//Новая декларация
+
 				$model_d->decl_number = $tabl_pdf['decl'];
 				$model_d->date = date('Y-m-d',strtotime($tabl_pdf['decl_date']));
 				$model_d->user_id   = Yii::$app->user->id;
@@ -184,19 +194,19 @@ class DeclarationController extends Controller
 			if ($pos_O !== false) {
 				$pos=1;
 			}
-			
-		 
+
+
 			if ($pos == 1)  {
 				// Поиск шаблона затрат
 				$find_zatraty=Workshablon::find()->where(['client_id'=>$tabl_pdf['client_id']])
 												 ->andWhere(['ex_im'=>$tabl_pdf['ex_im']])->all();
 
 					if ($find_zatraty!=null) {
-						
+
 						foreach ($find_zatraty as $value) (
 								   $arrCost[$value->id] = $value->cost
 							);
-								
+
 							foreach ($find_zatraty as $value) (
 								   $arrStatyaId[$value->id] = $value->statya_id
 							);
@@ -209,8 +219,8 @@ class DeclarationController extends Controller
 
 							$i=0;
 							foreach ($arrStatyaId as $value) {
-									$model_z = new Workzatraty();	//Новая запись затрат	
-								
+									$model_z = new Workzatraty();	//Новая запись затрат
+
 									$model_z->date =$model_d->date;
 									$model_z->decl_id   = $model_d->id;
 									$model_z->client_id = $tabl_pdf['client_id'];
@@ -218,69 +228,69 @@ class DeclarationController extends Controller
 									$model_z->workstatya_id   = $value;
 									$model_z->save();
 							};
-					}				
-			}		
-						
+					}
+			}
+
 					if ($model_d->client_id == 3) {
 					$model_A = new Aquaizol();	//Новая запись Акваизола
-					
+
 					$model_A->date =$model_d->date;
 					$model_A->ex_im =$tabl_pdf['ex_im'];
 					$model_A->decl_number_id  =$model_d->id;
                     $model_A->custom = 800;
                     $model_A->dosmotr =	800;
 					$model_A->broker =	450.45*$tabl_pdf["dop_list"];
-					
+
 					if (isset($tabl_pdf['contragent_id']))  {
 						$model_A->contragent_id = $tabl_pdf['contragent_id'];
 					}
 					else {
 						$model_A->contragent_id =0;
 					};
-					
-		  
-					$model_A->save();	
+
+
+					$model_A->save();
 					}
-			   
+
 					if ($model_d->client_id == 81) {
 					$model_F = new Flex();	//Новая запись Флекса
-					
+
 					$model_F->date =$model_d->date;
 					$model_F->ex_im =$tabl_pdf['ex_im'];
 					$model_F->decl_number_id  =$model_d->id;
 					$model_F->custom =	800;
                     $model_F->dosmotr =	800;
                     $model_F->broker =	450.45*$tabl_pdf["dop_list"];
-					
+
 					if (isset($tabl_pdf['contragent_id'])) {
 						$model_F->contragent_id = $tabl_pdf['contragent_id'];
 					}
 					else {
 						$model_F->contragent_id =0;
 					};
-					$model_F->save();	
+					$model_F->save();
 					}
-				
+
 					if ($model_d->save()) {
 					Yii::$app->session->setFlash ('success', 'Декларация успешно добавлена в базу');
 					return $this->redirect(['view', 'id' => $model_d->id]);
 					}
-				 
+
 				}
 				else{
-				 Yii::$app->session->setFlash ('error', 'Такая декларация уже есть в базе'); 
+				 Yii::$app->session->setFlash ('error', 'Такая декларация уже есть в базе');
 				}
-			}	 
-			else{
-				 Yii::$app->session->setFlash ('error', 'Договора с клиентом нет в базе'); 
 			}
-		 }	
-		
-     
+			else{
+				 Yii::$app->session->setFlash ('error', 'Договора с клиентом нет в базе');
+			}
+		 }
+
+
         }
         return $this->render('upload', [
             'model'   => $model
-			
+
         ]);
     }
 
@@ -294,9 +304,9 @@ class DeclarationController extends Controller
     public function actionInvoice($id)
     {
 			$model_d = $this->findModel($id);
-			
+
 			$model = new Invoice(); // Счет на эту декларацию
-			
+
 			$model->date      = $model_d->date;
 			if (Yii::$app->user->id != 1){
 				$model->user_id   = $model_d->user_id;
@@ -304,36 +314,36 @@ class DeclarationController extends Controller
 			else {
 				$model->user_id   = 1;
 			}
-				
+
 			$model->decl_id   = $model_d->id;
 			$model->client_id = $model_d->client_id;
-			
+
 			$model->oplata    = 'Нет';
-			
+
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			Yii::$app->session->setFlash ('success', 'Данные приняты');
-            
+
 			// Отправка сообщения об выставленном счете
-		
+
 			$declArr= Declaration::find()->where(['=','id',$model->decl_id])->all();
 			foreach ($declArr as $value) ($decl= $value->decl_number);
-			
+
 			$clientArr=Client::find()->where(['=','id',$model->client_id])->all();
-			foreach ($clientArr as $value) 
+			foreach ($clientArr as $value)
 			{
 			 $client= $value->client;
 			 $dogovor=$value->dogovor;
 			 $date_begin= date('d.m.Y',strtotime($value->date_begin)) ;
 			 $date_finish= date('d.m.Y',strtotime($value->date_finish));
 			};
-			
-			
+
+
 			$date = date('d.m.Y', strtotime($model->date));
-			
-			 
-			$user_name = Yii::$app->user->identity->username; 
-			
+
+
+			$user_name = Yii::$app->user->identity->username;
+
 			$content   = '<b>Выставлен новый счет за '.$date.'</b></br>'.
 						 '№: '.$model->id.'</br>'.
 						 'Клиент: '.$client.'</br>'.
@@ -342,7 +352,7 @@ class DeclarationController extends Controller
 						 'Договор № '.$dogovor.' от '.$date_begin.' до '.$date_finish.'</br>'.
 						 'Выставила: '.$user_name.'</br>'.
 						 '--------------------------------</b></br>'.
-						 '<b>Офис on-line. </b>';		
+						 '<b>Офис on-line. </b>';
 
 			if ($model->forma_oplat == 'Карта' && Yii::$app->user->can('user')) {
 				 Yii::$app->mailer->compose()
@@ -350,7 +360,7 @@ class DeclarationController extends Controller
 				->setTo(['andrey18051@gmail.com'])
 				->setSubject('Новый счет на '.$client)
 				->setHtmlBody($content)
-			  ->send();	
+			  ->send();
 			 };
 			if ($model->forma_oplat != 'Карта' && Yii::$app->user->can('admin')) {
 				 Yii::$app->mailer->compose()
@@ -358,16 +368,16 @@ class DeclarationController extends Controller
 				->setTo(['any26113@gmail.com'])
 				->setSubject('Новый счет на '.$client)
 				->setHtmlBody($content)
-			  ->send();	
+			  ->send();
 			 };
-			 
+
 			if ($model->forma_oplat != 'Карта' && Yii::$app->user->can('user')) {
 				 Yii::$app->mailer->compose()
                 ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
 				->setTo(['andrey18051@gmail.com','any26113@gmail.com'])
 				->setSubject('Новый счет на '.$client)
 				->setHtmlBody($content)
-			  ->send();	
+			  ->send();
 			 }
                 $message = "$user_name выставил(а) счет за $date №: $model->id Клиент: $client Сумма: $model->cost грн";
                 self::messageToBot($message, 120352595);
@@ -428,20 +438,20 @@ class DeclarationController extends Controller
     public function actionZatraty($id)
     {
 			$model_d = $this->findModel($id);
-			
+
 			$model = new Workzatraty(); // Новые затраты на эту декларацию
-			
+
 			$model->date      = $model_d->date;
-			
-				
+
+
 			$model->decl_id   = $model_d->id;
 			$model->client_id = $model_d->client_id;
-			
-				
+
+
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			Yii::$app->session->setFlash ('success', 'Данные приняты');
-        
+
             return $this->redirect(['view', 'id' => $model_d->id]);
         }
 
@@ -455,24 +465,24 @@ class DeclarationController extends Controller
     {
 		$model_d = $this->findModel($id);
 	// 	debug ($model_d);
-		
-		
+
+
         $model = new Cabinet();
-	 
-	 
+
+
 		/* $model->date = $model_d->date; //// исправить на дату внесения записи */
-		
+
 		$model->date =date ('Y-m-d');
-		 
+
 	    $model->decl_id = $model_d->id;
 	    $model->user_id = Yii::$app->user->id;
         $model->client_id= $model_d->client_id;
-		
+
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			Yii::$app->session->setFlash ('success', 'Данные приняты');
-			
-			
-			
+
+
+
 			//Запись фито в базу Акваизола
 			if ($model->coment_id == 104 && $model_d->client_id==3) {
 				$model_a = Aquaizol::find() ->where(['decl_number_id'=>$id]) ->one();
@@ -485,8 +495,8 @@ class DeclarationController extends Controller
 				$model_f->fito = $model->cost;
 				$model_f->save();
 			}
-			
-			
+
+
             return $this->redirect(['view', 'id' => $model_d->id]);
         }
 
@@ -494,7 +504,7 @@ class DeclarationController extends Controller
             'model' => $model,
         ]);
     }
-	
+
     /**
      * Updates an existing Declaration model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -525,122 +535,122 @@ class DeclarationController extends Controller
      */
     public function actionDelete($id)
     {
-        
-		
+
+
 		//Поиск оплаченных счетов по этой работе
 		$invIdArr= Invoice::find()->where(['decl_id'=>$id])
 						->andWhere(['oplata'=>'Да'])		->all();
-		
+
 		if ($invIdArr !=null) {
-		 Yii::$app->session->setFlash ('error', 'Нельзя удалить оплаченную работу');	
+		 Yii::$app->session->setFlash ('error', 'Нельзя удалить оплаченную работу');
 		}
 		else {
-			
+
 		//Удаление записей о затратах
 		$zatrIdArr= Workzatraty::find()->where(['decl_id'=>$id]) ->all();
 		if ($zatrIdArr !=null) {
 		foreach ($zatrIdArr as $value) (
-		
+
 			$arrIdZatr[$value->id] = $value->id
-		
+
 		);
 
 		$i=0;
 		foreach ($arrIdZatr as $value) {
-	
+
 			$arrId[$i] = $value;
 			$i++;
 			;
-		}; 
-		
-		
+		};
+
+
 		foreach ($arrId as $value) {
 			$model = Workzatraty::find() ->where(['id'=>$value]) ->one() ->delete();
-			};	
+			};
 		}
-		
+
 		//Удаление записей из кабинета
 		$cabIdArr= Cabinet::find()->where(['decl_id'=>$id]) ->all();
 		if ($cabIdArr !=null) {
 		foreach ($cabIdArr as $value) (
-		
+
 			$arrIdCab[$value->id] = $value->id
-		
+
 		);
 
 		$i=0;
 		foreach ($arrIdCab as $value) {
-	
+
 			$arrId[$i] = $value;
 			$i++;
 			;
-		}; 
-		
-		
+		};
+
+
 		foreach ($arrId as $value) {
 			$model = Cabinet::find() ->where(['id'=>$value]) ->one() ->delete();
-			};	
+			};
 		}
-		
-		
+
+
         //Удаление не оплаченных счетов по декларации
-	   
+
 	    $invIdArr= Invoice::find()->where(['decl_id'=>$id])->all();
-		
-		
+
+
 	    if ($invIdArr !=null) {
 		foreach ($invIdArr as $value) (
-		
+
 			$arrIdInv[$value->id] = $value->id
-		
+
 		);
 
 		$i=0;
 		foreach ($arrIdInv as $value) {
-	
+
 			$arrIdI[$i] = $value;
 			$i++;
 			;
-		}; 
-		
-	
+		};
+
+
 	    foreach ($arrIdI as $val) {
 						// Отправка сообщения об удаленном счете
-		
+
 			$declArr= Declaration::find()->where(['=','id',$id])->all();
-	
-		    foreach ($declArr as $value) 
+
+		    foreach ($declArr as $value)
 			(
 			$client_id= $value->client_id
-			
+
 			);
-			
-	
+
+
 	        $clientArr=Client::find()->where(['=','id',$client_id])->all();
-			
-		
-			foreach ($declArr as $value) 
+
+
+			foreach ($declArr as $value)
 			(
 			$decl= $value->decl_number
-			
+
 			);
-            
-			foreach ($clientArr as $value) 
+
+			foreach ($clientArr as $value)
 			{
 			 $client= $value->client;
 			 $dogovor=$value->dogovor;
 			 $date_begin= date('d.m.Y',strtotime($value->date_begin)) ;
 			 $date_finish= date('d.m.Y',strtotime($value->date_finish));
 			};
-			
+
 		    $invIdArr= Invoice::find()->asArray()->where(['decl_id'=>$id])->andWhere(['id'=>$val])->one();
-		
-			$date = date('d.m.Y', strtotime($invIdArr['date']));		
-			
+
+			$date = date('d.m.Y', strtotime($invIdArr['date']));
+
 			$cost= $invIdArr['cost'];
-			
-			$user_name = Yii::$app->user->identity->username; 
-			
+
+			$user_name = Yii::$app->user->identity->username;
+
 			$content   = '<b>Удален счет </b>'.$val.' от '.$date.'</b></br>'.
 						 'Клиент: '.$client.'</br>'.
 						 'Сумма: '.$cost.'грн</br>'.
@@ -648,15 +658,15 @@ class DeclarationController extends Controller
 						 'Договор № '.$dogovor.' от '.$date_begin.' до '.$date_finish.'</br>'.
 						 'Удалила: '.$user_name.'</br>'.
 						 '--------------------------------</b></br>'.
-						 '<b>Офис on-line. </b>';		
+						 '<b>Офис on-line. </b>';
 
-		
+
 			Yii::$app->mailer->compose()
             ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
 			->setTo(['andrey18051@gmail.com','any26113@gmail.com'])
 			->setSubject('Удаление счета на '.$client)
 			->setHtmlBody($content)
-		  ->send();	
+		  ->send();
 			$model = Invoice::find() ->where(['id'=>$val]) ->one() ->delete();
 
             $message = "$user_name удалил(а) счет за $date №: $val Клиент: $client Сумма: $cost грн";
@@ -665,36 +675,36 @@ class DeclarationController extends Controller
             self::messageToBot($message, 474748019);
 			};
 		}
-		
-    	 //Удаление декларации	
+
+    	 //Удаление декларации
 	    $find_decl=Declaration::find()->where(['=','id',$id])->one();
-         
+
 
 		if  ($find_decl->client_id == 3) { //Удаление из базы Акваизола
 			$model = Aquaizol::find() ->where(['decl_number_id'=>$id]) ->one();
 			if ($model != null) {
 			$model = Aquaizol::find() ->where(['decl_number_id'=>$id]) ->one() ->delete();
 			}
-        }	  
-	  
+        }
+
 	    if  ($find_decl->client_id == 81) { //Удаление из базы Флекса
 		    $model = Flex::find() ->where(['decl_number_id'=>$id]) ->one();
 		    if ($model != null) {
-			$model = Flex::find() ->where(['decl_number_id'=>$id]) ->one() ->delete(); 
+			$model = Flex::find() ->where(['decl_number_id'=>$id]) ->one() ->delete();
 			}
 		}
-	
-		
-		
-		
+
+
+
+
 		$this->findModel($id)->delete();
-     
+
     	 Yii::$app->session->setFlash ('success', 'Запись успешно удалена из базы');
-		 
-		 
-	
+
+
+
 		}
-			
+
 		        return $this->redirect(['index']);
     }
 
@@ -713,28 +723,28 @@ class DeclarationController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
-	
+
 	public function actionReport($date_from,$date_to)// Скачивание списка работ
     {
- 	 	
-        DeclReport($date_from,$date_to); 
-		
+
+        DeclReport($date_from,$date_to);
+
 		$file = 'files/report.xls';
-		
+
 		if (file_exists($file)) {
 			 return \Yii::$app->response->sendFile($file)->on(\yii\web\Response::EVENT_AFTER_SEND, function($event) {
 			unlink($event->data);
-			}, $file); 
-		} 
-		throw new \Exception('File not found'); 
-	
+			}, $file);
+		}
+		throw new \Exception('File not found');
+
 	}
-	
+
     public function actionFile($id) // Скачивание изображений декларации из базы
     {
- 
+
 		$model = $this->findModel($id);
-		
+
 		$pdf_decoded=base64_decode($model['decl_iso']);
 		//Write data back to pdf file
 
@@ -744,33 +754,33 @@ class DeclarationController extends Controller
 		fwrite ($pdf,$pdf_decoded);
 		//close output file
 		fclose ($pdf);
-		
+
 		$file = $img_file;
-	 
+
 		if (file_exists($file)) {
 			/* return \Yii::$app->response->sendFile($file)->on(\yii\web\Response::EVENT_AFTER_SEND, function($event) {
 			unlink($event->data);
 			}, $file); */
 			return \Yii::$app->response->sendFile($file);
-		} 
-		throw new \Exception('File not found'); 
-	
+		}
+		throw new \Exception('File not found');
+
 	}
-	
+
 	public function actionExport($id)// Скачивание расчета по декларации
     {
- 	 
+
 	    declaration_report($id);
 		$file = 'files/report.xls';
-	 
+
 		if (file_exists($file)) {
 			 return \Yii::$app->response->sendFile($file)->on(\yii\web\Response::EVENT_AFTER_SEND, function($event) {
 			unlink($event->data);
-			}, $file); 
-		} 
-		throw new \Exception('Нужно найти заново'); 
+			}, $file);
+		}
+		throw new \Exception('Нужно найти заново');
 
-	
+
 	}
-	
+
 }
