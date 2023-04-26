@@ -184,6 +184,7 @@ class SiteController extends Controller
                 ->andWhere(['=','decl_number','Операции за день'])->all();
 
 			$payment = Cabinet::find()->asArray()->where(['=', 'decl_id',  $payment_decl[0]['id']])->all();
+
 			$date = date('d.m.Y');
 			
 			
