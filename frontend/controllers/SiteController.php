@@ -121,7 +121,17 @@ class SiteController extends Controller
 		$user_info= User::find()->where(['=','id',Yii::$app->user->id])->asArray()->one();
 		
 	//	debug ($user_info);
-		
+        if (Yii::$app->user->can('user') ) {
+            $decl = Declaration::find()->where(['=', 'user_id', Yii::$app->user->id])
+                ->andWhere(['=', 'date', date('Y-m-d')])
+                ->andWhere(['=', 'decl_number', 'Операции за день'])->count();
+            if ($decl == 0) {
+
+                Yii::$app->session->addFlash('error', 'Не записано Операции за день - выход не возможен');
+                return $this->redirect('index');
+            }
+        }
+
 		if ($decl_inv[0] !=0){
 	 	
 	 		if (Yii::$app->user->can('user')) { // Отправка сообщения об окончании работы
@@ -159,12 +169,14 @@ class SiteController extends Controller
 			->setTo(['andrey18051@gmail.com','any26113@gmail.com',$user_info['email']])
 			->setSubject($user_name.' НЕ ЗАКОНЧИЛА РАБОТУ.')
 			->setHtmlBody($content)
-		  ->send();	  
-			}
+		  ->send();
 
+
+			}
             $message ="Не выставлены счета на выполненную работу: $inv_abs_plus";
             self::messageToBot($message, 120352595);
 
+            Yii::$app->session->addFlash ('error', $message);
             return $this->render('index');
 		}
 		else {  

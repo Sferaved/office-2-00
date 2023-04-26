@@ -39,22 +39,24 @@ $this->title = 'Офис on-line';
 				$Inv_abs = $Inv_abs.$arrDcl['decl_number'].' ';
 			};
 		
-		    Yii::$app->session->setFlash('error', 'Выход заблокирован!!!! Не выставлены счета на декларации: '.$Inv_abs);
+		    Yii::$app->session->addFlash('error', 'Выход заблокирован!!!! Не выставлены счета на декларации: '.$Inv_abs);
 	    }
 		else {
 			$invoice= Invoice::find()->where (['=','oplata','Нет'])->andWhere (['=','user_id',Yii::$app->user->id])->count();
 			$arrClient= dogovor_report();
 			
 			if ($invoice !=0 && $arrClient !=null) {
-				Yii::$app->session->setFlash('error', 'Не оплачено счетов: '. $invoice.'. Часть договоров нужно продлить');
+				Yii::$app->session->addFlash('error', 'Не оплачено счетов: '. $invoice.'. Часть договоров нужно продлить');
 			}
 			
 			if ($invoice ==0 && $arrClient !=null) {
-				Yii::$app->session->setFlash('error', 'Часть договоров нужно продлить');
+				Yii::$app->session->addFlash('error', 'Часть договоров нужно продлить');
+//				Yii::$app->session->removeFlash('error');
 			}
 			
 			if ($invoice !=0 && $arrClient ==null) {
-				Yii::$app->session->setFlash('error', 'Не оплачено счетов: '. $invoice);
+				Yii::$app->session->addFlash('error', 'Не оплачено счетов: '. $invoice);
+
 			}
 		}
 		
@@ -69,15 +71,15 @@ $this->title = 'Офис on-line';
 		$arrClient= dogovor_report();
 		
 		if ($invoice !=0 && $arrClient !=null) {
-			Yii::$app->session->setFlash('error', 'Не оплачено счетов: '. $invoice.'. Часть договоров нужно продлить');
+			Yii::$app->session->addFlash('error', 'Не оплачено счетов: '. $invoice.'. Часть договоров нужно продлить');
 		}
 		
 		if ($invoice ==0 && $arrClient !=null) {
-			Yii::$app->session->setFlash('error', 'Часть договоров нужно продлить');
+			Yii::$app->session->addFlash('error', 'Часть договоров нужно продлить');
 		}
 		
 		if ($invoice !=0 && $arrClient ==null) {
-			Yii::$app->session->setFlash('error', 'Не оплачено счетов: '. $invoice);
+			Yii::$app->session->addFlash('error', 'Не оплачено счетов: '. $invoice);
 		}
 	}
    
