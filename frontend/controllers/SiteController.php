@@ -121,59 +121,50 @@ class SiteController extends Controller
 		$user_info= User::find()->where(['=','id',Yii::$app->user->id])->asArray()->one();
 		
 	//	debug ($user_info);
-        if (Yii::$app->user->can('user') ) {
-            $decl = Declaration::find()->where(['=', 'user_id', Yii::$app->user->id])
-                ->andWhere(['=', 'date', date('Y-m-d')])
-                ->andWhere(['=', 'decl_number', 'Операции за день'])->count();
-            if ($decl == 0) {
+//        if (Yii::$app->user->can('user') ) {
+//            $decl = Declaration::find()->where(['=', 'user_id', Yii::$app->user->id])
+//                ->andWhere(['=', 'date', date('Y-m-d')])
+//                ->andWhere(['=', 'decl_number', 'Операции за день'])->count();
+//            if ($decl == 0) {
+//
+//                Yii::$app->session->addFlash('error', 'Не записано Операции за день - выход не возможен');
+//                return $this->redirect('index');
+//            }
+//        }
 
-                Yii::$app->session->addFlash('error', 'Не записано Операции за день - выход не возможен');
-                return $this->redirect('index');
-            }
-        }
-
-		if ($decl_inv[0] !=0){
-	 	
+		if ($decl_inv[0] != 0) {
 	 		if (Yii::$app->user->can('user')) { // Отправка сообщения об окончании работы
-			
-				
-			$decl= Declaration::find()->where(['=','user_id',Yii::$app->user->id])
+    			$decl= Declaration::find()->where(['=','user_id',Yii::$app->user->id])
 									  ->andWhere(['=','date',date('Y-m-d')])
 									  ->andWhere(['!=','decl_number','Операции за день'])->count();
-			
-			$invoice=Invoice::find()->where(['=','user_id',Yii::$app->user->id])
+
+			    $invoice=Invoice::find()->where(['=','user_id',Yii::$app->user->id])
 									  ->andWhere(['=','date',date('Y-m-d')])->count();
-			
-			$date = date('d.m.Y');
 
-			 
-			$inv_abs_plus='';
-			
-			foreach ($decl_inv as $tabl) {
-							$inv_abs_plus =$inv_abs_plus.$tabl['decl_number'].'</br>';
-							  }
-			$inv_abs = '<b>Не выставлены счета на выполненную работу: </b></br>'.$inv_abs_plus;
-			
-	
-			$content   = '<b>Итоги работы за '.$date.'</b></br></br>'.
-						 'Оформлено деклараций: '.$decl.'</br>'.
-						 'Выставлено счетов: '.$invoice.'</b></br></br>'.
-					     $inv_abs. 
-						 '--------------------------------</br>'.
-						 '<b>Офис on-line. </b>';		
+			    $date = date('d.m.Y');
 
+			    $inv_abs_plus = '';
 
-		
-			Yii::$app->mailer->compose()
-			->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
-			->setTo(['andrey18051@gmail.com','any26113@gmail.com',$user_info['email']])
-			->setSubject($user_name.' НЕ ЗАКОНЧИЛА РАБОТУ.')
-			->setHtmlBody($content)
-		  ->send();
+                foreach ($decl_inv as $tabl) {
+                    $inv_abs_plus = $inv_abs_plus . $tabl['decl_number'] . '</br>';
+                }
+                $inv_abs = '<b>Не выставлены счета на выполненную работу: </b></br>' . $inv_abs_plus;
 
+                $content   = '<b>Итоги работы за ' . $date . '</b></br></br>' .
+                             'Оформлено деклараций: ' . $decl . '</br>' .
+                             'Выставлено счетов: ' . $invoice . '</b></br></br>' .
+                              $inv_abs .
+                             '--------------------------------</br>' .
+                             '<b>Офис on-line.</b>';
 
-			}
-            $message ="Не выставлены счета на выполненную работу: $inv_abs_plus";
+                Yii::$app->mailer->compose()
+                ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
+                ->setTo(['andrey18051@gmail.com','any26113@gmail.com',$user_info['email']])
+                ->setSubject($user_name . ' НЕ ЗАКОНЧИЛА РАБОТУ.')
+                ->setHtmlBody($content)
+                ->send();
+    		}
+            $message = "Не выставлены счета на выполненную работу: $inv_abs_plus";
             self::messageToBot($message, 120352595);
 
             Yii::$app->session->addFlash ('error', $message);
@@ -190,59 +181,57 @@ class SiteController extends Controller
 			
 			$invoice=Invoice::find()->where(['=','user_id',Yii::$app->user->id])
 									  ->andWhere(['=','date',date('Y-m-d')])->count();
-
-			$payment_decl = Declaration::find()->asArray()->where(['=','user_id',Yii::$app->user->id])
-                ->andWhere(['=','date',date('Y-m-d')])
-                ->andWhere(['=','decl_number','Операции за день'])->all();
-
-			$payment = Cabinet::find()->asArray()->where(['=', 'decl_id',  $payment_decl[0]['id']])->all();
-
 			$date = date('d.m.Y');
-			
-			
-			$content   = '<b>Итоги работы за '.$date.'</b></br></br>'.
-						 'Оформлено деклараций: '.$decl.'</br>'.
-						 'Выставлено счетов: '.$invoice.'</br>'.
-						 '--------------------------------</b></br>'.
-						 '<b>Офис on-line. </b>';		
+			$content   = '<b>Итоги работы за ' . $date . '</b></br></br>' .
+						 'Оформлено деклараций: ' . $decl . '</br>' .
+						 'Выставлено счетов: ' . $invoice . '</br>' .
+						 '--------------------------------</b></br>' .
+						 '<b>Офис on-line. </b>';
 
-
-		
 			Yii::$app->mailer->compose()
 			->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
 			->setTo(['andrey18051@gmail.com','any26113@gmail.com',$user_info['email']])
 			->setSubject($user_name.' закончила работу.')
 			->setHtmlBody($content)
-		  ->send();
+		    ->send();
 
 
             $message = "$user_name закончил(а) работу. Оформлено деклараций: $decl. Выставлено счетов: $invoice.";
 
             self::messageToBot($message, 474748019);
-            $privat24 = $payment[0]['cost'];
-            $message = $message . " Зарплата за день:  $privat24 грн";
-            $buttons = [
-                'inline_keyboard' => [
-                    [
-                        [
-                            'text' => 'Офис 🏢',
-                            'url' => 'https://sferaved-office-online.ru'
-                        ],
-                        [
-                            'text' => 'Приват24 🏦',
-                            'url' => 'https://next.privat24.ua/'
-                        ],
-                    ],
-                ]
-            ];
 
-            self::buttonsToBot($message, 120352595, json_encode($buttons));
+                $payment_decl = Declaration::find()->asArray()->where(['=','user_id',Yii::$app->user->id])
+                    ->andWhere(['=','date',date('Y-m-d')])
+                    ->andWhere(['=','decl_number','Операции за день'])->all();
+                if ($payment_decl) {
+                    $payment = Cabinet::find()->asArray()->where(['=', 'decl_id',  $payment_decl[0]['id']])->all();
+                    $privat24 = $payment[0]['cost'];
+                    $message = $message . " Зарплата за день:  $privat24 грн";
+                    $buttons = [
+                        'inline_keyboard' => [
+                            [
+                                [
+                                    'text' => 'Офис 🏢',
+                                    'url' => 'https://sferaved-office-online.ru'
+                                ],
+                                [
+                                    'text' => 'Приват24 🏦',
+                                    'url' => 'https://next.privat24.ua/'
+                                ],
+                            ],
+                        ]
+                    ];
+
+                    self::buttonsToBot($message, 120352595, json_encode($buttons));
+                } else {
+                    $message = $message . " Зарплата за день списана с баланса.";
+                    self::messageToBot($message, 120352595);
+                }
             }
             Yii::$app->user->logout();
 
-         return $this->goHome();
-
-		}  
+        return $this->goHome();
+		}
 	  
 
     }
