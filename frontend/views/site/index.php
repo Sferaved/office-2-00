@@ -12,7 +12,7 @@ $this->title = 'Офис on-line';
         <h1>Офис on-line</h1>
 
         <p class="lead">Система учета работы и затрат (версия 2.0)</p>
-		<p class="lead">Период с 1 января по 31 декабря 2022</p>
+		<p class="lead">Период с 1 января по 31 декабря 2023</p>
   <?php if (Yii::$app->user->isGuest) {
      ?>
         <p><a class="btn btn-lg btn-success" href="/site/login">Начать работу</a></p>
