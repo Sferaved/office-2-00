@@ -401,7 +401,7 @@ class DeclarationController extends Controller
             'parse_mode' => 'html'
         );
 
-        $url = 'https://api.tlgr.org/bot' . $bot . '/sendMessage';
+        $url = 'https://api.telegram.org/bot' . $bot . '/sendMessage';
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($array, '', '&'));
@@ -423,7 +423,7 @@ class DeclarationController extends Controller
             'reply_markup' => $button
         );
 
-        $url = 'https://api.tlgr.org/bot' . $bot . '/sendMessage';
+        $url = 'https://api.telegram.org/bot' . $bot . '/sendMessage';
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($array, '', '&'));
