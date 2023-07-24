@@ -935,7 +935,7 @@ foreach ($arrAqFl as $tabl) {
 
 $i_All = $i_e+$i_i; // Количество оформлений общее за период
 
-$cost_1= round(($export+$import+$i_All*600)*1.2/$i_All,2); //Цена
+$cost_1= round(($export+$import+$i_All*650)*1.2/$i_All,2); //Цена
 
 $export =$cost_1*$i_e; // Счет за экспорт
 $import =$cost_1*$i_i; // Счет за импорт
@@ -1242,7 +1242,7 @@ $sheet->getStyle($G)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fil
 					  $G="G"."7";
 					  
 	$zatraty =	$broker+$dosmotr+ $custom+ $fito;
-	$usligi= 600*($i_e+$i_i);
+	$usligi= 650*($i_e+$i_i);
 	$itogo =($zatraty +$usligi)*1.2;
 
 	$sheet->setCellValue($A,   $broker ); 
@@ -2327,7 +2327,7 @@ $i_All = $i_e+$i_i; // Количество оформлений общее за
 
 if ($i_All !=0) {  // Если есть декларации за период начало условия
 
-$cost_1= round(($export+$import+$i_All*600)*1.2/$i_All,2); //Цена
+$cost_1= round(($export+$import+$i_All*650)*1.2/$i_All,2); //Цена
 
 $export =$cost_1*$i_e; // Счет за экспорт
 $import =$cost_1*$i_i; // Счет за импорт
