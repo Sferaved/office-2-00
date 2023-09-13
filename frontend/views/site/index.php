@@ -97,7 +97,7 @@ $this->title = 'Офис on-line';
 
                 <p>Панель администратора.</p>
 
-                <p><a class="btn btn-default" href="https://sferaved-office-online.ru/admin">перейти &raquo;</a></p>
+                <p><a class="btn btn-default" href="https://korzhov-office.kharkiv.ua/admin">перейти &raquo;</a></p>
             </div>
 			<div class="col-lg-3">
                 <h3>Электронный документооборот</h3>

@@ -212,7 +212,7 @@ class SiteController extends Controller
                             [
                                 [
                                     'text' => 'Офис 🏢',
-                                    'url' => 'https://sferaved-office-online.ru'
+                                    'url' => 'https://korzhov-office.kharkiv.ua'
                                 ],
                                 [
                                     'text' => 'Приват24 🏦',
