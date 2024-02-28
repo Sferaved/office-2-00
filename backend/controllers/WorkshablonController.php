@@ -53,16 +53,17 @@ class WorkshablonController extends Controller
         $searchModel = new WorkshablonSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $models = $dataProvider->getModels(); // Таблица отбранных записей
-		
+
 //Client
 
-		$arrCl = Client::find()->all(); 	
-		
+		$arrCl = Client::find()->all();
+
         foreach ($arrCl as $value) (// пара ключ-значение для отобранных записей
            $arrClient[$value->id] = $value->client
         );
 		
-//Statya		
+//Statya
+        $arrIdStatya = []; // Определение переменной как пустого массива
 		foreach ($models  as $value) (            //Получили отобранные id статей
            $arrIdStatya[$value->id] = $value->statya_id
 		);
@@ -70,7 +71,7 @@ class WorkshablonController extends Controller
 			$arrIdStatya = array_unique($arrIdStatya);   //Убрали повторяющиеся статьи отобранных записей
 		};
 		$arrSt = Workstatya::find()->where(['id' => $arrIdStatya])->all(); // пара ключ-значение для отобранных записей
-
+        $arrStatya =  [];
         foreach ($arrSt as $value) (
            $arrStatya[$value->id] = $value->statya
         );

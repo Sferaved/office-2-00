@@ -67,7 +67,7 @@ return [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.ukr.net', // SMTP сервер почтовика
                 'username' => 'sferaved@ukr.net', // Логин (адрес электронной почты)
-                'password' => 'pdnjd3AaL4dFH6Sc', // Пароль
+                'password' => 'JyUIc2pdYEjAbmQB', // Пароль
                 'port' => '2525', // Порт
                 'encryption' => 'ssl', // Шифрование
 		    ],

@@ -237,9 +237,14 @@ class DeclarationController extends Controller
 					$model_A->date =$model_d->date;
 					$model_A->ex_im =$tabl_pdf['ex_im'];
 					$model_A->decl_number_id  =$model_d->id;
-                    $model_A->custom = 800;
-                    $model_A->dosmotr =	800;
-					$model_A->broker =	450.45*$tabl_pdf["dop_list"];
+                            if ($pos != 1) {
+                                 $model_A->custom = 800;
+                                 $model_A->broker =	450.45 * $tabl_pdf["dop_list"];
+                            } else {
+                                $model_A->custom = 800 + 550;
+                                $model_A->broker =450.45 * $tabl_pdf["dop_list"] + 100;
+                            }
+                        $model_A->dosmotr = 800;
 
 					if (isset($tabl_pdf['contragent_id']))  {
 						$model_A->contragent_id = $tabl_pdf['contragent_id'];
@@ -258,11 +263,16 @@ class DeclarationController extends Controller
 					$model_F->date =$model_d->date;
 					$model_F->ex_im =$tabl_pdf['ex_im'];
 					$model_F->decl_number_id  =$model_d->id;
-					$model_F->custom =	800;
-                    $model_F->dosmotr =	800;
-                    $model_F->broker =	450.45*$tabl_pdf["dop_list"];
+                            if ($pos != 1) {
+                                $model_F->custom = 800;
+                                $model_F->broker =	450.45*$tabl_pdf["dop_list"];
+                            } else {
+                                $model_F->custom = 800 + 550;
+                                $model_F->broker =	450.45*$tabl_pdf["dop_list"] + 100;
+                            }
+                        $model_F->dosmotr =	800;
 
-					if (isset($tabl_pdf['contragent_id'])) {
+                        if (isset($tabl_pdf['contragent_id'])) {
 						$model_F->contragent_id = $tabl_pdf['contragent_id'];
 					}
 					else {
