@@ -174,7 +174,8 @@ class DeclarationController extends Controller
 
 			if ($tabl_pdf["client_id"] !=null) {
 
-				$find_decl=Declaration::find()->where(['=','decl_number',$tabl_pdf['decl']])->all();
+
+                $find_decl=Declaration::find()->where(['=','decl_number',$tabl_pdf['decl']])->all();
 
 				if ($find_decl == null) { //Проверка на наличие декларации в базе
 				$model_d = new Declaration();	//Новая декларация
@@ -238,10 +239,11 @@ class DeclarationController extends Controller
 					$model_A->ex_im =$tabl_pdf['ex_im'];
 					$model_A->decl_number_id  =$model_d->id;
                             if ($pos != 1) {
-                                 $model_A->custom = 800;
-                                 $model_A->broker =	450.45 * $tabl_pdf["dop_list"];
+
+                                 $model_A->custom = $tabl_pdf['custom'];
+                                 $model_A->broker =	450.45 * $tabl_pdf["dop_list"] + 100;
                             } else {
-                                $model_A->custom = 800 + 550;
+                                $model_A->custom = $tabl_pdf['custom'] + 550;
                                 $model_A->broker =450.45 * $tabl_pdf["dop_list"] + 100;
                             }
                         $model_A->dosmotr = 800;
@@ -264,10 +266,10 @@ class DeclarationController extends Controller
 					$model_F->ex_im =$tabl_pdf['ex_im'];
 					$model_F->decl_number_id  =$model_d->id;
                             if ($pos != 1) {
-                                $model_F->custom = 800;
-                                $model_F->broker =	450.45*$tabl_pdf["dop_list"];
+                                $model_F->custom = $tabl_pdf['custom'];
+                                $model_F->broker =	450.45*$tabl_pdf["dop_list"] + 100;
                             } else {
-                                $model_F->custom = 800 + 550;
+                                $model_F->custom = $tabl_pdf['custom'] + 550;
                                 $model_F->broker =	450.45*$tabl_pdf["dop_list"] + 100;
                             }
                         $model_F->dosmotr =	800;

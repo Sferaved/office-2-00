@@ -116,13 +116,13 @@ function decl_read ($filename) {
 					$tabl_pdf["contragent_id"] = $tabl["id"];
 					
 					$arrAqFlCost = AqFlCost::find()->asArray() 
-	                -> where (['=','contragent_id',$tabl_pdf["contragent_id"]]) ->one(); 
-//	debug ($arrAqFlCost);
+	                -> where (['=','contragent_id',$tabl_pdf["contragent_id"]]) ->one();
+
 	
 	if ($arrAqFlCost != null) {
 		$tabl_pdf['custom']=$arrAqFlCost['cost'];
 	};
-					
+
 					
 					/* if ($tabl["contragent"]== 'Difot International Trading Co') {
 						$tabl_pdf['custom'] =1050;
