@@ -411,14 +411,34 @@ class InvoiceController extends Controller
      * @return Invoice the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+//    protected function findModel($id)
+//    {
+//        if (($model = Invoice::findOne($id)) !== null) {
+//            return $model;
+//        }
+//
+//        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+//    }
+
     protected function findModel($id)
     {
-        if (($model = Invoice::findOne($id)) !== null) {
+        $cacheKey = 'invoice_' . $id;
+        $model = Yii::$app->cache->get($cacheKey);
+
+        if ($model === false) {
+            $model = Invoice::findOne($id);
+            if ($model !== null) {
+                Yii::$app->cache->set($cacheKey, $model, 3600); // Кэш на 1 час
+            }
+        }
+
+        if ($model !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+
 	
 	
 	public function actionExport($file)// Скачивание cчета декларации из базы
