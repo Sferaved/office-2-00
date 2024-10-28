@@ -255,144 +255,34 @@ class InvoiceController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
+
     public function actionUpdate($id)
     {
         $cacheKey = 'invoice_' . $id;
-        Yii::info("Начало обновления счета с ID: $id", __METHOD__);
+        Yii::info("Начало обновления статуса оплаты счета с ID: $id", __METHOD__);
 
-        // Используем кеширование модели
-        $model = Yii::$app->cache->get($cacheKey);
+        // Обновление поля oplata на 'Да' без загрузки полной модели
+        $rowsUpdated = Invoice::updateAll(['oplata' => 'Да'], ['id' => $id]);
 
-        if ($model === false) {
-            Yii::info("Модель счета не найдена в кэше, загружаем из базы данных.", __METHOD__);
-            $model = Invoice::findOne($id);
+        if ($rowsUpdated > 0) {
+            Yii::$app->cache->delete($cacheKey); // Очистка кеша после обновления
+            Yii::$app->session->setFlash('success', 'Статус оплаты счета обновлен.');
+            Yii::info("Статус оплаты счета с ID: $id обновлен на 'Да'.", __METHOD__);
 
-            if ($model !== null) {
-                Yii::$app->cache->set($cacheKey, $model, 3600);
-                Yii::info("Модель счета загружена и сохранена в кэш.", __METHOD__);
-            } else {
-                Yii::warning("Счет с ID: $id не найден в базе данных.", __METHOD__);
-                throw new NotFoundHttpException("Счет не найден.");
-            }
+            $date = date('d.m.Y');
+            $user_name = Yii::$app->user->identity->username;
+            $message = "$user_name подтвердил(а) оплату счета №: $id за $date";
+            self::messageToBot($message, 120352595);
+            self::messageToBot($message, 474748019);
+
+            return $this->redirect(['view', 'id' => $id]);
         } else {
-            Yii::info("Модель счета загружена из кэша.", __METHOD__);
+            Yii::$app->session->setFlash('error', 'Ошибка при обновлении статуса оплаты счета.');
+            Yii::error("Ошибка при обновлении статуса оплаты счета с ID: $id.", __METHOD__);
+            throw new NotFoundHttpException("Счет не найден или статус не был обновлен.");
         }
-
-        if ($model->load(Yii::$app->request->post())) {
-            Yii::info("Попытка сохранить модель счета.", __METHOD__);
-
-            if ($model->save(false)) { // Убираем валидацию, если она не нужна
-                Yii::$app->session->setFlash('success', 'Счет успешно исправлен');
-                Yii::info("Счет с ID: $id успешно сохранен.", __METHOD__);
-
-                // Извлечение данных декларации
-                $declNumber = Declaration::find()
-                    ->select('decl_number')
-                    ->where(['id' => $model->decl_id])
-                    ->scalar();
-
-                // Извлечение данных клиента
-                $clientDetails = Client::find()
-                    ->select(['client', 'dogovor', 'date_begin', 'date_finish'])
-                    ->where(['id' => $model->client_id])
-                    ->asArray()
-                    ->one();
-
-                // Проверка наличия данных клиента
-                $clientInfo = $clientDetails ? [
-                    'client' => $clientDetails['client'],
-                    'dogovor' => $clientDetails['dogovor'],
-                    'date_begin' => date('d.m.Y', strtotime($clientDetails['date_begin'])),
-                    'date_finish' => date('d.m.Y', strtotime($clientDetails['date_finish'])),
-                ] : [
-                    'client' => null,
-                    'dogovor' => null,
-                    'date_begin' => null,
-                    'date_finish' => null,
-                ];
-
-                if ($clientInfo['client']) {
-                    Yii::info("Данные клиента успешно извлечены: {$clientInfo['client']}", __METHOD__);
-                } else {
-                    Yii::warning("Данные клиента не найдены для счета с ID: $id.", __METHOD__);
-                }
-
-                $date = date('d.m.Y', strtotime($model->date));
-                $user_name = Yii::$app->user->identity->username;
-                $content = $this->generateEmailContent(
-                    $id,
-                    $date,
-                    $clientInfo['client'],
-                    $model->cost,
-                    $declNumber,
-                    $clientInfo['dogovor'],
-                    $clientInfo['date_begin'],
-                    $clientInfo['date_finish'],
-                    $user_name
-                );
-
-                // Отправка уведомлений
-                $this->sendEmail('Изменения в счете на ' . $clientInfo['client'], $content, ['andrey18051@gmail.com', 'any26113@gmail.com']);
-                Yii::info("Уведомления успешно отправлены.", __METHOD__);
-
-                $message = "$user_name исправил(а) счет за $date №: {$model->id} Клиент: {$clientInfo['client']} Сумма: {$model->cost} грн";
-                self::messageToBot($message, 120352595);
-                self::messageToBot($message, 474748019);
-
-                // Проверка оплаты счета
-                if ($model->oplata === 'Да' && Yii::$app->user->can('buh')) {
-                    $arrEmail = User::find()
-                        ->select('email')
-                        ->where(['id' => $model->user_id])
-                        ->scalar();
-
-                    if ($arrEmail) {
-                        $this->sendEmail('Оплата счета на ' . $clientInfo['client'], $content, ['andrey18051@gmail.com', $arrEmail]);
-                        Yii::info("Уведомление об оплате счета отправлено пользователю с ID: {$model->user_id}.", __METHOD__);
-
-                        $message = "Оплачен счет за $date №: $id Клиент: {$clientInfo['client']} Сумма: {$model->cost} грн";
-                        self::messageToBot($message, 120352595);
-                    }
-                }
-
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                Yii::$app->session->setFlash('error', 'Ошибка при сохранении счета.');
-                Yii::error("Ошибка при сохранении счета с ID: $id.", __METHOD__);
-            }
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
-
-
-    protected function sendEmail($subject, $content, $recipients)
-    {
-        Yii::$app->mailer->compose()
-            ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
-            ->setTo($recipients)
-            ->setSubject($subject)
-            ->setHtmlBody($content)
-            ->send();
-    }
-
-
-
-
-    private function generateEmailContent($id, $date, $client, $cost, $decl, $dogovor, $date_begin, $date_finish, $user_name)
-    {
-        return '<b>Счет №' . $id . ' от ' . $date . '</b></br>' .
-            'Клиент: ' . $client . '</br>' .
-            'Сумма: ' . $cost . 'грн</br>' .
-            'Декларация: ' . $decl . '</br>' .
-            'Договор № ' . $dogovor . ' от ' . $date_begin . ' до ' . $date_finish . '</br>' .
-            'Исправила: ' . $user_name . '</br>' .
-            '--------------------------------</b></br>' .
-            '<b>Офис on-line. </b>';
-    }
 
 
     /**
@@ -404,69 +294,24 @@ class InvoiceController extends Controller
      */
     public function actionDelete($id)
     {
-		$model = $this->findModel($id);
+        $model = $this->findModel($id);
         $this->findModel($id)->delete();
-		Yii::$app->session->setFlash ('success', 'Счет успешно удален');
-		
-		 // Отправка сообщения об удаленном счете
-		
-			$declArr= Declaration::find()->where(['=','id',$model->decl_id])->all();
-			foreach ($declArr as $value) 
-			(
-			$decl= $value->decl_number
-			
-			);
-			
-			$clientArr=Client::find()->where(['=','id',$model->client_id])->all();
-			foreach ($clientArr as $value) 
-			{
-			 $client= $value->client;
-			 $dogovor=$value->dogovor;
-			 $date_begin= date('d.m.Y',strtotime($value->date_begin)) ;
-			 $date_finish= date('d.m.Y',strtotime($value->date_finish));
-			};
-		
-			$date = date('d.m.Y', strtotime($model->date));		
-			$user_name = Yii::$app->user->identity->username; 
-			
-			$content   = '<b>Удален счет </b>'.$id.' от '.$date.'</b></br>'.
-						 'Клиент: '.$client.'</br>'.
-						 'Сумма: '.$model->cost.'грн</br>'.
-						 'Декларация: '.$decl.'</br>'.
-						 'Договор № '.$dogovor.' от '.$date_begin.' до '.$date_finish.'</br>'.
-						 'Удалила: '.$user_name.'</br>'.
-						 '--------------------------------</b></br>'.
-						 '<b>Офис on-line. </b>';		
+        Yii::$app->session->setFlash('success', 'Счет успешно удален');
 
-		
-			Yii::$app->mailer->compose()
-            ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
-			->setTo(['andrey18051@gmail.com','any26113@gmail.com'])
-			->setSubject('Удаление счета на '.$client)
-			->setHtmlBody($content)
-		  ->send();
+        $clientArr=Client::find()->where(['=','id',$model->client_id])->all();
+        foreach ($clientArr as $value) {
+            $client= $value->client;
+        };
+
+        $date = date('d.m.Y', strtotime($model->date));
+        $user_name = Yii::$app->user->identity->username;
+
         $message = "$user_name удалил(а) счет за $date №: $model->id Клиент: $client Сумма: $model->cost грн";
         self::messageToBot($message, 120352595);
         self::messageToBot($message, 474748019);
 
         return $this->redirect(['index']);
     }
-
-    /**
-     * Finds the Invoice model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Invoice the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-//    protected function findModel($id)
-//    {
-//        if (($model = Invoice::findOne($id)) !== null) {
-//            return $model;
-//        }
-//
-//        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
-//    }
 
     protected function findModel($id)
     {

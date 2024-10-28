@@ -33,10 +33,10 @@ foreach ($files as $file) {
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Добавить'), ['create', 'mod' => null], ['class' => 'btn btn-success']) ?>
-		<?= Html::a(Yii::t('app', 'Проверить'), ['file', 'id' => Yii::$app->user->id ], ['class' => 'btn btn-primary']) ?>
-	</p>
+<!--    <p>-->
+<!--        --><?//= Html::a(Yii::t('app', 'Добавить'), ['create', 'mod' => null], ['class' => 'btn btn-success']) ?>
+<!--		--><?//= Html::a(Yii::t('app', 'Проверить'), ['file', 'id' => Yii::$app->user->id ], ['class' => 'btn btn-primary']) ?>
+<!--	</p>-->
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 

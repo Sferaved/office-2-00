@@ -309,91 +309,43 @@ class DeclarationController extends Controller
     /**
      * Creates a new Invoice model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param int $id
      * @return mixed
      * @throws \yii\base\InvalidConfigException
      * @throws \yii\httpclient\Exception
      */
     public function actionInvoice($id)
     {
-			$model_d = $this->findModel($id);
+        $model_d = $this->findModel($id);
 
-			$model = new Invoice(); // Счет на эту декларацию
-
-			$model->date      = $model_d->date;
-			if (Yii::$app->user->id != 1){
-				$model->user_id   = $model_d->user_id;
-			}
-			else {
-				$model->user_id   = 1;
-			}
-
-			$model->decl_id   = $model_d->id;
-			$model->client_id = $model_d->client_id;
-
-			$model->oplata    = 'Нет';
-
+        $model = new Invoice();
+        $model->date = $model_d->date;
+        $model->user_id = (Yii::$app->user->id != 1) ? $model_d->user_id : 1;
+        $model->decl_id = $model_d->id;
+        $model->client_id = $model_d->client_id;
+        $model->oplata = 'Нет';
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			Yii::$app->session->setFlash ('success', 'Данные приняты');
+            Yii::$app->session->setFlash('success', 'Данные приняты');
 
-			// Отправка сообщения об выставленном счете
+            // Получаем нужные данные напрямую
+            $decl = Declaration::findOne($model->decl_id)->decl_number;
+            $clientModel = Client::findOne($model->client_id);
+            $client = $clientModel->client;
+            $dogovor = $clientModel->dogovor;
+            $date_begin = date('d.m.Y', strtotime($clientModel->date_begin));
+            $date_finish = date('d.m.Y', strtotime($clientModel->date_finish));
 
-			$declArr= Declaration::find()->where(['=','id',$model->decl_id])->all();
-			foreach ($declArr as $value) ($decl= $value->decl_number);
+            $date = date('d.m.Y', strtotime($model->date));
+            $user_name = Yii::$app->user->identity->username;
 
-			$clientArr=Client::find()->where(['=','id',$model->client_id])->all();
-			foreach ($clientArr as $value)
-			{
-			 $client= $value->client;
-			 $dogovor=$value->dogovor;
-			 $date_begin= date('d.m.Y',strtotime($value->date_begin)) ;
-			 $date_finish= date('d.m.Y',strtotime($value->date_finish));
-			};
+            // Генерация сообщения для отправки по email и боту
+            $content = $this->generateInvoiceMessage($model, $client, $decl, $dogovor, $date_begin, $date_finish, $user_name);
+//            $this->sendInvoiceEmail($model, $client, $content);
 
-
-			$date = date('d.m.Y', strtotime($model->date));
-
-
-			$user_name = Yii::$app->user->identity->username;
-
-			$content   = '<b>Выставлен новый счет за '.$date.'</b></br>'.
-						 '№: '.$model->id.'</br>'.
-						 'Клиент: '.$client.'</br>'.
-						 'Сумма: '.$model->cost.'грн</br>'.
-						 'Декларация: '.$decl.'</br>'.
-						 'Договор № '.$dogovor.' от '.$date_begin.' до '.$date_finish.'</br>'.
-						 'Выставила: '.$user_name.'</br>'.
-						 '--------------------------------</b></br>'.
-						 '<b>Офис on-line. </b>';
-
-			if ($model->forma_oplat == 'Карта' && Yii::$app->user->can('user')) {
-				 Yii::$app->mailer->compose()
-				->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
-				->setTo(['andrey18051@gmail.com'])
-				->setSubject('Новый счет на '.$client)
-				->setHtmlBody($content)
-			  ->send();
-			 };
-			if ($model->forma_oplat != 'Карта' && Yii::$app->user->can('admin')) {
-				 Yii::$app->mailer->compose()
-                ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
-				->setTo(['any26113@gmail.com'])
-				->setSubject('Новый счет на '.$client)
-				->setHtmlBody($content)
-			  ->send();
-			 };
-
-			if ($model->forma_oplat != 'Карта' && Yii::$app->user->can('user')) {
-				 Yii::$app->mailer->compose()
-                ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
-				->setTo(['andrey18051@gmail.com','any26113@gmail.com'])
-				->setSubject('Новый счет на '.$client)
-				->setHtmlBody($content)
-			  ->send();
-			 }
-                $message = "$user_name выставил(а) счет за $date №: $model->id Клиент: $client Сумма: $model->cost грн";
-                self::messageToBot($message, 120352595);
-                self::messageToBot($message, 474748019);
+            $message = "$user_name выставил(а) счет за $date №: {$model->id} Клиент: $client Сумма: {$model->cost} грн";
+            self::messageToBot($message, 120352595);
+            self::messageToBot($message, 474748019);
 
             return $this->redirect(['view', 'id' => $model_d->id]);
         }
@@ -402,6 +354,60 @@ class DeclarationController extends Controller
             'model' => $model,
         ]);
     }
+
+    /**
+     * Generates the content for the invoice email.
+     *
+     * @param Invoice $model
+     * @param string $client
+     * @param string $decl
+     * @param string $dogovor
+     * @param string $date_begin
+     * @param string $date_finish
+     * @param string $user_name
+     * @return string
+     */
+    private function generateInvoiceMessage($model, $client, $decl, $dogovor, $date_begin, $date_finish, $user_name)
+    {
+        return "<b>Выставлен новый счет за {$model->date}</b><br>" .
+            "№: {$model->id}<br>" .
+            "Клиент: $client<br>" .
+            "Сумма: {$model->cost} грн<br>" .
+            "Декларация: $decl<br>" .
+            "Договор № $dogovor от $date_begin до $date_finish<br>" .
+            "Выставила: $user_name<br>" .
+            "--------------------------------<br>" .
+            "<b>Офис on-line.</b>";
+    }
+
+    /**
+     * Sends invoice email based on payment form and user role.
+     *
+     * @param Invoice $model
+     * @param string $client
+     * @param string $content
+     */
+    private function sendInvoiceEmail($model, $client, $content)
+    {
+        $recipients = [];
+        if ($model->forma_oplat == 'Карта' && Yii::$app->user->can('user')) {
+            $recipients = ['andrey18051@gmail.com'];
+        } elseif ($model->forma_oplat != 'Карта' && Yii::$app->user->can('admin')) {
+            $recipients = ['any26113@gmail.com'];
+        } elseif ($model->forma_oplat != 'Карта' && Yii::$app->user->can('user')) {
+            $recipients = ['andrey18051@gmail.com', 'any26113@gmail.com'];
+        }
+
+        if (!empty($recipients)) {
+            Yii::$app->mailer->compose()
+                ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
+                ->setTo($recipients)
+                ->setSubject('Новый счет на ' . $client)
+                ->setHtmlBody($content)
+                ->send();
+        }
+    }
+
 
     public function messageToBot($message, $chat_id)
     {
