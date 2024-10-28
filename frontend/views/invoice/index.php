@@ -14,11 +14,19 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php //Очистка папки 
-$files = glob('files/*'); // get all file names
- foreach($files as $file){ // iterate files
-  if(is_file($file))
-    unlink($file); // delete file
- }  
+$files = glob('files/*');
+$now = time();
+
+foreach ($files as $file) {
+    if (is_file($file)) {
+        $fileModifiedTime = filemtime($file);
+        // Удалить файл, если он старше 30 дней
+        if ($now - $fileModifiedTime >= 30 * 24 * 60 * 60) {
+            unlink($file);
+        }
+    }
+}
+
 ?> 
 
 <div class="invoice-index">

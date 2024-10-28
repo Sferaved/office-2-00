@@ -9,9 +9,9 @@ $params = array_merge(
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],    
-    'name'=>'Офис on-line',
-    'language'=>'ru',
+    'bootstrap' => ['log'],
+    'name' => 'Офис on-line',
+    'language' => 'ru',
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'formatter' => [
@@ -19,24 +19,24 @@ return [
             'decimalSeparator' => ',',
             'thousandSeparator' => ' ',
             'currencyCode' => 'UAH',
-       ],
+        ],
         'request' => [
-            'baseUrl' => '',
+            'baseUrl' => '', // Убедитесь, что этот параметр установлен правильно для вашего приложения
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                '' => 'site/index',   
-                '/homezatraty' => 'homezatraty/index', 
-                '/declaration/index' => 'declaration/index',	
+                '' => 'site/index',
+                '/homezatraty' => 'homezatraty/index',
+                '/declaration/index' => 'declaration/index',
                 '/client/index' => 'client/index',
-				'/invoice' => 'invoice/index',	
+                '/invoice' => 'invoice/index',
                 '/cabinet' => 'cabinet/index',
-                '/upload' => 'upload/index',	
-				'/aquaizol' => 'aquaizol/index',
-				'/flex' => 'flex/index',
-                '<controller:\w+>/<action:\w+>/' => '<controller>/<action>',
+                '/upload' => 'upload/index',
+                '/aquaizol' => 'aquaizol/index',
+                '/flex' => 'flex/index',
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>', // Уберите лишний слэш в конце
             ],
         ],
         'user' => [
@@ -45,7 +45,7 @@ return [
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
         ],
         'session' => [
-            // this is the name of the session cookie used for login on the frontend
+            // Название куки для сессии
             'name' => 'advanced-frontend',
         ],
         'log' => [
@@ -54,6 +54,11 @@ return [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['info'],
+                    'logFile' => '@runtime/logs/info.log', // Путь для логов уровня info
                 ],
             ],
         ],
@@ -67,10 +72,10 @@ return [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.ukr.net', // SMTP сервер почтовика
                 'username' => 'sferaved@ukr.net', // Логин (адрес электронной почты)
-                'password' => 'JyUIc2pdYEjAbmQB', // Пароль
+                'password' => 'JyUIc2pdYEjAbmQB', // Пароль (рекомендуется использовать переменные окружения для безопасности)
                 'port' => '2525', // Порт
                 'encryption' => 'ssl', // Шифрование
-		    ],
+            ],
         ],
     ],
     'params' => $params,
