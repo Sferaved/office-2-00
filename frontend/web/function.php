@@ -2530,23 +2530,23 @@ if ($i_e !=0) {
 					  unlink($new_invoice.'_signature.xls'); 
 					  unlink($new_act.'.xls');
 					  unlink($new_act.'_signature.xls');
-					  
-	$content   = '<b>Выставлен новый счет за '.$date_to_T.'</b></br>'.
-						 $B17.'</br>'.
-						 'Клиент: '.$client.'</br>'.
-						 'Сумма: '.$AH29.'грн</br>'.
-						 'Декларация: '.$D29.'</br>'.
-						 'Договор '.$H25.'</br>'.
-						 '--------------------------------</b></br>'.
-						 '<b>Офис on-line. </b>';		
-
-			
-				 Yii::$app->mailer->compose()
-				->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
-				->setTo(['any26113@gmail.com'])
-				->setSubject('Новый счет на '.$client)
-				->setHtmlBody($content)
-			  ->send();	
+//
+//	$content   = '<b>Выставлен новый счет за '.$date_to_T.'</b></br>'.
+//						 $B17.'</br>'.
+//						 'Клиент: '.$client.'</br>'.
+//						 'Сумма: '.$AH29.'грн</br>'.
+//						 'Декларация: '.$D29.'</br>'.
+//						 'Договор '.$H25.'</br>'.
+//						 '--------------------------------</b></br>'.
+//						 '<b>Офис on-line. </b>';
+//
+//
+//				 Yii::$app->mailer->compose()
+//				->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
+//				->setTo(['any26113@gmail.com'])
+//				->setSubject('Новый счет на '.$client)
+//				->setHtmlBody($content)
+//			  ->send();
 			 		   
 	
 }
@@ -2731,22 +2731,22 @@ if ($i_i !=0) {
 					  
 					  
 	
-	$content   = '<b>Выставлен новый счет за '.$date_to_T.'</b></br>'.
-						 $B17.'</br>'.
-						 'Клиент: '.$client.'</br>'.
-						 'Сумма: '.$AH29.'грн</br>'.
-						 'Декларация: '.$D29.'</br>'.
-						 'Договор '.$H25.'</br>'.
-						 '--------------------------------</b></br>'.
-						 '<b>Офис on-line. </b>';		
-
-			
-				 Yii::$app->mailer->compose()
-				->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
-				->setTo(['any26113@gmail.com'])
-				->setSubject('Новый счет на '.$client)
-				->setHtmlBody($content)
-			  ->send();	
+//	$content   = '<b>Выставлен новый счет за '.$date_to_T.'</b></br>'.
+//						 $B17.'</br>'.
+//						 'Клиент: '.$client.'</br>'.
+//						 'Сумма: '.$AH29.'грн</br>'.
+//						 'Декларация: '.$D29.'</br>'.
+//						 'Договор '.$H25.'</br>'.
+//						 '--------------------------------</b></br>'.
+//						 '<b>Офис on-line. </b>';
+//
+//
+//				 Yii::$app->mailer->compose()
+//				->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
+//				->setTo(['any26113@gmail.com'])
+//				->setSubject('Новый счет на '.$client)
+//				->setHtmlBody($content)
+//			  ->send();
 			 	
 				
 				
