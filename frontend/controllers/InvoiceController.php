@@ -206,13 +206,13 @@ class InvoiceController extends Controller
 
 		//echo $content;
 		
-			Yii::$app->mailer->compose()
-			->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
-	//		->setReplyTo('sferaved@gmail.com')
-			->setTo(['andrey18051@gmail.com','any26113@gmail.com'])
-			->setSubject('Новый счет на '.$client)
-			->setHtmlBody($content)
-		  ->send();
+//			Yii::$app->mailer->compose()
+//			->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
+//	//		->setReplyTo('sferaved@gmail.com')
+//			->setTo(['andrey18051@gmail.com','any26113@gmail.com'])
+//			->setSubject('Новый счет на '.$client)
+//			->setHtmlBody($content)
+//		  ->send();
 
               $message = "$user_name выставил(а) счет за $date №: $model->id Клиент: $client Сумма: $model->cost грн";
               self::messageToBot($message, 120352595);

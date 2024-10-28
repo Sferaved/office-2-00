@@ -398,14 +398,14 @@ class DeclarationController extends Controller
             $recipients = ['andrey18051@gmail.com', 'any26113@gmail.com'];
         }
 
-        if (!empty($recipients)) {
-            Yii::$app->mailer->compose()
-                ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
-                ->setTo($recipients)
-                ->setSubject('Новый счет на ' . $client)
-                ->setHtmlBody($content)
-                ->send();
-        }
+//        if (!empty($recipients)) {
+//            Yii::$app->mailer->compose()
+//                ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
+//                ->setTo($recipients)
+//                ->setSubject('Новый счет на ' . $client)
+//                ->setHtmlBody($content)
+//                ->send();
+//        }
     }
 
 

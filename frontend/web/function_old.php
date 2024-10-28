@@ -2421,13 +2421,13 @@ if ($i_e !=0) {
 						 '<b>Офис on-line. </b>';		
 
 			
-				 Yii::$app->mailer->compose()
-				->setFrom(['sferaved@gmail.com' => 'Офис on-line'])
-				->setReplyTo('sferaved@gmail.com')
-				->setTo(['any26113@gmail.com'])
-				->setSubject('Новый счет на '.$client)
-				->setHtmlBody($content)
-			  ->send();	
+//				 Yii::$app->mailer->compose()
+//				->setFrom(['sferaved@gmail.com' => 'Офис on-line'])
+//				->setReplyTo('sferaved@gmail.com')
+//				->setTo(['any26113@gmail.com'])
+//				->setSubject('Новый счет на '.$client)
+//				->setHtmlBody($content)
+//			  ->send();
 			 		   
 	
 }
@@ -2617,13 +2617,13 @@ if ($i_i !=0) {
 						 '<b>Офис on-line. </b>';		
 
 			
-				 Yii::$app->mailer->compose()
-				->setFrom(['sferaved@gmail.com' => 'Офис on-line'])
-				->setReplyTo('sferaved@gmail.com')
-				->setTo(['any26113@gmail.com'])
-				->setSubject('Новый счет на '.$client)
-				->setHtmlBody($content)
-			  ->send();	
+//				 Yii::$app->mailer->compose()
+//				->setFrom(['sferaved@gmail.com' => 'Офис on-line'])
+//				->setReplyTo('sferaved@gmail.com')
+//				->setTo(['any26113@gmail.com'])
+//				->setSubject('Новый счет на '.$client)
+//				->setHtmlBody($content)
+//			  ->send();
 			 	
 				
 				
