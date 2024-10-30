@@ -182,11 +182,11 @@ class SiteController extends Controller
 			$invoice=Invoice::find()->where(['=','user_id',Yii::$app->user->id])
 									  ->andWhere(['=','date',date('Y-m-d')])->count();
 			$date = date('d.m.Y');
-//			$content   = '<b>Итоги работы за ' . $date . '</b></br></br>' .
-//						 'Оформлено деклараций: ' . $decl . '</br>' .
-//						 'Выставлено счетов: ' . $invoice . '</br>' .
-//						 '--------------------------------</b></br>' .
-//						 '<b>Офис on-line. </b>';
+			$content   = '<b>Итоги работы за ' . $date . '</b></br></br>' .
+						 'Оформлено деклараций: ' . $decl . '</br>' .
+						 'Выставлено счетов: ' . $invoice . '</br>' .
+						 '--------------------------------</b></br>' .
+						 '<b>Офис on-line. </b>';
 //
 			Yii::$app->mailer->compose()
 			->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
