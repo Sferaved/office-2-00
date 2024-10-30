@@ -157,12 +157,12 @@ class SiteController extends Controller
                              '--------------------------------</br>' .
                              '<b>Офис on-line.</b>';
 
-//                Yii::$app->mailer->compose()
-//                ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
-//                ->setTo(['andrey18051@gmail.com','any26113@gmail.com',$user_info['email']])
-//                ->setSubject($user_name . ' НЕ ЗАКОНЧИЛА РАБОТУ.')
-//                ->setHtmlBody($content)
-//                ->send();
+                Yii::$app->mailer->compose()
+                ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
+                ->setTo(['andrey18051@gmail.com','any26113@gmail.com',$user_info['email']])
+                ->setSubject($user_name . ' НЕ ЗАКОНЧИЛА РАБОТУ.')
+                ->setHtmlBody($content)
+                ->send();
     		}
             $message = "Не выставлены счета на выполненную работу: $inv_abs_plus";
             self::messageToBot($message, 120352595);
@@ -188,12 +188,12 @@ class SiteController extends Controller
 //						 '--------------------------------</b></br>' .
 //						 '<b>Офис on-line. </b>';
 //
-//			Yii::$app->mailer->compose()
-//			->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
-//			->setTo(['andrey18051@gmail.com','any26113@gmail.com',$user_info['email']])
-//			->setSubject($user_name.' закончила работу.')
-//			->setHtmlBody($content)
-//		    ->send();
+			Yii::$app->mailer->compose()
+			->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
+			->setTo(['andrey18051@gmail.com','any26113@gmail.com',$user_info['email']])
+			->setSubject($user_name.' закончила работу.')
+			->setHtmlBody($content)
+		    ->send();
 
 
             $message = "$user_name закончил(а) работу. Оформлено деклараций: $decl. Выставлено счетов: $invoice.";

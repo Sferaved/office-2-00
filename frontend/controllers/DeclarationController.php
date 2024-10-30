@@ -398,14 +398,14 @@ class DeclarationController extends Controller
             $recipients = ['andrey18051@gmail.com', 'any26113@gmail.com'];
         }
 
-//        if (!empty($recipients)) {
-//            Yii::$app->mailer->compose()
-//                ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
-//                ->setTo($recipients)
-//                ->setSubject('Новый счет на ' . $client)
-//                ->setHtmlBody($content)
-//                ->send();
-//        }
+        if (!empty($recipients)) {
+            Yii::$app->mailer->compose()
+                ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
+                ->setTo($recipients)
+                ->setSubject('Новый счет на ' . $client)
+                ->setHtmlBody($content)
+                ->send();
+        }
     }
 
 
@@ -669,22 +669,22 @@ class DeclarationController extends Controller
 
 			$user_name = Yii::$app->user->identity->username;
 
-//			$content   = '<b>Удален счет </b>'.$val.' от '.$date.'</b></br>'.
-//						 'Клиент: '.$client.'</br>'.
-//						 'Сумма: '.$cost.'грн</br>'.
-//						 'Декларация: '.$decl.'</br>'.
-//						 'Договор № '.$dogovor.' от '.$date_begin.' до '.$date_finish.'</br>'.
-//						 'Удалила: '.$user_name.'</br>'.
-//						 '--------------------------------</b></br>'.
-//						 '<b>Офис on-line. </b>';
-//
-//
-//			Yii::$app->mailer->compose()
-//            ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
-//			->setTo(['andrey18051@gmail.com','any26113@gmail.com'])
-//			->setSubject('Удаление счета на '.$client)
-//			->setHtmlBody($content)
-//		  ->send();
+			$content   = '<b>Удален счет </b>'.$val.' от '.$date.'</b></br>'.
+						 'Клиент: '.$client.'</br>'.
+						 'Сумма: '.$cost.'грн</br>'.
+						 'Декларация: '.$decl.'</br>'.
+						 'Договор № '.$dogovor.' от '.$date_begin.' до '.$date_finish.'</br>'.
+						 'Удалила: '.$user_name.'</br>'.
+						 '--------------------------------</b></br>'.
+						 '<b>Офис on-line. </b>';
+
+
+			Yii::$app->mailer->compose()
+            ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
+			->setTo(['andrey18051@gmail.com','any26113@gmail.com'])
+			->setSubject('Удаление счета на '.$client)
+			->setHtmlBody($content)
+		  ->send();
 			$model = Invoice::find() ->where(['id'=>$val]) ->one() ->delete();
 
             $message = "$user_name удалил(а) счет за $date №: $val Клиент: $client Сумма: $cost грн";
