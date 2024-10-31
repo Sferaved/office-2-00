@@ -935,7 +935,7 @@ foreach ($arrAqFl as $tabl) {
 
 $i_All = $i_e+$i_i; // Количество оформлений общее за период
 
-$cost_1= round(($export+$import+$i_All*800)*1.2/$i_All,2); //Цена
+$cost_1= round(($export+$import+$i_All*800)*1.21/$i_All,2); //Цена
 
 $export =$cost_1*$i_e; // Счет за экспорт
 $import =$cost_1*$i_i; // Счет за импорт
@@ -1243,7 +1243,7 @@ $sheet->getStyle($G)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fil
 					  
 	$zatraty =	$broker+$dosmotr+ $custom+ $fito;
 	$usligi= 800*($i_e+$i_i);
-	$itogo =($zatraty +$usligi)*1.2;
+	$itogo =($zatraty +$usligi)*1.21;
 
 	$sheet->setCellValue($A,   $broker ); 
     $sheet->setCellValue($B,   $dosmotr); 
@@ -2327,7 +2327,7 @@ $i_All = $i_e+$i_i; // Количество оформлений общее за
 
 if ($i_All !=0) {  // Если есть декларации за период начало условия
 
-$cost_1= round(($export+$import+$i_All*800)*1.2/$i_All,2); //Цена
+$cost_1= round(($export+$import+$i_All*800)*1.21/$i_All,2); //Цена
 
 $export =$cost_1*$i_e; // Счет за экспорт
 $import =$cost_1*$i_i; // Счет за импорт
@@ -2531,16 +2531,16 @@ if ($i_e !=0) {
 					  unlink($new_act.'.xls');
 					  unlink($new_act.'_signature.xls');
 //
-//	$content   = '<b>Выставлен новый счет за '.$date_to_T.'</b></br>'.
-//						 $B17.'</br>'.
-//						 'Клиент: '.$client.'</br>'.
-//						 'Сумма: '.$AH29.'грн</br>'.
-//						 'Декларация: '.$D29.'</br>'.
-//						 'Договор '.$H25.'</br>'.
-//						 '--------------------------------</b></br>'.
-//						 '<b>Офис on-line. </b>';
-//
-//
+	$content   = '<b>Выставлен новый счет за '.$date_to_T.'</b></br>'.
+						 $B17.'</br>'.
+						 'Клиент: '.$client.'</br>'.
+						 'Сумма: '.$AH29.'грн</br>'.
+						 'Декларация: '.$D29.'</br>'.
+						 'Договор '.$H25.'</br>'.
+						 '--------------------------------</b></br>'.
+						 '<b>Офис on-line. </b>';
+
+
 				 Yii::$app->mailer->compose()
 				->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
 				->setTo(['any26113@gmail.com'])
