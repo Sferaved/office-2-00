@@ -4,6 +4,7 @@ rem -------------------------------------------------------------
 rem  Yii command line bootstrap script for Windows.
 rem -------------------------------------------------------------
 
+
 @setlocal
 
 set YII_PATH=%~dp0
