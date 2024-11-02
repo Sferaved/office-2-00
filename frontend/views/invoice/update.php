@@ -21,5 +21,3 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Исправить');
     ]) ?>
 
 </div>
-
-
