@@ -361,7 +361,7 @@ class InvoiceController extends Controller
                         ->scalar();
 
                     if ($arrEmail) {
-                        $this->sendEmail('Оплата счета на ' . $client, $content, ['andrey18051@gmail.com', $arrEmail]);
+//                        $this->sendEmail('Оплата счета на ' . $client, $content, ['andrey18051@gmail.com', $arrEmail]);
                         Yii::info("Уведомление об оплате счета отправлено пользователю с ID: {$model->user_id}.", __METHOD__);
 
                         $message = "Оплачен счет за $date №: $id Клиент: $client Сумма: $model->cost грн";
