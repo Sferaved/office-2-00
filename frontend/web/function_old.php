@@ -557,7 +557,7 @@ function dogovor_doc ($id){
     $table->addCell(200)->addText("");
     $table->addCell(5000)->addText($company,$table_styleFont_normal);
     $table->addRow(200);
-    $table->addCell(5000)->addText("Юридична адреса: 61176, Україна, м.Харків, вул.Краснодарська , буд. 177, корп. Б, кв.58",$table_styleFont_normal);
+    $table->addCell(5000)->addText("Юридична адреса: 61176, Україна, м.Харків, вул.Єдності, буд. 177, корп. Б, кв.58",$table_styleFont_normal);
     $table->addCell(200)->addText("");
     $table->addCell(5000)->addText("Юридична адреса:",$table_styleFont_normal);
     $table->addRow(200);
@@ -694,7 +694,7 @@ function dogovor_long_doc ($id){
     $table->addCell(200)->addText("");
     $table->addCell(5000)->addText($company,$table_styleFont_normal);
     $table->addRow(200);
-    $table->addCell(5000)->addText("Юридична адреса: 61176, Україна, м.Харків, вул.Краснодарська , буд. 177, корп. Б, кв.58",$table_styleFont_normal);
+    $table->addCell(5000)->addText("Юридична адреса: 61176, Україна, м.Харків, вул.Єдності, буд. 177, корп. Б, кв.58",$table_styleFont_normal);
     $table->addCell(200)->addText("");
     $table->addCell(5000)->addText("Юридична адреса:",$table_styleFont_normal);
     $table->addRow(200);
@@ -2688,7 +2688,7 @@ if ($aq_fl_id==3)
     $table->addCell(200)->addText("");
     $table->addCell(5000)->addText('ТОВ  “Акваізол"',$table_styleFont_normal);
     $table->addRow(200);
-    $table->addCell(5000)->addText("Юридична адреса: 61176, Україна, м.Харків, вул.Краснодарська , буд. 177, корп. Б, кв.58",$table_styleFont_normal);
+    $table->addCell(5000)->addText("Юридична адреса: 61176, Україна, м.Харків, вул.Єдності, буд. 177, корп. Б, кв.58",$table_styleFont_normal);
     $table->addCell(200)->addText("");
     $table->addCell(5000)->addText("Юридична адреса: 62371, Харківська обл., Дергачівський р-н, с. Подвірки, вул.Сумський шлях ,47-Б",$table_styleFont_normal);
     $table->addRow(200);
@@ -2757,7 +2757,7 @@ else
     $table->addCell(200)->addText("");
     $table->addCell(5000)->addText('ТОВ “ФЛЕКСС”',$table_styleFont_normal);
     $table->addRow(200);
-    $table->addCell(5000)->addText("Юридична адреса: 61176, Україна, м.Харків, вул.Краснодарська , буд. 177, корп. Б, кв.58",$table_styleFont_normal);
+    $table->addCell(5000)->addText("Юридична адреса: 61176, Україна, м.Харків, вул.Єдності, буд. 177, корп. Б, кв.58",$table_styleFont_normal);
     $table->addCell(200)->addText("");
     $table->addCell(5000)->addText("Юридична адреса: 62371, Харківська обл., Дергачівський р-н, с. Подвірки, вул.Сумський шлях ,45-Д, офіс 307",$table_styleFont_normal);
     $table->addRow(200);
