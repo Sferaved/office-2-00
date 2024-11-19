@@ -824,7 +824,6 @@ function dogovor_long_doc ($id){
 //Отчеты Аква Флекс
 
 function aq_fl_report($aq_fl_id,$date_from,$date_to) {
-	
 
 //Формирование отчета
 
@@ -2263,163 +2262,169 @@ function messageToBot($message, $chat_id)
     curl_close($ch);
 }
 
-function aq_fl_documents($aq_fl_id,$date_from,$date_to) {
+    function aq_fl_documents($aq_fl_id,$date_from,$date_to) {
 // Расчет для формирования документов
-if ($aq_fl_id==3) {
-	$arrAqFl=Aquaizol::find()->where(['between', 'date', $date_from, $date_to])->all();
-    $client = "Акваизол";
-}
+    if ($aq_fl_id==3) {
+        $arrAqFl=Aquaizol::find()->where(['between', 'date', $date_from, $date_to])->all();
+        $client = "Акваизол";
+    }
 
-if ($aq_fl_id==81) {
-	$arrAqFl=Flex::find()->where(['between', 'date', $date_from, $date_to])->all();
-    $client = "ФЛЕКСС";
-}
+    if ($aq_fl_id==81) {
+        $arrAqFl=Flex::find()->where(['between', 'date', $date_from, $date_to])->all();
+        $client = "ФЛЕКСС";
+    }
 
-foreach ($arrAqFl as $value)(
- $arrId[$value->id] = $value->decl_number_id
- );
+    foreach ($arrAqFl as $value) (
+        $arrId[$value->id] = $value->decl_number_id
+    );
 
  
 
- $arrDeclaration=Declaration::find()->asArray()->where(['id' => $arrId])->all(); 
+    $arrDeclaration = Declaration::find()->asArray()->where(['id' => $arrId])->all();
 
 
-if ($aq_fl_id==3) {
-	$arrAqFl=Aquaizol::find()->where(['between', 'date', $date_from, $date_to])->all();
-}
+    if ($aq_fl_id==3) {
+        $arrAqFl=Aquaizol::find()->where(['between', 'date', $date_from, $date_to])->all();
+    }
 
-if ($aq_fl_id==81) {
-	$arrAqFl=Flex::find()->where(['between', 'date', $date_from, $date_to])->all();
-}
-//debug ($arrAquaizol);
-$export=0;
-$i_e=0;
-$md_export=null;
+    if ($aq_fl_id==81) {
+        $arrAqFl=Flex::find()->where(['between', 'date', $date_from, $date_to])->all();
+    }
+    //debug ($arrAquaizol);
+    $export=0;
+    $i_e=0;
+    $md_export=null;
 
 
-$import=0;
-$i_i=0;
-$md_import=null;
+    $import=0;
+    $i_i=0;
+    $md_import=null;
 
-foreach ($arrAqFl as $tabl) {
-	if ($tabl['ex_im'] =='Экспорт') {
-		$export+=$tabl['broker']+$tabl['dosmotr']+$tabl['custom']+$tabl['fito'];
-		foreach ($arrDeclaration as $arr){
-			if ($arr['id'] == $tabl['decl_number_id']) {
-			$md_export = $md_export.$arr['decl_number'].' ';
-			};
-		}
-		
-		$i_e++;
-	};
-	if ($tabl['ex_im'] =='Импорт') {
-		$import+=$tabl['broker']+$tabl['dosmotr']+$tabl['custom']+$tabl['fito'];
-		foreach ($arrDeclaration as $arr){
-			if ($arr['id'] == $tabl['decl_number_id']) {
-			$md_import = $md_import.$arr['decl_number'].' ';
-			};
-		}
-	    $i_i++;
-	}
-};
+    foreach ($arrAqFl as $tabl) {
+        if ($tabl['ex_im'] =='Экспорт') {
+            $export+=$tabl['broker']+$tabl['dosmotr']+$tabl['custom']+$tabl['fito'];
+            foreach ($arrDeclaration as $arr) {
+                if ($arr['id'] == $tabl['decl_number_id']) {
+                    $md_export = $md_export.$arr['decl_number'].' ';
+                };
+            }
 
-$i_All = $i_e+$i_i; // Количество оформлений общее за период
+            $i_e++;
+        };
+        if ($tabl['ex_im'] =='Импорт') {
+            $import+=$tabl['broker']+$tabl['dosmotr']+$tabl['custom']+$tabl['fito'];
+            foreach ($arrDeclaration as $arr){
+                if ($arr['id'] == $tabl['decl_number_id']) {
+                    $md_import = $md_import.$arr['decl_number'].' ';
+                };
+            }
+            $i_i++;
+        }
+    }
 
-if ($i_All !=0) {  // Если есть декларации за период начало условия
+    $i_All = $i_e+$i_i; // Количество оформлений общее за период
 
-$cost_1= round(($export+$import+$i_All*800)*1.21/$i_All,2); //Цена
+    if ($i_All !=0) {  // Если есть декларации за период начало условия
+        $cost_1 = round(($export+$import+$i_All*800)*1.21/$i_All, 2); //Цена
 
-$export =$cost_1*$i_e; // Счет за экспорт
-$import =$cost_1*$i_i; // Счет за импорт
+        $export = $cost_1*$i_e; // Счет за экспорт
+        $import = $cost_1*$i_i; // Счет за импорт
 
 //// Счет
 
 
- //номер и дата договора 
-    $arrClient = Client::findOne(['id'=>$aq_fl_id]);
-    
-	$client = $arrClient["client"];
-	$dogovor= $arrClient["dogovor"];
-    $dogovor_date= $arrClient["date_begin"];
-	$dogovor_date =date('d.m.Y',strtotime($dogovor_date));
-	
-	
- 
+//номер и дата договора
+
+        $arrClient = Client::findOne(['id'=>$aq_fl_id]);
+
+        $client = $arrClient["client"];
+        $dogovor = $arrClient["dogovor"];
+        $dogovor_date = $arrClient["date_begin"];
+        $dogovor_date = date('d.m.Y', strtotime($dogovor_date));
+
 
 
 // Создание счета экспорт
-if ($i_e !=0) {
- $inputFileName = './templates/ranunok.xlsx';
-    
-	$spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
-    $sheet = $spreadsheet->getActiveSheet();
-   
-	$decl_text="Экспорт c ". date('d',strtotime($date_from))." по ".date('d',strtotime($date_to));
+        if ($i_e !=0) {
+            $inputFileName = './templates/ranunok.xlsx';
 
-	
-  	$model_d = new Declaration();	//Новая декларация 	
-		    $model_d->date = $date_to;
-   		    $model_d->decl_number = $decl_text;
-			
-			$model_d->user_id   = Yii::$app->user->id;
-			$model_d->client_id = $aq_fl_id;
-	//		$model_d->decl_iso  = $decl_text;
-			$model_d->save();
-			
-    $model_i= new Invoice();
-	$model_i->date = $date_to;
-	$model_i->decl_id = $model_d->id;
-	$model_i->client_id = $aq_fl_id;
-	$model_i->cost = $export;
-	$model_i->user_id = 1;
-	$model_i->oplata = 'Нет';
-	$model_i->forma_oplat = 'Безнал';
-    $model_i->save();
+            $spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
+            $sheet = $spreadsheet->getActiveSheet();
 
-	$date_from_T= date('d.m.Y',strtotime($date_from));
-	$date_to_T = date('d.m.Y',strtotime($date_to));
+            $decl_text="Экспорт c ". date('d',strtotime($date_from))." по ".date('d',strtotime($date_to));
 
-    $message = "Андрей выставил счет за $date_to_T №: $model_i->id Клиент: $client Сумма: $export грн";
-    messageToBot($message, 120352595);
-    messageToBot($message, 474748019);
+//Новая декларация
+            $model_d = new Declaration();
+            $model_d->date = $date_to;
+            $model_d->decl_number = $decl_text;
 
-    $B17 = 'Рахунок на оплату № '.$model_i->id.' від '. $date_to_T.'р.';
-    $H22 = $client;
-    $H25 = "№".$dogovor." від ".$dogovor_date."р.";
-    $D29 = "Послуги митного брокера з оформлення експорту товару у період з ".$date_from_T."р" ." по ".$date_to_T."р за МД №№:".$md_export;
-    
- 
-    $W29=$i_e;
-    $B34 = num2text_ua($export); // Общая стоимость словами
-    $AD29 = number_format ($cost_1,2,',',' ');//Цена за 1 декларацию
-    $AH29 = number_format ($export,2,',',' ');//Стоимость за все
-    $B33 = 'Всього найменувань 1,'.' на суму '.$AH29.' грн';
-           
+            $model_d->user_id   = Yii::$app->user->id;
+            $model_d->client_id = $aq_fl_id;
+//		$model_d->decl_iso  = $decl_text;
+            $model_d->save();
+
+            Yii::info('Saving Declaration: ' . json_encode($model_d->attributes));
+            if ($model_d->save()) {
+                Yii::info('Declaration saved with ID: ' . $model_d->id);
+                $model_i = new Invoice();
+                $model_i->date = $date_to;
+                $model_i->decl_id = $model_d->id;
+                Yii::info('Setting decl_id for Invoice: ' . $model_d->id);
+                $model_i->client_id = $aq_fl_id;
+                $model_i->cost = $export;
+                $model_i->user_id = 1;
+                $model_i->oplata = 'Нет';
+                $model_i->forma_oplat = 'Безнал';
+                $model_i->save();
+                Yii::info('Invoice saved with ID: ' . $model_i->id);
+            } else {
+                Yii::error('Error saving Declaration: ' . json_encode($model_d->getErrors()));
+            }
+
+
+            $date_from_T= date('d.m.Y',strtotime($date_from));
+            $date_to_T = date('d.m.Y',strtotime($date_to));
+
+            $message = "Андрей выставил счет за $date_to_T №: $model_i->id Клиент: $client Сумма: $export грн";
+            messageToBot($message, 120352595);
+            messageToBot($message, 474748019);
+
+            $B17 = 'Рахунок на оплату № '.$model_i->id.' від '. $date_to_T.'р.';
+            $H22 = $client;
+            $H25 = "№".$dogovor." від ".$dogovor_date."р.";
+            $D29 = "Послуги митного брокера з оформлення експорту товару у період з ".$date_from_T."р" ." по ".$date_to_T."р за МД №№:".$md_export;
+
+
+            $W29=$i_e;
+            $B34 = num2text_ua($export); // Общая стоимость словами
+            $AD29 = number_format ($cost_1,2, ',', ' ');//Цена за 1 декларацию
+            $AH29 = number_format ($export,2, ',', ' ');//Стоимость за все
+            $B33 = 'Всього найменувань 1,'.' на суму '.$AH29.' грн';
+
             $new_invoice = 'ranunok_'.$model_i->id;
-            
-            
-            $sheet->setCellValue("B17",   $B17); //Номер счета
-            $sheet->setCellValue("H22",   $H22); //Клиент
-            $sheet->setCellValue("H25",  $H25); //Клиент
-			
-			$hight_e=$i_e*6+8; // высота строк
-			
-				if ($hight_e <=32) {
-				$hight_e=32;
-				}
-				
-			
-			$sheet->getRowDimension('29')->setRowHeight($hight_e); 	
-            $sheet->setCellValue("D29",   $D29); //Товар
-			$sheet->setCellValue("W29",   $W29); //Количество
+
+
+            $sheet->setCellValue("B17", $B17); //Номер счета
+            $sheet->setCellValue("H22", $H22); //Клиент
+            $sheet->setCellValue("H25", $H25); //Клиент
+
+            $hight_e=$i_e*6+8; // высота строк
+
+            if ($hight_e <=32) {
+                $hight_e=32;
+            }
+
+            $sheet->getRowDimension('29')->setRowHeight($hight_e);
+            $sheet->setCellValue("D29",  $D29); //Товар
+            $sheet->setCellValue("W29",  $W29); //Количество
             $sheet->setCellValue("AD29", $AD29); //Цена за 1 декларацию
             $sheet->setCellValue("AH29", $AH29); //Стоимость за все
             $sheet->setCellValue("AH31", $AH29); //Стоимость за все (ИТОГО)
-           
-            $sheet->setCellValue("B33", $B33); //Всього найменувань на суму 
+
+            $sheet->setCellValue("B33", $B33); //Всього найменувань на суму
 
             $sheet->setCellValue("B34", $B34); //Всего прописью
-            
+
             $invoice = new PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
             $invoice->save($new_invoice.'.xls');
 
@@ -2427,140 +2432,138 @@ if ($i_e !=0) {
             $drawing->setPath('img/signature.jpg');
             $drawing->setWidth(255);
             $drawing->setCoordinates('K37');
-            $drawing->setWorksheet($sheet);  
-     
+            $drawing->setWorksheet($sheet);
+
             $invoice_signature = new PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
             $invoice_signature->save($new_invoice.'_signature.xls');
-	
-	
-// Акт выполненных работ
-//// Без подписи	
-	
-	if ($aq_fl_id==3) {
-		$inputFileName = './templates/act_aquaizol.xls';
-		$spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
-	}
 
-	if ($aq_fl_id==81) {
-		$inputFileName = './templates/act_flexx.xls';
-		$spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
-	}	
-	
-			$sheet = $spreadsheet->getActiveSheet();
-            
-       
+
+    // Акт выполненных работ
+    //// Без подписи
+
+            if ($aq_fl_id==3) {
+                $inputFileName = './templates/act_aquaizol.xls';
+                $spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
+            }
+
+            if ($aq_fl_id==81) {
+                $inputFileName = './templates/act_flexx.xls';
+                $spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
+            }
+
+            $sheet = $spreadsheet->getActiveSheet();
+
+
             $C23 = 'Загальна вартість робіт (послуг) склала '.$B34; // Общая стоимость  словами
             $C11 = 'АКТ надання послуг № '.$model_i->id.' від '. $date_to_T.'р.';
 
-           $new_act = 'act_'.$model_i->id;
-            
-       
-            $sheet->setCellValue("C11",   $C11); //Номер счета
-		 	$sheet->getRowDimension('19')->setRowHeight($hight_e); 	
-			$sheet->setCellValue("E19",   $D29); //Список деклараций
-    		
-            $sheet->setCellValue("Y19",   $W29); //Количество деклараций
+            $new_act = 'act_'.$model_i->id;
+
+
+            $sheet->setCellValue("C11", $C11); //Номер счета
+            $sheet->getRowDimension('19')->setRowHeight($hight_e);
+            $sheet->setCellValue("E19", $D29); //Список деклараций
+
+            $sheet->setCellValue("Y19",  $W29); //Количество деклараций
             $sheet->setCellValue("AF19", $AD29); //Цена за 1 декларацию
             $sheet->setCellValue("AK19", $AH29); //Стоимость за все
             $sheet->setCellValue("AK21", $AH29); //Стоимость за все (ИТОГО)
-            $sheet->setCellValue("C23", $C23); //Сумма прописью 
-            $sheet->setCellValue("C34",  $date_to_T); //Дата подписи акта   
-            $sheet->setCellValue("T34",  $date_to_T); //Дата подписи акта   
+            $sheet->setCellValue("C23", $C23); //Сумма прописью
+            $sheet->setCellValue("C34",  $date_to_T); //Дата подписи акта
+            $sheet->setCellValue("T34",  $date_to_T); //Дата подписи акта
 
- 
+
             $act= new PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
             $act->save($new_act.'.xls');
-	
-////Подписанный	
-	
-	if ($aq_fl_id==3) {
-		$inputFileName =  './templates/act_aquaizol_sign.xls';
-		$spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
-	}
 
-	if ($aq_fl_id==81) {
-		$inputFileName = './templates/act_flexx_sign.xls';
-		$spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
-	}	
-	
-			$sheet = $spreadsheet->getActiveSheet();
-            
-       
-            $C23 = 'Загальна вартість робіт (послуг) склала '.$B34; // Общая стоимость  словами
-            $C11 = 'АКТ надання послуг № '.$model_i->id.' від '. $date_to_T.'р.';
+    ////Подписанный
 
-           $new_act = 'act_'.$model_i->id;
-            
-        
-            $sheet->setCellValue("C11",   $C11); //Номер счета
-           
-			
-	        $sheet->getRowDimension('19')->setRowHeight($hight_e); 	
-			$sheet->setCellValue("E19",   $D29); //Список деклараций
-			
-            $sheet->setCellValue("Y19",   $W29); //Количество деклараций
-            $sheet->setCellValue("AF19", $AD29); //Цена за 1 декларацию
-            $sheet->setCellValue("AK19", $AH29); //Стоимость за все
-            $sheet->setCellValue("AK21", $AH29); //Стоимость за все (ИТОГО)
-            $sheet->setCellValue("C23", $C23); //Сумма прописью 
-            $sheet->setCellValue("C34",  $date_to_T); //Дата подписи акта   
-            $sheet->setCellValue("T34",  $date_to_T); //Дата подписи акта   
+            if ($aq_fl_id==3) {
+                $inputFileName =  './templates/act_aquaizol_sign.xls';
+                $spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
+            }
 
- 
-            $act= new PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
-            $act->save($new_act.'_signature.xls');	
-	
-  //Запись в архив
+            if ($aq_fl_id==81) {
+                $inputFileName = './templates/act_flexx_sign.xls';
+                $spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
+            }
 
-                      $zip = new ZipArchive();
-                      $filename = "files/documents.zip";
-                      if ($zip->open($filename, ZipArchive::CREATE)!==TRUE) 
-                      {
-                      exit("Невозможно открыть <$filename>\n");
-                      }
-
-                      $zip->addFile($new_invoice.'.xls');
-					  $zip->addFile($new_invoice.'_signature.xls');
-					  $zip->addFile($new_act.'.xls');
-					  $zip->addFile($new_act.'_signature.xls');					  
-
-                      $zip->close();
-					  
-                      unlink($new_invoice.'.xls'); 
-					  unlink($new_invoice.'_signature.xls'); 
-					  unlink($new_act.'.xls');
-					  unlink($new_act.'_signature.xls');
-//
-	$content   = '<b>Выставлен новый счет за '.$date_to_T.'</b></br>'.
-						 $B17.'</br>'.
-						 'Клиент: '.$client.'</br>'.
-						 'Сумма: '.$AH29.'грн</br>'.
-						 'Декларация: '.$D29.'</br>'.
-						 'Договор '.$H25.'</br>'.
-						 '--------------------------------</b></br>'.
-						 '<b>Офис on-line. </b>';
+                $sheet = $spreadsheet->getActiveSheet();
 
 
-				 Yii::$app->mailer->compose()
-				->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
-				->setTo(['any26113@gmail.com'])
-				->setSubject('Новый счет на '.$client)
-				->setHtmlBody($content)
-			  ->send();
-			 		   
-	
-}
+                $C23 = 'Загальна вартість робіт (послуг) склала '.$B34; // Общая стоимость  словами
+                $C11 = 'АКТ надання послуг № '.$model_i->id.' від '. $date_to_T.'р.';
+
+               $new_act = 'act_'.$model_i->id;
+
+
+                $sheet->setCellValue("C11",   $C11); //Номер счета
+
+
+                $sheet->getRowDimension('19')->setRowHeight($hight_e);
+                $sheet->setCellValue("E19",   $D29); //Список деклараций
+
+                $sheet->setCellValue("Y19",   $W29); //Количество деклараций
+                $sheet->setCellValue("AF19", $AD29); //Цена за 1 декларацию
+                $sheet->setCellValue("AK19", $AH29); //Стоимость за все
+                $sheet->setCellValue("AK21", $AH29); //Стоимость за все (ИТОГО)
+                $sheet->setCellValue("C23", $C23); //Сумма прописью
+                $sheet->setCellValue("C34",  $date_to_T); //Дата подписи акта
+                $sheet->setCellValue("T34",  $date_to_T); //Дата подписи акта
+
+
+                $act= new PhpOffice\PhpSpreadsheet\Writer\Xls($spreadsheet);
+                $act->save($new_act.'_signature.xls');
+
+      //Запись в архив
+
+                          $zip = new ZipArchive();
+                          $filename = "files/documents.zip";
+                          if ($zip->open($filename, ZipArchive::CREATE)!==TRUE)
+                          {
+                          exit("Невозможно открыть <$filename>\n");
+                          }
+
+                          $zip->addFile($new_invoice.'.xls');
+                          $zip->addFile($new_invoice.'_signature.xls');
+                          $zip->addFile($new_act.'.xls');
+                          $zip->addFile($new_act.'_signature.xls');
+
+                          $zip->close();
+
+                          unlink($new_invoice.'.xls');
+                          unlink($new_invoice.'_signature.xls');
+                          unlink($new_act.'.xls');
+                          unlink($new_act.'_signature.xls');
+    //
+        $content   = '<b>Выставлен новый счет за '.$date_to_T.'</b></br>'.
+                             $B17.'</br>'.
+                             'Клиент: '.$client.'</br>'.
+                             'Сумма: '.$AH29.'грн</br>'.
+                             'Декларация: '.$D29.'</br>'.
+                             'Договор '.$H25.'</br>'.
+                             '--------------------------------</b></br>'.
+                             '<b>Офис on-line. </b>';
+
+
+                     Yii::$app->mailer->compose()
+                    ->setFrom(['sferaved@ukr.net' => 'Офис on-line'])
+                    ->setTo(['any26113@gmail.com'])
+                    ->setSubject('Новый счет на '.$client)
+                    ->setHtmlBody($content)
+                  ->send();
+    }
 
 // Создание счета импорт
-if ($i_i !=0) {   
- $inputFileName = './templates/ranunok.xlsx';
+    if ($i_i !=0) {
+            $inputFileName = './templates/ranunok.xlsx';
     
-	$spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
-    $sheet = $spreadsheet->getActiveSheet();
+	        $spreadsheet = PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
+            $sheet = $spreadsheet->getActiveSheet();
    
-	$decl_text="Импорт c ". date('d',strtotime($date_from))." по ".date('d',strtotime($date_to));
+	        $decl_text="Импорт c ". date('d',strtotime($date_from))." по ".date('d',strtotime($date_to));
 	
-  	$model_d = new Declaration();	//Новая декларация 	
+  	        $model_d = new Declaration();	//Новая декларация
 		    $model_d->date = $date_to;
    		    $model_d->decl_number = $decl_text;
 			
@@ -2568,36 +2571,38 @@ if ($i_i !=0) {
 			$model_d->client_id = $aq_fl_id;
 	//		$model_d->decl_iso  = $decl_text;
 			$model_d->save();
-			
-    $model_i= new Invoice();
-	$model_i->date = $date_to;
-	$model_i->decl_id = $model_d->id;
-	$model_i->client_id = $aq_fl_id;
-	$model_i->cost = $import;
-	$model_i->user_id = 1;
-	$model_i->oplata = 'Нет';
-	$model_i->forma_oplat = 'Безнал';
-    $model_i->save();
+
+            if ($model_d->save()) {
+                $model_i = new Invoice();
+                $model_i->date = $date_to;
+                $model_i->decl_id = $model_d->id;
+                $model_i->client_id = $aq_fl_id;
+                $model_i->cost = $import;
+                $model_i->user_id = 1;
+                $model_i->oplata = 'Нет';
+                $model_i->forma_oplat = 'Безнал';
+                $model_i->save();
+            }
 
 
-	$date_from_T = date('d.m.Y',strtotime($date_from));
-	$date_to_T = date('d.m.Y',strtotime($date_to));
+            $date_from_T = date('d.m.Y',strtotime($date_from));
+            $date_to_T = date('d.m.Y',strtotime($date_to));
 
-    $message = "Андрей выставил счет за $date_to_T №: $model_i->id Клиент: $client Сумма: $import грн";
-    messageToBot($message, 120352595);
-    messageToBot($message, 474748019);
+            $message = "Андрей выставил счет за $date_to_T №: $model_i->id Клиент: $client Сумма: $import грн";
+            messageToBot($message, 120352595);
+            messageToBot($message, 474748019);
 
-    $B17 = 'Рахунок на оплату № '.$model_i->id.' від '. $date_to_T.'р.';
-    $H22 = $client;
-    $H25 = "№".$dogovor." від ".$dogovor_date."р.";
-    $D29 = "Послуги митного брокера з оформлення імпорту товару у період з ".$date_from_T."р" ." по ".$date_to_T."р за МД №№:".$md_import;
+            $B17 = 'Рахунок на оплату № '.$model_i->id.' від '. $date_to_T.'р.';
+            $H22 = $client;
+            $H25 = "№".$dogovor." від ".$dogovor_date."р.";
+            $D29 = "Послуги митного брокера з оформлення імпорту товару у період з ".$date_from_T."р" ." по ".$date_to_T."р за МД №№:".$md_import;
     
  
-    $W29=$i_i;
-    $B34 = num2text_ua($import); // Общая стоимость словами
-    $AD29 = number_format ($cost_1,2,',',' ');//Цена за 1 декларацию
-    $AH29 = number_format ($import,2,',',' ');//Стоимость за все
-    $B33 = 'Всього найменувань 1,'.' на суму '.$AH29.' грн';
+            $W29=$i_i;
+            $B34 = num2text_ua($import); // Общая стоимость словами
+            $AD29 = number_format ($cost_1,2,',',' ');//Цена за 1 декларацию
+            $AH29 = number_format ($import,2,',',' ');//Стоимость за все
+            $B33 = 'Всього найменувань 1,'.' на суму '.$AH29.' грн';
            
             $new_invoice = 'ranunok_'.$model_i->id;
             
@@ -2755,180 +2760,174 @@ if ($i_i !=0) {
 // Доп соглашение по цене
 
 // Creating the new document...
-$phpWord = new \PhpOffice\PhpWord\PhpWord();
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
 
 /* Note: any element you append to a document must reside inside of a Section. */
 
 // Adding an empty Section to the document...
-$section = $phpWord->addSection();
+        $section = $phpWord->addSection();
 
-$B34 = num2text_ua($cost_1); // Цена за 1 декларацию словами
+        $B34 = num2text_ua($cost_1); // Цена за 1 декларацию словами
 
-if ($aq_fl_id==3)
-{
-    $phpWord->addParagraphStyle('Paragraph', array('bold' => TRUE , 'align' => 'center' ));
-    $fontStyle = array('name' => 'Times New Roman', 'size'=>12,'bold' => TRUE );
-    $section->addText(
-        'ДОДАТКОВА УГОДА', $fontStyle, 'Paragraph'
-    );
+        if ($aq_fl_id==3) {
+            $phpWord->addParagraphStyle('Paragraph', array('bold' => TRUE , 'align' => 'center' ));
+            $fontStyle = array('name' => 'Times New Roman', 'size'=>12,'bold' => TRUE );
+            $section->addText(
+                'ДОДАТКОВА УГОДА', $fontStyle, 'Paragraph'
+            );
 
-    $fontStyle = array('name' => 'Times New Roman', 'size'=>12);
-    $section->addText(
-       'до ДОГОВОРУ ДОРУЧЕННЯ про надання послуг з декларування товарів і транспортних засобів №3-КБ-06/2012 від 06.06.2012',
-       $fontStyle, 'Paragraph'
-    );
-   
- 
-    $fontStyle = array('name' => 'Times New Roman', 'size'=>12);
-    $section->addText(
-    'м.Харків                                                                                                                    '.$date_to_T, 
-    $fontStyle, 'Paragraph'
-    );
-    $phpWord->addParagraphStyle('Paragraph_2', array('bold' => TRUE , 'align' => 'both' ));
-    $fontStyle = array('name' => 'Times New Roman', 'size'=>12);
-    $section->addText(
-        '       ТОВ  “Акваізол” (надалі “ДОРУЧИТЕЛЬ”) в особі директора Файнера Д.І., діючого на підставі Статуту, і ФО-П Коржов А.А. (надалі “ПОВІРЕНИЙ”), що діє на підставі запису в Єдиному державному реєстрі 2 480 017 0000 009334 від 23.08.2002 р. та зареєстрований у реєстрі митних брокерів від 19/06/2015р АЕ №294128, уклали додаткову угоду про наведене нижче:',
-        $fontStyle, 'Paragraph_2'
-    );
+            $fontStyle = array('name' => 'Times New Roman', 'size'=>12);
+            $section->addText(
+               'до ДОГОВОРУ ДОРУЧЕННЯ про надання послуг з декларування товарів і транспортних засобів №3-КБ-06/2012 від 06.06.2012',
+               $fontStyle, 'Paragraph'
+            );
 
-    $fontStyle = array('name' => 'Times New Roman', 'size'=>12, 'align'=>'both');
-        $section->addText(
-         '      1.Вартість послуг з оформлення однієї митної декларації (МД) на митниці  за період з '.$date_from_T.' по '.$date_to_T.' складає '.$AD29.' ('.$B34.') без ПДВ. Всі інші умови договору залишаються незмінними.',
-        $fontStyle, 'Paragraph_2'
-    );
-   
-    $table = $section->addTable();
-     
-    $table->addRow(200);
-    $table_styleFont_bold=array('name' => 'Times New Roman', 'size' => 12,'bold'=>TRUE);
-    $table_styleFont_normal=array('name' => 'Times New Roman', 'size' => 12,'bold'=>false);
-     
-    $table->addCell(5000)->addText("ПОВІРЕНИЙ",$table_styleFont_bold);
-    $table->addCell(200)->addText("");
-    $table->addCell(5000)->addText("ДОРУЧИТЕЛЬ",$table_styleFont_bold);
-    $table->addRow(200);
-    $table->addCell(5000)->addText("ФО-П Коржов А.А.",$table_styleFont_normal);
-    $table->addCell(200)->addText("");
-    $table->addCell(5000)->addText('ТОВ  “Акваізол"',$table_styleFont_normal);
-    $table->addRow(200);
-    $table->addCell(5000)->addText("Юридична адреса: 61176, Україна, м.Харків, вул.Єдності, буд. 177, корп. Б, кв.58",$table_styleFont_normal);
-    $table->addCell(200)->addText("");
-    $table->addCell(5000)->addText("Юридична адреса: 62371, Харківська обл., с.Подвірки, вул.Сумський шлях ,47-Б",$table_styleFont_normal);
-    $table->addRow(200);
-    $table->addCell(5000)->addText("Код ДРФО:   2607014759",$table_styleFont_normal);
-    $table->addCell(200)->addText("");
-    $table->addCell(5000)->addText("Код ЄДРПОУ:   31466053",$table_styleFont_normal);
-    $table->addRow(200);
-    $table->addCell(5000)->addText("Свідоцтво про сплату единого податку  Б № 390917",$table_styleFont_normal);
-    $table->addCell(200)->addText("");
-    $table->addCell(5000)->addText("ІПН № 314660520113",$table_styleFont_normal);
-    $table->addRow(200);
-    $table->addCell(5000)->addText("Телефон: 093 673-44-88",$table_styleFont_normal);
-    $table->addCell(200)->addText("");
-    $table->addCell(5000)->addText("Телефон: 050 323-71-10",$table_styleFont_normal);
-    $table->addRow(200);
-    $table->addCell(5000)->addText("ФО-П А.А.Коржов",$table_styleFont_normal);
-    $table->addCell(200)->addText("");
-    $table->addCell(5000)->addText("Директор Д.І.Файнер",$table_styleFont_normal);
-}
-else 
-{
-    if ($aq_fl_id==81)
-{
-    $phpWord->addParagraphStyle('Paragraph', array('bold' => TRUE , 'align' => 'center' ));
-    $fontStyle = array('name' => 'Times New Roman', 'size'=>12,'bold' => TRUE );
-    $section->addText(
-        'ДОДАТКОВА УГОДА', $fontStyle, 'Paragraph'
-    );
 
-    $fontStyle = array('name' => 'Times New Roman', 'size'=>12);
-    $section->addText(
-       'до ДОГОВОРУ ДОРУЧЕННЯ про надання послуг з декларування товарів і транспортних засобів №81-КБ-08/2014 від 05.08.2014',
-       $fontStyle, 'Paragraph'
-    );
-   
- 
-    $fontStyle = array('name' => 'Times New Roman', 'size'=>12);
-    $section->addText(
-    'м.Харків                                                                                                                    '.$date_to_T, 
-    $fontStyle, 'Paragraph'
-    );
-    $phpWord->addParagraphStyle('Paragraph_2', array('bold' => TRUE , 'align' => 'both' ));
-    $fontStyle = array('name' => 'Times New Roman', 'size'=>12);
-    $section->addText(
-        '       ТОВ  “ФЛЕКСС” (надалі “ДОРУЧИТЕЛЬ”) в особі директора Бондаренка М.П., діючого на підставі Статуту, і ФО-П Коржов А.А. (надалі “ПОВІРЕНИЙ”), що діє на підставі запису в Єдиному державному реєстрі 2 480 017 0000 009334 від 23.08.2002 р. та зареєстрований у реєстрі митних брокерів від 19/06/2015р АЕ №294128, уклали додаткову угоду про наведене нижче:',
-        $fontStyle, 'Paragraph_2'
-    );
+            $fontStyle = array('name' => 'Times New Roman', 'size'=>12);
+            $section->addText(
+            'м.Харків                                                                                                                    '.$date_to_T,
+            $fontStyle, 'Paragraph'
+            );
+            $phpWord->addParagraphStyle('Paragraph_2', array('bold' => TRUE , 'align' => 'both' ));
+            $fontStyle = array('name' => 'Times New Roman', 'size'=>12);
+            $section->addText(
+                '       ТОВ  “Акваізол” (надалі “ДОРУЧИТЕЛЬ”) в особі директора Файнера Д.І., діючого на підставі Статуту, і ФО-П Коржов А.А. (надалі “ПОВІРЕНИЙ”), що діє на підставі запису в Єдиному державному реєстрі 2 480 017 0000 009334 від 23.08.2002 р. та зареєстрований у реєстрі митних брокерів від 19/06/2015р АЕ №294128, уклали додаткову угоду про наведене нижче:',
+                $fontStyle, 'Paragraph_2'
+            );
 
-    $fontStyle = array('name' => 'Times New Roman', 'size'=>12, 'align'=>'both');
-        $section->addText(
-         '      1.Вартість послуг з оформлення однієї митної декларації (МД) на митниці  за період з '.$date_from_T.' по '.$date_to_T.' складає '.$AD29.'('.$B34.') без ПДВ. Всі інші умови договору залишаються незмінними.',
-        $fontStyle, 'Paragraph_2'
-    );
-   
-    $table = $section->addTable();
-     
-    $table->addRow(200);
-    $table_styleFont_bold=array('name' => 'Times New Roman', 'size' => 12,'bold'=>TRUE);
-    $table_styleFont_normal=array('name' => 'Times New Roman', 'size' => 12,'bold'=>false);
-     
-    $table->addCell(5000)->addText("ПОВІРЕНИЙ",$table_styleFont_bold);
-    $table->addCell(200)->addText("");
-    $table->addCell(5000)->addText("ДОРУЧИТЕЛЬ",$table_styleFont_bold);
-    $table->addRow(200);
-    $table->addCell(5000)->addText("ФО-П Коржов А.А.",$table_styleFont_normal);
-    $table->addCell(200)->addText("");
-    $table->addCell(5000)->addText('ТОВ “ФЛЕКСС”',$table_styleFont_normal);
-    $table->addRow(200);
-    $table->addCell(5000)->addText("Юридична адреса: 61176, Україна, м.Харків, вул.Єдності, буд. 177, корп. Б, кв.58",$table_styleFont_normal);
-    $table->addCell(200)->addText("");
-    $table->addCell(5000)->addText("Юридична адреса: 62371, Харківська обл., с.Подвірки, вул.Сумський шлях ,45-Д, офіс 307",$table_styleFont_normal);
-    $table->addRow(200);
-    $table->addCell(5000)->addText("Код ДРФО:   2607014759",$table_styleFont_normal);
-    $table->addCell(200)->addText("");
-    $table->addCell(5000)->addText("Код ЄДРПОУ:   38734484",$table_styleFont_normal);
-    $table->addRow(200);
-    $table->addCell(5000)->addText("Свідоцтво про сплату единого податку  Б № 390917",$table_styleFont_normal);
-    $table->addCell(200)->addText("");
-    $table->addCell(5000)->addText("ІПН № 387344820119",$table_styleFont_normal);
-    $table->addRow(200);
-    $table->addCell(5000)->addText("Телефон: 093 673-44-88",$table_styleFont_normal);
-    $table->addCell(200)->addText("");
-    $table->addCell(5000)->addText("Телефон: 050 400-94-85",$table_styleFont_normal);
-    $table->addRow(200);
-    $table->addCell(5000)->addText("ФО-П А.А. Коржов",$table_styleFont_normal);
-    $table->addCell(200)->addText("");
-    $table->addCell(5000)->addText("Директор М.П.Бондаренко",$table_styleFont_normal); 
-  };
-};
+            $fontStyle = array('name' => 'Times New Roman', 'size'=>12, 'align'=>'both');
+                $section->addText(
+                 '      1.Вартість послуг з оформлення однієї митної декларації (МД) на митниці  за період з '.$date_from_T.' по '.$date_to_T.' складає '.$AD29.' ('.$B34.') без ПДВ. Всі інші умови договору залишаються незмінними.',
+                $fontStyle, 'Paragraph_2'
+            );
 
-$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007'); 
-$new_ugoda = 'ugoda.docx';
-$objWriter->save($new_ugoda);  
+        $table = $section->addTable();
 
-$section->addImage('img/signature.jpg', array('width'=>180, 'align'=>'left'));
-        
-$objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007'); 
-$new_ugoda_signature = 'ugoda_signature.docx';
-$objWriter->save($new_ugoda_signature);  
+        $table->addRow(200);
+        $table_styleFont_bold=array('name' => 'Times New Roman', 'size' => 12,'bold'=>TRUE);
+        $table_styleFont_normal=array('name' => 'Times New Roman', 'size' => 12,'bold'=>false);
+
+        $table->addCell(5000)->addText("ПОВІРЕНИЙ",$table_styleFont_bold);
+        $table->addCell(200)->addText("");
+        $table->addCell(5000)->addText("ДОРУЧИТЕЛЬ",$table_styleFont_bold);
+        $table->addRow(200);
+        $table->addCell(5000)->addText("ФО-П Коржов А.А.",$table_styleFont_normal);
+        $table->addCell(200)->addText("");
+        $table->addCell(5000)->addText('ТОВ  “Акваізол"',$table_styleFont_normal);
+        $table->addRow(200);
+        $table->addCell(5000)->addText("Юридична адреса: 61176, Україна, м.Харків, вул.Єдності, буд. 177, корп. Б, кв.58",$table_styleFont_normal);
+        $table->addCell(200)->addText("");
+        $table->addCell(5000)->addText("Юридична адреса: 62371, Харківська обл., с.Подвірки, вул.Сумський шлях ,47-Б",$table_styleFont_normal);
+        $table->addRow(200);
+        $table->addCell(5000)->addText("Код ДРФО:   2607014759",$table_styleFont_normal);
+        $table->addCell(200)->addText("");
+        $table->addCell(5000)->addText("Код ЄДРПОУ:   31466053",$table_styleFont_normal);
+        $table->addRow(200);
+        $table->addCell(5000)->addText("Свідоцтво про сплату единого податку  Б № 390917",$table_styleFont_normal);
+        $table->addCell(200)->addText("");
+        $table->addCell(5000)->addText("ІПН № 314660520113",$table_styleFont_normal);
+        $table->addRow(200);
+        $table->addCell(5000)->addText("Телефон: 093 673-44-88",$table_styleFont_normal);
+        $table->addCell(200)->addText("");
+        $table->addCell(5000)->addText("Телефон: 050 323-71-10",$table_styleFont_normal);
+        $table->addRow(200);
+        $table->addCell(5000)->addText("ФО-П А.А.Коржов",$table_styleFont_normal);
+        $table->addCell(200)->addText("");
+        $table->addCell(5000)->addText("Директор Д.І.Файнер",$table_styleFont_normal);
+    } else {
+            if ($aq_fl_id==81) {
+                $phpWord->addParagraphStyle('Paragraph', array('bold' => TRUE , 'align' => 'center' ));
+                $fontStyle = array('name' => 'Times New Roman', 'size'=>12,'bold' => TRUE );
+                $section->addText(
+                    'ДОДАТКОВА УГОДА', $fontStyle, 'Paragraph'
+                );
+
+                $fontStyle = array('name' => 'Times New Roman', 'size'=>12);
+                $section->addText(
+                   'до ДОГОВОРУ ДОРУЧЕННЯ про надання послуг з декларування товарів і транспортних засобів №81-КБ-08/2014 від 05.08.2014',
+                   $fontStyle, 'Paragraph'
+                );
+
+
+                $fontStyle = array('name' => 'Times New Roman', 'size'=>12);
+                $section->addText(
+                'м.Харків                                                                                                                    '.$date_to_T,
+                $fontStyle, 'Paragraph'
+                );
+                $phpWord->addParagraphStyle('Paragraph_2', array('bold' => TRUE , 'align' => 'both' ));
+                $fontStyle = array('name' => 'Times New Roman', 'size'=>12);
+                $section->addText(
+                    '       ТОВ  “ФЛЕКСС” (надалі “ДОРУЧИТЕЛЬ”) в особі директора Бондаренка М.П., діючого на підставі Статуту, і ФО-П Коржов А.А. (надалі “ПОВІРЕНИЙ”), що діє на підставі запису в Єдиному державному реєстрі 2 480 017 0000 009334 від 23.08.2002 р. та зареєстрований у реєстрі митних брокерів від 19/06/2015р АЕ №294128, уклали додаткову угоду про наведене нижче:',
+                    $fontStyle, 'Paragraph_2'
+                );
+
+                $fontStyle = array('name' => 'Times New Roman', 'size'=>12, 'align'=>'both');
+                $section->addText(
+                    '      1.Вартість послуг з оформлення однієї митної декларації (МД) на митниці  за період з '.$date_from_T.' по '.$date_to_T.' складає '.$AD29.'('.$B34.') без ПДВ. Всі інші умови договору залишаються незмінними.',
+                    $fontStyle, 'Paragraph_2'
+                );
+
+                $table = $section->addTable();
+
+                $table->addRow(200);
+                $table_styleFont_bold=array('name' => 'Times New Roman', 'size' => 12, 'bold'=>TRUE);
+                $table_styleFont_normal=array('name' => 'Times New Roman', 'size' => 12,'bold'=>false);
+
+                $table->addCell(5000)->addText("ПОВІРЕНИЙ", $table_styleFont_bold);
+                $table->addCell(200)->addText("");
+                $table->addCell(5000)->addText("ДОРУЧИТЕЛЬ", $table_styleFont_bold);
+                $table->addRow(200);
+                $table->addCell(5000)->addText("ФО-П Коржов А.А.", $table_styleFont_normal);
+                $table->addCell(200)->addText("");
+                $table->addCell(5000)->addText('ТОВ “ФЛЕКСС”', $table_styleFont_normal);
+                $table->addRow(200);
+                $table->addCell(5000)->addText("Юридична адреса: 61176, Україна, м.Харків, вул.Єдності, буд. 177, корп. Б, кв.58",$table_styleFont_normal);
+                $table->addCell(200)->addText("");
+                $table->addCell(5000)->addText("Юридична адреса: 62371, Харківська обл., с.Подвірки, вул.Сумський шлях ,45-Д, офіс 307",$table_styleFont_normal);
+                $table->addRow(200);
+                $table->addCell(5000)->addText("Код ДРФО:   2607014759", $table_styleFont_normal);
+                $table->addCell(200)->addText("");
+                $table->addCell(5000)->addText("Код ЄДРПОУ:   38734484", $table_styleFont_normal);
+                $table->addRow(200);
+                $table->addCell(5000)->addText("Свідоцтво про сплату единого податку  Б № 390917", $table_styleFont_normal);
+                $table->addCell(200)->addText("");
+                $table->addCell(5000)->addText("ІПН № 387344820119", $table_styleFont_normal);
+                $table->addRow(200);
+                $table->addCell(5000)->addText("Телефон: 093 673-44-88", $table_styleFont_normal);
+                $table->addCell(200)->addText("");
+                $table->addCell(5000)->addText("Телефон: 050 400-94-85", $table_styleFont_normal);
+                $table->addRow(200);
+                $table->addCell(5000)->addText("ФО-П А.А. Коржов", $table_styleFont_normal);
+                $table->addCell(200)->addText("");
+                $table->addCell(5000)->addText("Директор М.П.Бондаренко", $table_styleFont_normal);
+            }
+        };
+
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+        $new_ugoda = 'ugoda.docx';
+        $objWriter->save($new_ugoda);
+
+        $section->addImage('img/signature.jpg', array('width'=>180, 'align'=>'left'));
+
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+        $new_ugoda_signature = 'ugoda_signature.docx';
+        $objWriter->save($new_ugoda_signature);
 
 //Запись в архив
 
-                      $zip = new ZipArchive();
-                      $filename = "files/documents.zip";
-                      if ($zip->open($filename, ZipArchive::CREATE)!==TRUE) 
-                      {
-                      exit("Невозможно открыть <$filename>\n");
-                      }
+        $zip = new ZipArchive();
+        $filename = "files/documents.zip";
+        if ($zip->open($filename,ZipArchive::CREATE)!==TRUE) {
+            exit("Невозможно открыть <$filename>\n");
+        }
 
-                      $zip->addFile($new_ugoda);
-					  $zip->addFile($new_ugoda_signature);
+        $zip->addFile($new_ugoda);
+        $zip->addFile($new_ugoda_signature);
 
-                      $zip->close();
-                      unlink($new_ugoda); 
-					  unlink($new_ugoda_signature); 
-					  
-} // Если есть декларации за период - конец условия
+        $zip->close();
+        unlink($new_ugoda);
+        unlink($new_ugoda_signature);
+    } // Если есть декларации за период - конец условия
 }
 
 //Калькуляция
