@@ -259,8 +259,185 @@ foreach ($a as $tabl)
 	return ($tabl_pdf);
 	
  
-}   
+}
 
+function decl_parsing_full ($filename) {
+
+    $parser = new \Smalot\PdfParser\Parser();
+    $pdf    = $parser->parseFile($filename);
+
+    $text = $pdf->getText();
+
+
+    //Поиск контрагента
+
+
+    $arrContragent = Contragent::find()->asArray()->all();
+
+    $tabl_pdf['custom']=800;
+
+
+    foreach ($arrContragent as $tabl) {
+
+
+        if ($tabl["contragent"] != null) {
+            $pos = strpos($text,$tabl["contragent"]);
+
+            if ($pos !== false) {
+
+                $tabl_pdf["contragent_id"] = $tabl["id"];
+
+                $arrAqFlCost = AqFlCost::find()->asArray()
+                    -> where (['=','contragent_id',$tabl_pdf["contragent_id"]]) ->one();
+
+
+                if ($arrAqFlCost != null) {
+                    $tabl_pdf['custom']=$arrAqFlCost['cost'];
+                };
+
+
+                /* if ($tabl["contragent"]== 'Difot International Trading Co') {
+                    $tabl_pdf['custom'] =1050;
+                };
+                if ($tabl["contragent"]== 'S.R.L. "MILANCONS"') {
+                    $tabl_pdf['custom'] =1050;
+                };
+                if ($tabl["contragent"]== 'Пигмент') {
+                    $tabl_pdf['custom'] =1050;
+                };
+                if ($tabl["contragent"]== 'Synthomer Deutschland GmbH') {
+                    $tabl_pdf['custom'] =1050;
+                };
+                if ($tabl["contragent"]== 'Graf + Cie AG') {
+                    $tabl_pdf['custom'] =1800;
+                };
+                if ($tabl["contragent"]== 'AziaGRIT') {
+                    $tabl_pdf['custom'] =950;
+                };
+                if ($tabl["contragent"]== 'Tectex Needle Boards srl') {
+                    $tabl_pdf['custom'] =1800;
+                };
+                if ($tabl["contragent"]== 'Kumho Petrochemical Co. Ltd.') {
+                    $tabl_pdf['custom'] =6150;
+                };
+                if ($tabl["contragent"]== 'Уралгрит') {
+                    $tabl_pdf['custom'] =1550;
+                };
+                if ($tabl["contragent"]== 'Mogensen GmbH & Co. KG') {
+                    $tabl_pdf['custom'] =1350;
+                };
+                if ($tabl["contragent"]== 'MONTENERO') {
+                    $tabl_pdf['custom'] =2800;
+                };
+                if ($tabl["contragent"]== 'CROSS LINE CORPORATION FOR IMPORT AND EXPORT') {
+                    $tabl_pdf['custom'] =6510;
+                }; */
+            }
+        }
+
+    };
+
+
+
+    $keywords = preg_split("/[\s,]+/", $text);
+
+    unlink($filename);
+
+    $a = $keywords;
+
+//    debug ($a);
+
+    $a_i =0;
+    $i=0;
+    $i_date=0;
+
+    foreach ($a as $tabl)
+    {
+        //Поиск номера декларации
+        if ($a[$i]=='РОЗРАХУНКІВ') {
+            $i_decl=$i+1;
+        }
+
+
+        //Поиск даты декларации
+        if ($a[$i]=='ОНП') {
+            $i_date=$i+2;
+        }
+
+        //Поиск количества доп листов
+        if ($a[$i]=='Вн.') {
+            $i_dop_list=$i-3;
+        }
+
+        //Поиск типа декларации
+        if ($a[$i]=='ЕК')  {
+            $tabl_pdf["ex_im"]='Экспорт';
+            $i_cod_inozem=$i+25;
+        }
+        if ($a[$i]=='ІМ')  {
+            $tabl_pdf["ex_im"]='Импорт';
+            $i_cod_inozem=$i+4;
+        }
+        if ($a[$i]=='UA/2607014759')  {
+            $tabl_pdf["costCurrency"]=$a[$i+24];
+            $tabl_pdf["costValue"]=$a[$i+25];
+            $tabl_pdf["costCurs"]=$a[$i+26];
+
+        }
+
+        $findme   = 'UA/';
+        $pos = strpos($a[$i],   $findme );
+
+        //Поиск кода ЕГРПОУ клиента
+        if ($pos !== false) {
+            if( substr($a[$i], -10) !== "2607014759"   & $a_i ==1) {
+                $tabl_pdf["cod_EGRPOU"] =  substr($a[$i], -10); //Номер  кода ЕГРПОУ клиента
+                $a_i++;
+            }
+        }
+        if ($pos !== false & $a_i !=1) {
+            $a_i++;
+        }
+        $i++;
+    }
+
+    $i=0;
+    $tabl_pdf["dop_list"] = 0;
+
+    foreach ($a as $tabl){
+        if ($i == $i_decl & $i!=0){
+            $tabl_pdf["decl"] = $tabl;//Номер декларации
+        }
+
+        if ($i == $i_date & $i!=0){
+            $tabl_pdf["decl_date"] = date('Y-m-d',strtotime($tabl)); //Дата оформления
+        }
+        if ($i_date ==0){
+            $tabl_pdf["decl_date"] = date('Y-m-d'); //Дата оформления
+        }
+        if ($i ==  $i_dop_list & $i!=0){
+            $tabl_pdf["dop_list"] = $tabl-1; //Количество доп листов
+        }
+
+
+        $i++;
+    }
+
+    if ($tabl_pdf["decl_date"] ==  "1970-01-01" ) {
+        $tabl_pdf["decl_date"] = date ("Y-m-d");
+    }
+
+//	$tabl_pdf["client_id"] =null;
+    $arrClient = Client::findOne(['cod_EGRPOU'=>$tabl_pdf["cod_EGRPOU"]]);
+
+    $tabl_pdf['client_id'] = $arrClient['id'];
+
+//debug ($tabl_pdf);
+
+    return ($tabl_pdf);
+
+
+}
 // Создание счета
 
 function invoice_doc ($number_invoice,$date, $decl, $client, $cost ) {

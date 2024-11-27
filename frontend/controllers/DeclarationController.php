@@ -774,6 +774,9 @@ class DeclarationController extends Controller
 		fclose ($pdf);
 
 		$file = $img_file;
+//        $tabl_pdf = decl_parsing_full($file);
+//        debug ($tabl_pdf);
+//        exit;
 
 		if (file_exists($file)) {
 			/* return \Yii::$app->response->sendFile($file)->on(\yii\web\Response::EVENT_AFTER_SEND, function($event) {
@@ -785,6 +788,35 @@ class DeclarationController extends Controller
 
 	}
 
+    public function actionParsing($id) // Скачивание изображений декларации из базы
+    {
+
+        $model = $this->findModel($id);
+
+        $pdf_decoded=base64_decode($model['decl_iso']);
+        //Write data back to pdf file
+
+        $img_file = 'files/'.'decl_iso_'.$id.'.pdf';
+
+        $pdf = fopen ($img_file,'w');
+        fwrite ($pdf,$pdf_decoded);
+        //close output file
+        fclose ($pdf);
+
+        $file = $img_file;
+        $tabl_pdf = decl_parsing_full($file);
+        debug ($tabl_pdf);
+        exit;
+
+//        if (file_exists($file)) {
+//            /* return \Yii::$app->response->sendFile($file)->on(\yii\web\Response::EVENT_AFTER_SEND, function($event) {
+//            unlink($event->data);
+//            }, $file); */
+//            return \Yii::$app->response->sendFile($file);
+//        }
+        throw new \Exception('File not found');
+
+    }
 	public function actionExport($id)// Скачивание расчета по декларации
     {
 
