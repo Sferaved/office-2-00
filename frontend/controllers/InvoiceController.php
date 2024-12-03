@@ -293,7 +293,10 @@ class InvoiceController extends Controller
 
         if ($model === false) {
             Yii::info("Модель счета не найдена в кэше, загружаем из базы данных.", __METHOD__);
-            $model = Invoice::findOne($id);
+            $model = Invoice::find()
+                ->where(['id' => $id])
+                ->select(['id', 'client_id', 'decl_id', 'cost', 'date', 'oplata', 'user_id']) // Выберите только необходимые поля
+                ->one();
             if ($model !== null) {
                 Yii::$app->cache->set($cacheKey, $model, 3600);
                 Yii::info("Модель счета загружена и сохранена в кэш.", __METHOD__);
