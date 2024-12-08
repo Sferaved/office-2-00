@@ -287,7 +287,7 @@ class InvoiceController extends Controller
     {
         $cacheKey = 'invoice_' . $id;
         Yii::info("Начало обновления счета с ID: $id", __METHOD__);
-
+        ini_set('memory_limit', '2G');
         // Используем кеширование модели
         $model = Yii::$app->cache->get($cacheKey);
 
@@ -296,6 +296,7 @@ class InvoiceController extends Controller
             $model = Invoice::find()
                 ->where(['id' => $id])
                 ->select(['id', 'client_id', 'decl_id', 'cost', 'date', 'oplata', 'user_id']) // Выберите только необходимые поля
+                ->asArray()
                 ->one();
             if ($model !== null) {
                 Yii::$app->cache->set($cacheKey, $model, 3600);
