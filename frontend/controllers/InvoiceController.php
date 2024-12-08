@@ -138,20 +138,24 @@ class InvoiceController extends Controller
      */
     public function actionView($id)
     {
-        $cacheKey = 'view_invoice_' . $id;
-        $model = Yii::$app->cache->get($cacheKey);
+//        $cacheKey = 'view_invoice_' . $id;
+//        $model = Yii::$app->cache->get($cacheKey);
+//
+//        if ($model === false) {
+//            $model = $this->findModel($id);
+//
+//            if ($model === null) {
+//                throw new NotFoundHttpException("Запрашиваемая страница не найдена.");
+//            }
+//
+//            // Сохраняем модель в кэш на 1 час
+//            Yii::$app->cache->set($cacheKey, $model, 3600);
+//        }
+        $model = $this->findModel($id);
 
-        if ($model === false) {
-            $model = $this->findModel($id);
-
-            if ($model === null) {
-                throw new NotFoundHttpException("Запрашиваемая страница не найдена.");
-            }
-
-            // Сохраняем модель в кэш на 1 час
-            Yii::$app->cache->set($cacheKey, $model, 3600);
+        if ($model === null) {
+            throw new NotFoundHttpException("Запрашиваемая страница не найдена.");
         }
-
         return $this->render('view', [
             'model' => $model,
         ]);
@@ -295,7 +299,7 @@ class InvoiceController extends Controller
             Yii::info("Модель счета не найдена в кэше, загружаем из базы данных.", __METHOD__);
             $model = Invoice::find()
                 ->where(['id' => $id])
-                ->select(['id', 'client_id', 'decl_id', 'cost', 'date', 'oplata', 'user_id']) // Выберите только необходимые поля
+                ->select(['id', 'client_id', 'decl_id', 'cost', 'date', 'oplata', 'user_id', 'forma_oplat']) // Выберите только необходимые поля
                 ->asArray()
                 ->one();
             if ($model !== null) {
@@ -432,16 +436,19 @@ class InvoiceController extends Controller
 
     protected function findModel($id)
     {
-        $cacheKey = 'invoice_' . $id;
-        $model = Yii::$app->cache->get($cacheKey);
-
-        if ($model === false) {
-            $model = Invoice::findOne($id);
-            if ($model !== null) {
-                Yii::$app->cache->set($cacheKey, $model, 3600); // Кэш на 1 час
-            }
-        }
-
+//        $cacheKey = 'invoice_' . $id;
+//        $model = Yii::$app->cache->get($cacheKey);
+//
+//        if ($model === false) {
+//            $model = Invoice::findOne($id);
+//            if ($model !== null) {
+//                Yii::$app->cache->set($cacheKey, $model, 3600); // Кэш на 1 час
+//            }
+//        }
+        $model = Invoice::findOne($id);
+//        if ($model !== null) {
+//            Yii::$app->cache->set($cacheKey, $model, 3600); // Кэш на 1 час
+//        }
         if ($model !== null) {
             return $model;
         }
