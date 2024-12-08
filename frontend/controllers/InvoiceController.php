@@ -300,7 +300,7 @@ class InvoiceController extends Controller
             $model = Invoice::find()
                 ->where(['id' => $id])
                 ->select(['id', 'client_id', 'decl_id', 'cost', 'date', 'oplata', 'user_id', 'forma_oplat']) // Выберите только необходимые поля
-                ->asArray()
+//                ->asArray()
                 ->one();
             if ($model !== null) {
                 Yii::$app->cache->set($cacheKey, $model, 3600);
@@ -436,7 +436,7 @@ class InvoiceController extends Controller
 
     protected function findModel($id)
     {
-//        $cacheKey = 'invoice_' . $id;
+        $cacheKey = 'invoice_' . $id;
 //        $model = Yii::$app->cache->get($cacheKey);
 //
 //        if ($model === false) {
@@ -446,9 +446,9 @@ class InvoiceController extends Controller
 //            }
 //        }
         $model = Invoice::findOne($id);
-//        if ($model !== null) {
-//            Yii::$app->cache->set($cacheKey, $model, 3600); // Кэш на 1 час
-//        }
+        if ($model !== null) {
+            Yii::$app->cache->set($cacheKey, $model, 3600); // Кэш на 1 час
+        }
         if ($model !== null) {
             return $model;
         }
