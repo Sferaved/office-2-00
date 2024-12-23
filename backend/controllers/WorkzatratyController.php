@@ -51,6 +51,7 @@ class WorkzatratyController extends Controller
      */
     public function actionIndex()
     {
+        ini_set('memory_limit', '2G');
         $searchModel = new WorkzatratySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 		$models = $dataProvider->getModels(); // Таблица отбранных записей
@@ -142,6 +143,7 @@ class WorkzatratyController extends Controller
      */
     public function actionUpdate($id)
     {
+        ini_set('memory_limit', '2G');
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
