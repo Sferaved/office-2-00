@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5f426366f47cde2e16ed03b1e2c9d9f3",
+    "content-hash": "f567d3ca95dfd47c2e9fd8706cfdddf8",
     "packages": [
         {
             "name": "2amigos/yii2-date-picker-widget",
@@ -2535,27 +2535,25 @@
         },
         {
             "name": "smalot/pdfparser",
-            "version": "v0.18.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/smalot/pdfparser.git",
-                "reference": "b6db6aa9f605e9a82a29f1325309929a1e0beac0"
+                "reference": "f44ada017eac4f607ffeb1caca96a2347d48f38f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smalot/pdfparser/zipball/b6db6aa9f605e9a82a29f1325309929a1e0beac0",
-                "reference": "b6db6aa9f605e9a82a29f1325309929a1e0beac0",
+                "url": "https://api.github.com/repos/smalot/pdfparser/zipball/f44ada017eac4f607ffeb1caca96a2347d48f38f",
+                "reference": "f44ada017eac4f607ffeb1caca96a2347d48f38f",
                 "shasum": ""
             },
             "require": {
+                "ext-iconv": "*",
                 "ext-zlib": "*",
-                "php": ">=5.6",
+                "php": ">=7.1",
                 "symfony/polyfill-mbstring": "^1.18"
             },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.16",
-                "symfony/phpunit-bridge": "^5.2"
-            },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -2583,9 +2581,9 @@
             ],
             "support": {
                 "issues": "https://github.com/smalot/pdfparser/issues",
-                "source": "https://github.com/smalot/pdfparser/tree/v0.18.2"
+                "source": "https://github.com/smalot/pdfparser/tree/master"
             },
-            "time": "2021-02-25T07:40:30+00:00"
+            "time": "2024-12-03T12:01:10+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

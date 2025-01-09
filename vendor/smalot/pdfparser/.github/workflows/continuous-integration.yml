@@ -1,10 +1,6 @@
 name: "CI"
 
-on:
-  pull_request:
-  push:
-    branches:
-      - "master"
+on: [push, pull_request]
 
 env:
   fail-fast: true
@@ -14,117 +10,21 @@ jobs:
     name: "PHPUnit (PHP ${{ matrix.php }})"
     runs-on: "ubuntu-20.04"
 
-    env:
-      SYMFONY_PHPUNIT_VERSION: 7.5
-
     strategy:
       matrix:
         php:
           - "7.2"
           - "7.3"
           - "7.4"
+          - "8.0"
+          - "8.1"
+          - "8.2"
+          - "8.3"
+          - "8.4"
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
-
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@v2"
-        with:
-          php-version: "${{ matrix.php }}"
-          coverage: "none"
-          tools: composer:v1
-        env:
-          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: "Install dependencies with Composer"
-        uses: "ramsey/composer-install@v1"
-
-      - name: "Remove PHP-CS-Fixer"
-        run: "composer remove friendsofphp/php-cs-fixer --dev --no-progress --no-update"
-
-      - name: "Run PHPUnit"
-        run: "php vendor/bin/simple-phpunit -v"
-
-  phpunit-lower-php:
-    name: "PHPUnit (PHP ${{ matrix.php }})"
-    runs-on: "ubuntu-20.04"
-
-    strategy:
-      matrix:
-        php:
-          - "5.6"
-          - "7.0"
-          - "7.1"
-
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v2"
-
-      - name: "Install PHP"
-        uses: "shivammathur/setup-php@v2"
-        with:
-          php-version: "${{ matrix.php }}"
-          coverage: "none"
-          tools: composer:v1
-        env:
-          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: "Install dependencies with Composer"
-        uses: "ramsey/composer-install@v1"
-
-      - name: "Remove PHP-CS-Fixer"
-        run: "composer remove friendsofphp/php-cs-fixer --dev --no-progress --no-update"
-
-      - name: "Run PHPUnit"
-        run: "php vendor/bin/simple-phpunit -v"
-
-  phpunit-coverage:
-    name: "PHPUnit coverage (PHP ${{ matrix.php }})"
-    runs-on: "ubuntu-20.04"
-
-    env:
-      SYMFONY_PHPUNIT_VERSION: 7.5
-
-    strategy:
-      matrix:
-        php:
-          - "7.4"
-
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v2"
-
-      - name: "Install PHP with PCOV"
-        uses: "shivammathur/setup-php@v2"
-        with:
-          php-version: "${{ matrix.php }}"
-          coverage: "xdebug"
-          tools: composer:v1
-        env:
-          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: "Install dependencies with Composer"
-        uses: "ramsey/composer-install@v1"
-
-      - name: "Run PHPUnit (with coverage)"
-        run: "php vendor/bin/simple-phpunit -v --coverage-clover coverage/clover.xml"
-
-  phpunit-composerv2:
-    name: "PHPUnit Composer v2 (PHP ${{ matrix.php }})"
-    runs-on: "ubuntu-20.04"
-
-    env:
-      SYMFONY_PHPUNIT_VERSION: 7.5
-
-    strategy:
-      matrix:
-        php:
-          - "7.4"
-
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
@@ -136,31 +36,127 @@ jobs:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Install dependencies with Composer"
-        uses: "ramsey/composer-install@v1"
+        uses: "ramsey/composer-install@v2"
+
+      - name: "Install dev tools"
+        run: "make install-dev-tools"
 
       - name: "Run PHPUnit"
-        run: "php vendor/bin/simple-phpunit -v"
+        run: "make run-phpunit"
+
+  phpunit-lower-php:
+    name: "PHPUnit (PHP ${{ matrix.php }})"
+    runs-on: "ubuntu-20.04"
+
+    strategy:
+      matrix:
+        php:
+          - "7.1"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v3"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "${{ matrix.php }}"
+          coverage: "none"
+          tools: composer:v2
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Install dependencies with Composer"
+        uses: "ramsey/composer-install@v2"
+
+      - name: "Install dev tools"
+        run: "make install-dev-tools"
+
+      - name: "Run PHPUnit"
+        run: "make run-phpunit"
+
+  phpunit-coverage:
+    name: "PHPUnit coverage (PHP ${{ matrix.php }})"
+    runs-on: "ubuntu-20.04"
+
+    strategy:
+      matrix:
+        php:
+          - "7.4"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v3"
+
+      - name: "Install PHP with PCOV"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "${{ matrix.php }}"
+          coverage: "xdebug"
+          tools: composer:v2
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Install dependencies with Composer"
+        uses: "ramsey/composer-install@v2"
+
+      - name: "Install dev tools"
+        run: "make install-dev-tools"
+
+      - name: "Run PHPUnit"
+        run: make run-phpunit ARGS="-v --coverage-clover coverage/clover.xml"
+
+  phpunit-composerv2:
+    name: "PHPUnit Composer v2 (PHP ${{ matrix.php }})"
+    runs-on: "ubuntu-20.04"
+
+    strategy:
+      matrix:
+        php:
+          - "7.4"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v3"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "${{ matrix.php }}"
+          coverage: "none"
+          tools: composer:v2
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: "Install dependencies with Composer"
+        uses: "ramsey/composer-install@v2"
+
+      - name: "Install dev tools"
+        run: "make install-dev-tools"
+
+      - name: "Run PHPUnit"
+        run: "make run-phpunit"
 
   alt-autoload:
     name: "Tests alternative autoloader (PHP ${{ matrix.php }})"
     runs-on: "ubuntu-20.04"
 
-    env:
-      SYMFONY_PHPUNIT_VERSION: 7.5
-
     strategy:
       matrix:
         php:
-          - "5.6"
-          - "7.0"
           - "7.1"
           - "7.2"
           - "7.3"
           - "7.4"
+          - "8.0"
+          - "8.1"
+          - "8.2"
+          - "8.3"
+          - "8.4"
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
@@ -169,15 +165,11 @@ jobs:
           coverage: "none"
 
       - name: "Test alt-autoload"
-        run: "php tests/AltAutoloadTest.php"
+        run: "php tests/AltAutoloading/AltAutoloadCheck.php"
 
   phpunit-lowest:
     name: "PHPUnit lowest deps (PHP ${{ matrix.php }})"
     runs-on: "ubuntu-20.04"
-
-    env:
-      SYMFONY_PHPUNIT_VERSION: 7.5
-      SYMFONY_DEPRECATIONS_HELPER: disabled=1
 
     strategy:
       matrix:
@@ -186,21 +178,52 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
 
       - name: "Install PHP"
         uses: "shivammathur/setup-php@v2"
         with:
           php-version: "${{ matrix.php }}"
           coverage: "none"
-          tools: composer:v1
+          tools: composer:v2
         env:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Install dependencies with Composer"
-        uses: "ramsey/composer-install@v1"
+        uses: "ramsey/composer-install@v2"
         with:
           dependency-versions: "lowest"
 
+      - name: "Install dev tools"
+        run: "make install-dev-tools"
+
       - name: "Run PHPUnit"
-        run: "php vendor/bin/simple-phpunit -v"
+        run: "make run-phpunit"
+
+  windows-tests:
+    name: Windows-Tests with PHP ${{ matrix.php-versions }}
+    runs-on: windows-2019
+
+    strategy:
+      fail-fast: true
+      matrix:
+        php-versions: ['7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          ini-values: memory_limit=1G
+
+      - name: Install Composer dependencies (root)
+        run: composer update --no-progress --no-suggest --prefer-dist --optimize-autoloader
+
+      - name: Install Composer dependencies (dev-tools)
+        run: composer update --working-dir=dev-tools
+
+      - name: Tests
+        run: dev-tools/vendor/bin/phpunit -c phpunit-windows.xml --exclude-group linux-only

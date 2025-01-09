@@ -21,7 +21,7 @@
         "mdmsoft/yii2-admin": "~2.0",
         "kartik-v/yii2-widgets": "*",
         "2amigos/yii2-date-picker-widget": "~1.0",
-        "smalot/pdfparser": "^0.18.1",
+        "smalot/pdfparser": "dev-master",
         "yii2tech/spreadsheet": "1.0.x-dev",
         "phpoffice/phpspreadsheet": "^1.8",
         "phpoffice/phpword": "0.18.x-dev",

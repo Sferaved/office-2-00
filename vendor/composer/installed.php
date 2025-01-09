@@ -3,7 +3,7 @@
         'name' => 'yiisoft/yii2-app-advanced',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '2b3b0ae425b907160c8e5e4ec2256a7904a52c3a',
+        'reference' => '3b7c953d4353932cb4919b97f161111f797c1d41',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -893,12 +893,14 @@
             'dev_requirement' => false,
         ),
         'smalot/pdfparser' => array(
-            'pretty_version' => 'v0.18.2',
-            'version' => '0.18.2.0',
-            'reference' => 'b6db6aa9f605e9a82a29f1325309929a1e0beac0',
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => 'f44ada017eac4f607ffeb1caca96a2347d48f38f',
             'type' => 'library',
             'install_path' => __DIR__ . '/../smalot/pdfparser',
-            'aliases' => array(),
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
             'dev_requirement' => false,
         ),
         'swiftmailer/swiftmailer' => array(
@@ -1090,7 +1092,7 @@
         'yiisoft/yii2-app-advanced' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '2b3b0ae425b907160c8e5e4ec2256a7904a52c3a',
+            'reference' => '3b7c953d4353932cb4919b97f161111f797c1d41',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

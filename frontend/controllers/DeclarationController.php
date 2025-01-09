@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use Smalot\PdfParser\Parser;
 use Yii;
 use frontend\models\Declaration;
 use frontend\models\DeclarationSearch;
@@ -12,10 +13,12 @@ use frontend\models\Cabinet;
 use frontend\models\ParsedDeclarations;
 
 use yii\base\BaseObject;
+use yii\db\Query;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\web\Response;
 use yii\web\UploadedFile;
 use frontend\models\Invoice;
 use backend\models\Workzatraty;
@@ -835,6 +838,7 @@ class DeclarationController extends Controller
 
             // Парсим PDF
             $tabl_pdf = decl_parsing_full($file);
+//            $tabl_pdf = $this->parse($file);
 //            debug($tabl_pdf);
 
             if (is_array($tabl_pdf) && !empty($tabl_pdf)) {
@@ -892,6 +896,31 @@ class DeclarationController extends Controller
         }
     }
 
+
+    public function parse($filePath)
+    {
+        // Укажите путь к вашему файлу
+
+
+        if (!file_exists($filePath)) {
+            throw new \yii\web\NotFoundHttpException('Файл не найден');
+        }
+
+        // Инициализация парсера
+        $parser = new Parser();
+
+        // Парсим файл
+        $pdf = $parser->parseFile($filePath);
+
+        // Извлекаем текст
+        $text = $pdf->getText();
+debug($text);
+        // Выводим текст или сохраняем в базу данных
+        return $this->render('parse', [
+            'text' => $text,
+        ]);
+    }
+
 	public function actionExport($id)// Скачивание расчета по декларации
     {
 
@@ -947,6 +976,33 @@ class DeclarationController extends Controller
         }
     }
 
+    public function actionCompareDeclarations()
+    {
+        // Пример "Операции за день" (можете заменить на нужное значение)
+        $operationForTheDay = 'Операции за день'; // Установите значение для "Операции за день"
+
+        // Получаем все значения из таблицы declaration, исключая "Операции за день"
+        $parsedDeclarationsSubquery = (new Query())
+            ->select('decl')
+            ->from('parsed_declarations');
+
+        // Получаем все значения из таблицы declaration, исключая "Операции за день"
+        $declarationQuery = (new Query())
+            ->select('decl_number')
+            ->from('declaration')
+            ->where(['not', ['decl_number' => $operationForTheDay]])  // Исключаем "Операцию за день"
+            ->andWhere(['not in', 'decl_number', $parsedDeclarationsSubquery]); // Исключаем из подзапроса
+
+        // Получаем результат запроса
+        $declarations = $declarationQuery->all();
+
+        // Преобразуем результат в массив с номерами деклараций
+        $declarations = array_column($declarations, 'decl_number');
+
+        // Возвращаем результат - номера деклараций, которых нет в parsed_declarations
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $declarations;
+    }
 //    public function actionParseDeclarations($page = 1)
 //    {
 //        ini_set('memory_limit', '4G');

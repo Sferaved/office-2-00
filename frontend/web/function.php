@@ -371,11 +371,24 @@ function decl_parsing_full ($filename) {
 
         //Поиск типа декларации
         if ($a[$i]=='ЕК')  {
-            $tabl_pdf["ex_im"]='Экспорт';
+            $tabl_pdf["ex_im"]='Экспорт ' . $a[$i+1];
+
+
             $i_cod_inozem=$i+25;
         }
+        if ($a[$i] == '11') {
+            $tabl_pdf["costCurrency"]=$a[$i+64];
+            $tabl_pdf["costValue"]=$a[$i+65];
+            $tabl_pdf["costCurs"]=$a[$i+66];
+        }
         if ($a[$i]=='ІМ')  {
-            $tabl_pdf["ex_im"]='Импорт';
+            $tabl_pdf["ex_im"]='Импорт '  . $a[$i+1];
+            if ($a[$i+1] == '31') {
+                $tabl_pdf["costCurrency"]=$a[$i+63];
+                $tabl_pdf["costValue"]=$a[$i+64];
+                $tabl_pdf["costCurs"]=$a[$i+66];
+            }
+
             $i_cod_inozem=$i+4;
         }
         if ($a[$i]=='ЄДРПОУ:')  {
@@ -388,10 +401,24 @@ function decl_parsing_full ($filename) {
                 $tabl_pdf["costValue"]=$a[$i-5];
                 $tabl_pdf["costCurs"]=$a[$i-4];
             }
-
-
+        }
+//        if ($a[$i] == "14305909" &&  $tabl_pdf["costCurrency"] != 'EUR' || $tabl_pdf["costCurrency"] != 'USD') {
+////            debug ($a[$i+1] . " " . $a[$i-6] . " " . $a[$i-5] . " " . $a[$i-4] );
+//            $tabl_pdf["costCurrency"]=$a[$i-7];
+//            $tabl_pdf["costValue"]=$a[$i-6];
+//            $tabl_pdf["costCurs"]=$a[$i-5];
+//        }
+        if ($a[$i] == "039") {
+            $tabl_pdf["costCurrency"]=$a[$i-3];
+            $tabl_pdf["costValue"]=$a[$i-2];
+            $tabl_pdf["costCurs"]=$a[$i-1];
         }
 
+        if ($a[$i] == "039") {
+            $tabl_pdf["costCurrency"]=$a[$i-3];
+            $tabl_pdf["costValue"]=$a[$i-2];
+            $tabl_pdf["costCurs"]=$a[$i-1];
+        }
         $findme   = 'UA/';
         $pos = strpos($a[$i],   $findme );
 
