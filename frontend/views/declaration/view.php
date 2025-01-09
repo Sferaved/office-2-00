@@ -40,6 +40,8 @@ $this->params['breadcrumbs'][] = $this->title;
 			<?= Html::a(Yii::t('app', 'Калькуляция'), ['export','id' => $model->id], ['class' => 'btn btn-danger']) ?>
 			<?= Html::a(Yii::t('app', 'Затраты'), ['zatraty', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
 			<?= Html::a(Yii::t('app', 'Парсинг'), ['parsing', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+			<?= Html::a(Yii::t('app', 'Парсинг в базу данных'), ['parse-declarations'], ['class' => 'btn btn-primary']) ?>
+			<?= Html::a(Yii::t('app', 'Парсинг в базу данных 10'), ['parse-first-ten-declarations'], ['class' => 'btn btn-primary']) ?>
 	<?php
 	};
 	?>	

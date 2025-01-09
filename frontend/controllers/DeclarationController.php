@@ -9,6 +9,7 @@ use frontend\models\User;
 use common\models\Client;
 use frontend\models\UploadForm;
 use frontend\models\Cabinet;
+use frontend\models\ParsedDeclarations;
 
 use yii\base\BaseObject;
 use yii\web\Controller;
@@ -788,35 +789,109 @@ class DeclarationController extends Controller
 
 	}
 
+//    public function actionParsing($id) // Скачивание изображений декларации из базы
+//    {
+//
+//        $model = $this->findModel($id);
+//
+//        $pdf_decoded=base64_decode($model['decl_iso']);
+//        //Write data back to pdf file
+//
+//        $img_file = 'files/'.'decl_iso_'.$id.'.pdf';
+//
+//        $pdf = fopen ($img_file,'w');
+//        fwrite ($pdf,$pdf_decoded);
+//        //close output file
+//        fclose ($pdf);
+//
+//        $file = $img_file;
+//        $tabl_pdf = decl_parsing_full($file);
+//        debug ($tabl_pdf);
+//        exit;
+//
+//        throw new \Exception('File not found');
+//
+//    }
+
     public function actionParsing($id) // Скачивание изображений декларации из базы
     {
+        try {
+            // Находим модель по ID
+            $model = $this->findModel($id);
 
-        $model = $this->findModel($id);
+            // Декодируем PDF из базы данных
+            $pdf_decoded = base64_decode($model['decl_iso']);
 
-        $pdf_decoded=base64_decode($model['decl_iso']);
-        //Write data back to pdf file
+            // Путь для сохранения PDF файла
+            $img_file = 'files/' . 'decl_iso_' . $id . '.pdf';
 
-        $img_file = 'files/'.'decl_iso_'.$id.'.pdf';
+            // Открываем файл для записи
+            $pdf = fopen($img_file, 'w');
+            fwrite($pdf, $pdf_decoded);
+            fclose($pdf); // Закрываем файл
 
-        $pdf = fopen ($img_file,'w');
-        fwrite ($pdf,$pdf_decoded);
-        //close output file
-        fclose ($pdf);
+            // Путь к файлу для парсинга
+            $file = $img_file;
 
-        $file = $img_file;
-        $tabl_pdf = decl_parsing_full($file);
-        debug ($tabl_pdf);
-        exit;
+            // Парсим PDF
+            $tabl_pdf = decl_parsing_full($file);
+//            debug($tabl_pdf);
 
-//        if (file_exists($file)) {
-//            /* return \Yii::$app->response->sendFile($file)->on(\yii\web\Response::EVENT_AFTER_SEND, function($event) {
-//            unlink($event->data);
-//            }, $file); */
-//            return \Yii::$app->response->sendFile($file);
-//        }
-        throw new \Exception('File not found');
+            if (is_array($tabl_pdf) && !empty($tabl_pdf)) {
+                Yii::info("Результаты парсинга: " . print_r($tabl_pdf, true), __METHOD__);
+//                debug($tabl_pdf);
 
+                $parsedData = [
+
+                    'contragent_id' => $tabl_pdf['contragent_id'],
+                    'ex_im' => $tabl_pdf['ex_im'],
+                    'cod_EGRPOU' => $tabl_pdf['cod_EGRPOU'],
+                    'costCurrency' => $tabl_pdf['costCurrency'],
+                    'costValue' => $tabl_pdf['costValue'],
+                    'costCurs' => $tabl_pdf['costCurs'],
+
+                    'decl' => $tabl_pdf['decl'],
+                    'decl_date' => $tabl_pdf['decl_date'],
+                    'client_id' => $tabl_pdf['client_id'],
+                ];
+                Yii::info('Данные, переданные в модель ParsedDeclarations: ' . print_r($parsedData, true), __METHOD__);
+
+                $parsedModel = new ParsedDeclarations();
+
+                $parsedModel->contragent_id = $tabl_pdf['contragent_id'];
+                $parsedModel->ex_im = $tabl_pdf['ex_im'];
+                $parsedModel->cod_EGRPOU = $tabl_pdf['cod_EGRPOU'];
+                $parsedModel->costCurrency = $tabl_pdf['costCurrency'];
+                $parsedModel->costValue = $tabl_pdf['costValue'];
+                $parsedModel->costCurs = $tabl_pdf['costCurs'];
+
+                $parsedModel->decl = $tabl_pdf['decl'];
+                $parsedModel->decl_date = $tabl_pdf['decl_date'];
+                $parsedModel->client_id = $tabl_pdf['client_id'];
+                $parsedModel->save();
+
+                Yii::info("Данные для декларации с ID " . $model['id'] . " успешно сохранены.", __METHOD__);
+
+            }
+            // Логируем результат парсинга
+            Yii::info("Результаты парсинга для декларации с ID $id: " . print_r($tabl_pdf, true), __METHOD__);
+
+            // Проверка на случай, если парсинг не вернул данных
+            if (empty($tabl_pdf)) {
+                Yii::error("Ошибка: данные парсинга для декларации с ID $id пусты.", __METHOD__);
+            } else {
+                Yii::debug("Парсинг для декларации с ID $id прошел успешно.", __METHOD__);
+            }
+
+            // Удаляем временный файл после обработки
+            unlink($img_file);
+
+        } catch (\Exception $e) {
+            // Логируем ошибку
+            Yii::error("Ошибка при обработке декларации с ID $id: " . $e->getMessage(), __METHOD__);
+        }
     }
+
 	public function actionExport($id)// Скачивание расчета по декларации
     {
 
@@ -830,7 +905,184 @@ class DeclarationController extends Controller
 		}
 		throw new \Exception('Нужно найти заново');
 
-
 	}
+
+    public function actionParseDeclarations($page = 1)
+    {
+        ini_set('memory_limit', '4G');
+
+        $pageSize = 10;
+        $offset = ($page - 1) * $pageSize;
+
+        // Выполняем запрос с учетом LIMIT и OFFSET
+        Yii::debug("Запрос к базе данных: выбираем записи с LIMIT = $pageSize и OFFSET = $offset", __METHOD__);
+        $declarations = \Yii::$app->db->createCommand('SELECT * FROM declaration WHERE decl_iso IS NOT NULL LIMIT :limit OFFSET :offset')
+            ->bindValues([':limit' => $pageSize, ':offset' => $offset])
+            ->queryAll();
+
+        // Проверка результата запроса
+        Yii::debug("Полученные данные для страницы $page: " . print_r($declarations, true), __METHOD__);
+
+        if (!empty($declarations)) {
+            foreach ($declarations as $model) {
+                try {
+                    // Логируем начало обработки записи
+                    Yii::info("Начинаем обработку декларации с ID " . $model['id'], __METHOD__);
+
+                    // Скачиваем изображение декларации, используя вашу функцию
+                    $this->actionParsing($model['id']);
+
+                    Yii::info("Обработка декларации с ID " . $model['id'] . " завершена.", __METHOD__);
+                } catch (\Exception $e) {
+                    Yii::info("Ошибка при обработке декларации с ID " . $model['id'] . ": " . $e->getMessage(), __METHOD__);
+                }
+            }
+
+            // Переход к следующей странице
+            Yii::debug("Продолжаем обработку на следующей странице: " . ($page + 1), __METHOD__);
+            $this->actionParseDeclarations($page + 1);
+        } else {
+            Yii::debug("Данных для обработки больше нет, завершение.", __METHOD__);
+            echo "Обработка завершена";
+        }
+    }
+
+//    public function actionParseDeclarations($page = 1)
+//    {
+//        ini_set('memory_limit', '4G');
+//
+//        $pageSize = 10;
+//        $offset = ($page - 1) * $pageSize;
+//
+//        // Выполняем запрос с учетом LIMIT и OFFSET
+//        Yii::debug("Запрос к базе данных: выбираем записи с LIMIT = $pageSize и OFFSET = $offset", __METHOD__);
+//        $declarations = \Yii::$app->db->createCommand('SELECT * FROM declaration WHERE decl_iso IS NOT NULL LIMIT :limit OFFSET :offset')
+//            ->bindValues([':limit' => $pageSize, ':offset' => $offset])
+//            ->queryAll();
+//
+//        // Проверка результата запроса
+//        Yii::debug("Полученные данные для страницы $page: " . print_r($declarations, true), __METHOD__);
+//
+//        if (!empty($declarations)) {
+//            foreach ($declarations as $model) {
+//                try {
+//                    Yii::debug("Обработка декларации с ID " . $model['id'], __METHOD__);
+//
+//                    $isValid = $this->validatePdf($model['decl_iso']);
+//                    if (!$isValid) {
+//                        throw new \Exception('Файл не является валидным PDF или поврежден');
+//                    }
+//
+//                    $pdf_decoded = base64_decode($model['decl_iso']);
+//                    $img_file = 'files/' . 'decl_iso_' . $model['id'] . '.pdf';
+//                    Yii::debug("Сохранение файла: $img_file", __METHOD__);
+//                    $pdf = fopen($img_file, 'w');
+//                    fwrite($pdf, $pdf_decoded);
+//                    fclose($pdf);
+//
+//                    // Парсим PDF
+//                    Yii::debug("Парсинг данных из PDF файла для декларации с ID " . $model['id'], __METHOD__);
+//                    $tabl_pdf = decl_parsing_full($img_file);
+//
+//                    if (is_array($tabl_pdf) && !empty($tabl_pdf)) {
+//                        debug ($tabl_pdf);
+//                        Yii::debug("Результаты парсинга: " . print_r($tabl_pdf, true), __METHOD__);
+//
+//                        $parsedData = [
+//                            'custom' => $tabl_pdf['custom'],
+//                            'contragent_id' => $tabl_pdf['contragent_id'],
+//                            'ex_im' => $tabl_pdf['ex_im'],
+//                            'cod_EGRPOU' => $tabl_pdf['cod_EGRPOU'],
+//                            'costCurrency' => $tabl_pdf['costCurrency'],
+//                            'costValue' => $tabl_pdf['costValue'],
+//                            'costCurs' => $tabl_pdf['costCurs'],
+//                            'dop_list' => $tabl_pdf['dop_list'],
+//                            'decl' => $tabl_pdf['decl'],
+//                            'decl_date' => $tabl_pdf['decl_date'],
+//                            'client_id' => $tabl_pdf['client_id'],
+//                        ];
+//
+//                        $parsedModel = new ParsedDeclarations();
+//                        $parsedModel->setAttributes($parsedData);
+//
+//                        if (!$parsedModel->save()) {
+//                            Yii::error('Ошибка при сохранении данных для декларации с ID ' . $model['id'], __METHOD__);
+//                            throw new \Exception('Ошибка при сохранении данных');
+//                        }
+//
+//                        Yii::debug("Данные для декларации с ID " . $model['id'] . " успешно сохранены.", __METHOD__);
+//                    } else {
+//                        throw new \Exception('Ошибка парсинга для декларации с ID ' . $model['id']);
+//                    }
+//
+//                    // Удаляем временный файл
+//                    Yii::debug("Удаление временного файла для декларации с ID " . $model['id'], __METHOD__);
+//                    unlink($img_file);
+//                } catch (\Exception $e) {
+//                    Yii::error('Ошибка при парсинге декларации с ID ' . $model['id'] . ': ' . $e->getMessage(), __METHOD__);
+//                }
+//            }
+//
+//            // Обработка завершена для первых 10 записей
+//            Yii::debug("Обработка завершена для первых 10 деклараций.", __METHOD__);
+//            echo "Обработка завершена для первых 10 деклараций.";
+//        } else {
+//            Yii::debug("Данных для обработки больше нет, завершение.", __METHOD__);
+//            echo "Обработка завершена";
+//        }
+//    }
+
+    public function actionParseFirstTenDeclarations()
+    {
+        // Запрашиваем первые 10 записей из таблицы declaration
+        $declarations = \Yii::$app->db->createCommand('SELECT * FROM declaration WHERE decl_iso IS NOT NULL LIMIT 10')
+            ->queryAll();
+//        $this->actionParsing(2);
+//        debug ($declarations);
+
+//         Проверяем, если данные найдены
+        if (!empty($declarations)) {
+            foreach ($declarations as $model) {
+                try {
+                    // Логируем начало обработки записи
+                    Yii::info("Начинаем обработку декларации с ID " . $model['id'], __METHOD__);
+
+                    // Скачиваем изображение декларации, используя вашу функцию
+                    $this->actionParsing($model['id']);
+
+                    Yii::info("Обработка декларации с ID " . $model['id'] . " завершена.", __METHOD__);
+                } catch (\Exception $e) {
+                    Yii::info("Ошибка при обработке декларации с ID " . $model['id'] . ": " . $e->getMessage(), __METHOD__);
+                }
+            }
+
+            Yii::info("Обработка первых 10 деклараций завершена.", __METHOD__);
+        } else {
+            Yii::info("Нет данных для обработки.", __METHOD__);
+        }
+    }
+
+
+// Пример метода для проверки валидности PDF
+    public function validatePdf($filePath)
+    {
+        // Проверка, что файл существует
+        if (!file_exists($filePath)) {
+            return false;
+        }
+
+        // Попробуем открыть файл и проверить его как PDF
+        $file = fopen($filePath, 'rb');
+        $bin = fread($file, 4);
+        fclose($file);
+
+        // Проверим, что файл начинается с "%PDF" (стандартный заголовок для PDF)
+        if ($bin === '%PDF') {
+            return true;
+        }
+
+        return false;
+    }
+
 
 }

@@ -378,10 +378,17 @@ function decl_parsing_full ($filename) {
             $tabl_pdf["ex_im"]='Импорт';
             $i_cod_inozem=$i+4;
         }
-        if ($a[$i]=='UA/2607014759')  {
-            $tabl_pdf["costCurrency"]=$a[$i+24];
-            $tabl_pdf["costValue"]=$a[$i+25];
-            $tabl_pdf["costCurs"]=$a[$i+26];
+        if ($a[$i]=='ЄДРПОУ:')  {
+            if ($a[$i-7] == "EUR" || $a[$i-7] == "USD") {
+                $tabl_pdf["costCurrency"]=$a[$i-7];
+                $tabl_pdf["costValue"]=$a[$i-6];
+                $tabl_pdf["costCurs"]=$a[$i-5];
+            } else {
+                $tabl_pdf["costCurrency"]=$a[$i-6];
+                $tabl_pdf["costValue"]=$a[$i-5];
+                $tabl_pdf["costCurs"]=$a[$i-4];
+            }
+
 
         }
 
