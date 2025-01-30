@@ -6,7 +6,7 @@ required_plugins = %w( vagrant-hostmanager vagrant-vbguest )
 required_plugins.each do |plugin|
   unless Vagrant.has_plugin? plugin
     system "vagrant plugin install #{plugin}"
-    required_plugins_installed = true
+    required_plugins_inst:qalled = true
   end
 end
 
