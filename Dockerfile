@@ -22,16 +22,18 @@ COPY ./yii /usr/share/nginx/html/office/
 COPY ./yii.bat /usr/share/nginx/html/office/
 COPY ./yii_test /usr/share/nginx/html/office/
 COPY ./yii_test.bat /usr/share/nginx/html/office/
+
 RUN mkdir -p /etc/ssl/certs/nginx/
 RUN cp /usr/share/nginx/html/office/docker/korzhov-office-kharkiv-ua.key /etc/ssl/certs/nginx/korzhov-office-kharkiv-ua.key 
-RUN cp /usr/share/nginx/html/office/docker/korzhov-office-kharkiv-ua.crt /etc/ssl/certs/nginx/korzhov-office-kharkiv-ua.crt 
+RUN cp /usr/share/nginx/html/office/docker/korzhov-office-kharkiv-ua.crt /etc/ssl/certs/nginx/korzhov-office-kharkiv-ua.crt
 RUN cp /usr/share/nginx/html/office/docker/supervisord.conf /etc/supervisord.conf
 RUN cp /usr/share/nginx/html/office/docker/office.conf /opt/docker/etc/nginx/vhost.conf
 RUN cp /usr/share/nginx/html/office/docker/main-local.php /usr/share/nginx/html/office/common/config/main-local.php
-RUN cp /usr/share/nginx/html/office/docker/index_f.php /usr/share/nginx/html/office/frontend/views/site/index.php 
-RUN cp /usr/share/nginx/html/office/docker/index_b.php /usr/share/nginx/html/office/backend/views/site/index.php 
+RUN cp /usr/share/nginx/html/office/docker/index_f.php /usr/share/nginx/html/office/frontend/views/site/index.php
+RUN cp /usr/share/nginx/html/office/docker/index_b.php /usr/share/nginx/html/office/backend/views/site/index.php
+RUN cp /usr/share/nginx/html/office/docker/main.php  /usr/share/nginx/html/office/backend/config/main.php
 RUN chmod -R 777 /usr/share/nginx/html/office
 RUN service nginx restart
-EXPOSE 8080
+EXPOSE 443
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
