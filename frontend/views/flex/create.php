@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $model frontend\models\Flex */
 
 $this->title = Yii::t('app', 'Сделать новую запись');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Флекс'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'ФЛЄКСС'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="flex-create">

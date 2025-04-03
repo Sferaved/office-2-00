@@ -10,7 +10,7 @@ use frontend\models\Declaration;
 /* @var $searchModel frontend\models\FlexSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Флекс');
+$this->title = Yii::t('app', 'ФЛЄКСС');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="flex-index">

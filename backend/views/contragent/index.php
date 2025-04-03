@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\ContragentSearh */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Контрагенты Аква-ФЛЕКС');
+$this->title = Yii::t('app', 'Контрагенты Аква-ФЛЄКСС');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="contragent-index">

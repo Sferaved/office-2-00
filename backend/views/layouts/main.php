@@ -50,8 +50,8 @@ AppAsset::register($this);
 			['label' => 'Отчеты', 'url' => ['/workzatraty'],'active' => $this->context->route == 'workzatraty/index'], 
 			['label' => 'Списки', 'items' => [
                     ['label' => 'Статьи расходов по дому', 'url' => ['/homestatya'],'active' => $this->context->route == 'homestatya/index'],
-                    ['label' => 'Контрагенты Аква-ФЛЕКС', 'url' => ['/contragent'],'active' => $this->context->route == 'contragent/index'],
-					['label' => 'Доплаты Аква-ФЛЕКС', 'url' => ['/aq-fl-cost'],'active' => $this->context->route == 'aq-fl-cost/index'],
+                    ['label' => 'Контрагенты Аква-ФЛЄКСС', 'url' => ['/contragent'],'active' => $this->context->route == 'contragent/index'],
+					['label' => 'Доплаты Аква-ФЛЄКСС', 'url' => ['/aq-fl-cost'],'active' => $this->context->route == 'aq-fl-cost/index'],
 					['label' => 'Статьи для отчета', 'url' => ['/workstatya'],'active' => $this->context->route == 'workstatya/index'],
 					['label' => 'Типовые затраты по клиентам', 'url' => ['/workshablon'],'active' => $this->context->route == 'workshablon/index'],
 					['label' => 'Комментарии в кабинете брокера', 'url' => ['/cabinetstatya'],'active' => $this->context->route == 'cabinetstatya/index'], 

@@ -728,7 +728,7 @@ function dogovor_long_doc ($id){
 }
 
 
-//Отчеты Аква Флекс
+//Отчеты Аква ФЛЄКСС
 
 function aq_fl_report($aq_fl_id,$date_from,$date_to) {
 	

@@ -52,7 +52,7 @@ AppAsset::register($this);
 			['label' => 'Кабинет', 'url' => ['/cabinet'],'active' => $this->context->route == 'cabinet/index'],
 		    ['label' => 'Клиенты', 'url' => ['/client'],'active' => $this->context->route == 'client/index'],
 			['label' => 'Акваизол', 'url' => ['/aquaizol'],'active' => $this->context->route == 'aquaizol/index'],
-			['label' => 'Флекс', 'url' => ['/flex'],'active' => $this->context->route == 'flex/index']
+			['label' => 'ФЛЄКСС', 'url' => ['/flex'],'active' => $this->context->route == 'flex/index']
 			];
 						
         }  
@@ -80,7 +80,7 @@ AppAsset::register($this);
 			$menuItems=[
 			['label' => 'Главная', 'url' => ['/site/index']],
 			['label' => 'Акваизол', 'url' => ['/aquaizol'],'active' => $this->context->route == 'aquaizol/index'],
-			['label' => 'Флекс', 'url' => ['/flex'],'active' => $this->context->route == 'flex/index']
+			['label' => 'ФЛЄКСС', 'url' => ['/flex'],'active' => $this->context->route == 'flex/index']
 			];
 						
         }

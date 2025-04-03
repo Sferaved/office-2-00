@@ -264,7 +264,7 @@ class DeclarationController extends Controller
 					}
 
 					if ($model_d->client_id == 81) {
-					$model_F = new Flex();	//Новая запись Флекса
+					$model_F = new Flex();	//Новая запись ФЛЄКССа
 
 					$model_F->date =$model_d->date;
 					$model_F->ex_im =$tabl_pdf['ex_im'];
@@ -511,7 +511,7 @@ class DeclarationController extends Controller
 				$model_a->fito = $model->cost;
 				$model_a->save();
 			}
-		//Запись фито в базу Флекса
+		//Запись фито в базу ФЛЄКССа
 			if ($model->coment_id == 104 && $model_d->client_id==81) {
 				$model_f = Flex::find() ->where(['decl_number_id'=>$id]) ->one();
 				$model_f->fito = $model->cost;
@@ -709,7 +709,7 @@ class DeclarationController extends Controller
 			}
         }
 
-	    if  ($find_decl->client_id == 81) { //Удаление из базы Флекса
+	    if  ($find_decl->client_id == 81) { //Удаление из базы ФЛЄКССа
 		    $model = Flex::find() ->where(['decl_number_id'=>$id]) ->one();
 		    if ($model != null) {
 			$model = Flex::find() ->where(['decl_number_id'=>$id]) ->one() ->delete();
