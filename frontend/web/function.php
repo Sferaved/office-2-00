@@ -1112,7 +1112,7 @@ if ($aq_fl_id==3) {
 
 if ($aq_fl_id==81) {
 	$arrAqFl=Flex::find()->asArray()->where(['between', 'date', $date_from, $date_to])->all();
-	$sheet = $spreadsheet->getActiveSheet()->setTitle("ФЛЕКСС");
+	$sheet = $spreadsheet->getActiveSheet()->setTitle("ФЛЄКСС");
 }
 
 $export=0;
@@ -2482,7 +2482,7 @@ function messageToBot($message, $chat_id)
 
     if ($aq_fl_id==81) {
         $arrAqFl=Flex::find()->where(['between', 'date', $date_from, $date_to])->all();
-        $client = "ФЛЕКСС";
+        $client = "ФЛЄКСС";
     }
 
     foreach ($arrAqFl as $value) (
@@ -3068,7 +3068,7 @@ function messageToBot($message, $chat_id)
                 $phpWord->addParagraphStyle('Paragraph_2', array('bold' => TRUE , 'align' => 'both' ));
                 $fontStyle = array('name' => 'Times New Roman', 'size'=>12);
                 $section->addText(
-                    '       ТОВ  “ФЛЕКСС” (надалі “ДОРУЧИТЕЛЬ”) в особі директора Бондаренка М.П., діючого на підставі Статуту, і ФО-П Коржов А.А. (надалі “ПОВІРЕНИЙ”), що діє на підставі запису в Єдиному державному реєстрі 2 480 017 0000 009334 від 23.08.2002 р. та зареєстрований у реєстрі митних брокерів від 19.11.2024 №MB/002110/01, уклали додаткову угоду про наведене нижче:',
+                    '       ТОВ  “ФЛЄКСС” (надалі “ДОРУЧИТЕЛЬ”) в особі директора Бондаренка М.П., діючого на підставі Статуту, і ФО-П Коржов А.А. (надалі “ПОВІРЕНИЙ”), що діє на підставі запису в Єдиному державному реєстрі 2 480 017 0000 009334 від 23.08.2002 р. та зареєстрований у реєстрі митних брокерів від 19.11.2024 №MB/002110/01, уклали додаткову угоду про наведене нижче:',
                     $fontStyle, 'Paragraph_2'
                 );
 
@@ -3090,7 +3090,7 @@ function messageToBot($message, $chat_id)
                 $table->addRow(200);
                 $table->addCell(5000)->addText("ФО-П Коржов А.А.", $table_styleFont_normal);
                 $table->addCell(200)->addText("");
-                $table->addCell(5000)->addText('ТОВ “ФЛЕКСС”', $table_styleFont_normal);
+                $table->addCell(5000)->addText('ТОВ “ФЛЄКСС”', $table_styleFont_normal);
                 $table->addRow(200);
                 $table->addCell(5000)->addText("Юридична адреса: 61176, Україна, м.Харків, вул.Єдності, буд. 177, корп. Б, кв.58",$table_styleFont_normal);
                 $table->addCell(200)->addText("");

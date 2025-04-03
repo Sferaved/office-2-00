@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $model backend\models\AqFlCost */
 
 $this->title = 'Исправить запись №: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Доплата Аква-ФЛЕКСС', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Доплата Аква-ФЛЄКСС', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>

@@ -8,7 +8,7 @@ use common\models\Contragent;
 /* @var $model backend\models\AqFlCost */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Доплата Аква-ФЛЕКСС', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Доплата Аква-ФЛЄКСС', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>

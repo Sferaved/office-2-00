@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\AqFlCostSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Доплаты по контрагентам Аква-Флексс';
+$this->title = 'Доплаты по контрагентам Аква-ФЛЄКСС';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="aq-fl-cost-index">
