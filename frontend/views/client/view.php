@@ -35,9 +35,11 @@ $this->params['breadcrumbs'][] = $this->title;
 		<?php
 		// Формирование продления договора
 		$dogovor_long= dogovor_long_doc ( $model->id);
+        $dogovor_mp= dogovor_mp_doc ( $model->id);
 		?>
 		<?= Html::a(Yii::t('app', 'Продление'), ['export','file'=>$dogovor_long], ['class' => 'btn btn-primary']) ?>
-	
+		<?= Html::a(Yii::t('app', 'Авторизация'), ['export','file'=>$dogovor_mp], ['class' => 'btn btn-success']) ?>
+
 	
     </p>
 
