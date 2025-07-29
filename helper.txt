@@ -1,0 +1,5 @@
+docker stop office && docker rm office && docker rmi $(docker inspect --format '{{.Config.Image}}' office)
+ docker inspect --format '{{.Config.Image}}' office
+ docker pull  ghcr.io/andrey18051/office:1.0
+ docker run -d office --network host ghcr.io/andrey18051/office:1.0
+ docker run --name office -d --network host ghcr.io/andrey18051/office:1.0
