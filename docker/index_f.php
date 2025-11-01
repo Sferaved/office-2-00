@@ -90,8 +90,8 @@ $this->title = 'Офис on-line';
     <div class="body-content">
 
         <div class="row">
-	
-	<?php if (Yii::$app->user->can('admin')) { ?>
+
+	<?php if (Yii::$app->user->can('admin') || Yii::$app->user->can('buh')) { ?>
 		    <div class="col-lg-3">
                 <h3>Отчеты</h3>
 
@@ -104,7 +104,7 @@ $this->title = 'Офис on-line';
 
                 <p>Отправка документов.</p>
 
-                <p><a class="btn btn-default" href="https://sota-buh.com.ua/edo">перейти &raquo;</a></p>
+                <p><a class="btn btn-default" href="https://my.sota-buh.com.ua/account/login?type=3">перейти &raquo;</a></p>
             </div>
 	<?php }?>
 	

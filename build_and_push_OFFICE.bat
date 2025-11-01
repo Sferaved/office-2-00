@@ -2,7 +2,7 @@
 
 chcp 65001 > nul
 
-cd /d "D:\OpenServer\domains\of2024"
+cd /d "C:\OpenServer\domains\of2024"
 
 echo Building Docker image...
 docker build -t ghcr.io/andrey18051/office:1.0  .

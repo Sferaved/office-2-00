@@ -90,23 +90,24 @@ $this->title = 'Офис on-line';
     <div class="body-content">
 
         <div class="row">
-	
-	<?php if (Yii::$app->user->can('admin')) { ?>
-		    <div class="col-lg-3">
-                <h3>Отчеты</h3>
 
-                <p>Панель администратора.</p>
 
-                <p><a class="btn btn-default" href="https://korzhov-office.kharkiv.ua/admin">перейти &raquo;</a></p>
-            </div>
-			<div class="col-lg-3">
-                <h3>Электронный документооборот</h3>
+            <?php if (Yii::$app->user->can('admin') || Yii::$app->user->can('buh')) { ?>
+                <div class="col-lg-3">
+                    <h3>Отчеты</h3>
 
-                <p>Отправка документов.</p>
+                    <p>Панель администратора.</p>
 
-                <p><a class="btn btn-default" href="https://sota-buh.com.ua/edo">перейти &raquo;</a></p>
-            </div>
-	<?php }?>
+                    <p><a class="btn btn-default" href="https:///admin.korzhov-office.kharkiv.ua">перейти &raquo;</a></p>
+                </div>
+                <div class="col-lg-3">
+                    <h3>Электронный документооборот</h3>
+
+                    <p>Отправка документов.</p>
+
+                    <p><a class="btn btn-default" href="https://my.sota-buh.com.ua/account/login?type=3">перейти &raquo;</a></p>
+                </div>
+            <?php }?>
 	
 	
 
